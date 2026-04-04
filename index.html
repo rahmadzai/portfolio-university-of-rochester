@@ -126,8 +126,8 @@
             border: 1px solid rgba(0, 102, 255, 0.4);
             box-shadow: 0 0 15px rgba(0, 102, 255, 0.1);
             position: relative;
-            background-color: rgba(5, 10, 20, 0.8);
-            backdrop-filter: blur(8px);
+            background-color: #000000; /* Forced solid black to completely prevent background bleed */
+            overflow: hidden;
         }
         .media-frame::after {
             content: 'REC •';
@@ -218,7 +218,7 @@
         <div class="flex items-center gap-4">
             <div class="w-2 h-2 bg-cyber-cyan animate-ping rounded-full shadow-[0_0_10px_#00f3ff]"></div>
             <a href="#" class="text-cyber-cyan text-glow-cyan hover:text-white transition-colors font-bold tracking-widest hidden md:block border border-cyber-cyan/30 px-2 py-0.5 rounded-sm bg-cyber-cyan/10">
-            [ORIGIN]
+                [ /ORIGIN ]
             </a>
             <span class="text-cyber-cyan" id="nav-status">SYS.AUTH // ROKHAN_A</span>
         </div>
@@ -394,7 +394,7 @@
                 </div>
                 
                 <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit">
-                    <div class="media-frame angled-cut-reverse bg-black/90 w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative">
+                    <div class="media-frame angled-cut-reverse bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative">
                         <div class="bg-cyber-blue/40 text-cyber-cyan text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_01 // THE_CLAW_INTRO</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
@@ -404,7 +404,7 @@
                         </video>
                     </div>
                     
-                    <div class="media-frame angled-cut bg-black/90 w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative">
+                    <div class="media-frame angled-cut bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative">
                         <div class="bg-cyber-blue/40 text-cyber-cyan text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_02 // PID_TESTING_PROTOCOL</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
@@ -475,24 +475,39 @@
                 </div>
 
                 <div class="lg:col-span-8 h-fit">
-                    <div class="grid grid-cols-2 gap-4 aspect-square lg:aspect-[16/10]">
-                        <div class="media-frame group overflow-hidden relative bg-black/80">
+                    <!-- Upgraded to a 3-column responsive grid to fit CAD and Media seamlessly -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- NEW: CAD Model 1 -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./CADENR153.png" alt="CAD Model 1" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: CAD_MODEL_A</div>
+                        </div>
+
+                        <!-- NEW: CAD Model 2 -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
+                                <source src="./ENR153A.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CAD_MODEL_ANIMATION</div>
+                        </div>  
+
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(1).mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: BARE_CHASSIS_MACHINING</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: BARE_CHASSIS_MACHINING</div>
                         </div>   
-                        <div class="media-frame group overflow-hidden relative bg-black/80">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
                             <img src="./ENR153(2).jpg" alt="Hardware Assembly" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: HARDWARE_ASSEMBLY</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: HARDWARE_ASSEMBLY</div>
                         </div>
-                         <div class="media-frame group overflow-hidden relative bg-black/80">
+                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(3).mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: DESIGN_TESTING</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_05: DESIGN_TESTING</div>
                         </div>  
-                        <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black/80">
+                        <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black aspect-square lg:aspect-auto lg:h-48">
                             <img src="./ENR153(4).jpg" alt="Final Lava Blitz" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-cyber-amber/95 text-[10px] text-black font-black px-3 py-2 tracking-widest backdrop-blur-md">FINAL_ASSEMBLY: LAVA_BLITZ</div>
                         </div>
@@ -545,20 +560,32 @@
                 </div>
                 
                 <div class="lg:col-span-7 flex flex-col gap-4">
-                    <div class="media-frame h-64 md:h-80 w-full relative group overflow-hidden bg-black/80">
-                        <img src="./FPGA.png" alt="FPGA Setup" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" onerror="this.style.display='none'">
+                    <!-- NEW: Microwave Project Demonstration Video -->
+                    <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black">
+                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
+                            <source src="./ENR157V.mp4" type="video/mp4">
+                        </video>
                         <div class="absolute top-3 left-3 bg-black/90 border border-cyber-cyan/80 text-cyber-cyan px-4 py-2 text-xs font-bold angled-cut tracking-widest backdrop-blur-md shadow-lg">
-                            HARDWARE_INTEGRATION_HERO
+                            SYSTEM_DEMONSTRATION
                         </div>
                     </div>
+                    <div class="media-frame h-48 md:h-64 w-full relative group overflow-hidden bg-black">
+                        <img src="./Schematic.png" alt="FPGA Setup" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" onerror="this.style.display='none'">
+                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">
+                            SCHEMATIC_CAPTURE
+                        </div>
+                    </div>                
                     <div class="grid grid-cols-2 gap-4 h-48">
-                        <div class="media-frame relative group overflow-hidden bg-black/80">
+                        <div class="media-frame relative group overflow-hidden bg-black">
                             <img src="./ENR157.jpg" alt="Breadboard Top Down" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHYSICAL_WIRING_MAP</div>
                         </div>
-                        <div class="media-frame relative group overflow-hidden bg-white/10">
-                            <img src="./Schematic.png" alt="Schematic" class="w-full h-full object-contain p-2 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/95 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">SCHEMATIC_CAPTURE</div>
+                        <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black">
+                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
+                            <source src="./ENR157A.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">
+                            SYSTEM_DEMONSTRATION
                         </div>
                     </div>
                 </div>
@@ -608,18 +635,35 @@
                 </div>
 
                 <div class="lg:col-span-7 flex flex-col gap-4">
-                    <div class="grid grid-cols-2 gap-4 h-64">
-                        <div class="media-frame relative group overflow-hidden bg-black/80">
-                            <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
+                    <!-- Expanded to a 4-item grid to accommodate GIFs and Videos -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- NEW: Testing Video / Action Shot -->
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3]">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
+                                <source src="./ENR251F.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
                         </div>
-                        <div class="media-frame relative group overflow-hidden bg-black/80">
+
+                        <!-- NEW: Mechanism GIF / Animation -->
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3]">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
+                                <source src="./ENR251A.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION DAY</div>
+                        </div>
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3]">
                             <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
                         </div>
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3]">
+                            <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
+                        </div>
                     </div>
                     
-                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black/80">
+                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black">
                         <img src="./Poster.png" alt="Statics Poster" class="w-full h-auto object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
                         <div class="absolute top-3 right-3 bg-black/95 border border-cyber-magenta text-cyber-magenta px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
                             DATA_VISUALIZATION_POSTER
@@ -664,7 +708,7 @@
                 </div>
                 
                 <div class="lg:col-span-7">
-                    <div class="media-frame angled-cut-reverse bg-black/60 w-full h-80 flex flex-col group overflow-hidden relative border-cyber-cyan backdrop-blur-xl">
+                    <div class="media-frame angled-cut-reverse bg-black w-full h-80 flex flex-col group overflow-hidden relative border-cyber-cyan">
                         <div class="bg-cyber-blue/30 text-cyber-cyan text-[10px] font-bold px-3 py-2 flex justify-between z-10 absolute top-0 w-full border-b border-cyber-cyan/30 backdrop-blur-md">
                             <span>CAM_01 // 3D_VECTOR_RENDERING</span>
                             <span class="animate-pulse">INTERACTIVE (DRAG TO ROTATE)</span>

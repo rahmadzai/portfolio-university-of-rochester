@@ -314,50 +314,99 @@
         </header>
 
         <!-- ========================================== -->
-        <!-- VIEW 1: GLOBAL LEADERSHIP -->
+        <!-- VIEW 1: GLOBAL LEADERSHIP (UPGRADED MEDIA GRID) -->
         <!-- ========================================== -->
         <section id="leadership" class="scroll-mt-32 mb-32 relative">
-            <div class="flex items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2">
-                <h2 class="font-display text-4xl font-black text-white text-glow-cyan">01 // GLOBAL_RESILIENCE</h2>
-                <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CRISIS_MANAGEMENT_PROTOCOL</span>
+            <div class="flex items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between">
+                <div class="flex items-end gap-4">
+                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">01 // GLOBAL_RESILIENCE</h2>
+                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CRISIS_MANAGEMENT_PROTOCOL</span>
+                </div>
+                <button onclick="analyzeProject('leadership')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                    <span>✨</span> EXTRACT_LEADERSHIP_TRAITS
+                </button>
             </div>
             
+            <div id="ai-out-leadership" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
+
             <div class="grid lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 space-y-6">
-                    <div class="hud-panel angled-cut p-6">
-                        <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
+                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> MISSION_CRITICAL: EXTREME_RELOCATION</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-leadership">
-                            Navigating severe geopolitical instability to direct the emergency international relocation and resettlement of a multi-member family from Afghanistan to the US. Required immediate mastery of executive decision-making, crisis management, and legal frameworks while sustaining rigorous STEM academic excellence.
+                            Engineered the emergency international relocation of my family from Afghanistan to the United States amidst severe geopolitical collapse. Executed high-stakes logistics, navigated complex international legal frameworks, and established immediate financial and housing independence—all while rapidly adapting to a new culture and maintaining rigorous STEM academic excellence.
                         </p>
                     </div>
                     
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> TECH_&_SOFT_STACK</h4>
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="px-2 py-1 bg-cyber-blue/20 border border-cyber-blue text-cyber-cyan rounded">Executive Decision-Making</span>
-                            <span class="px-2 py-1 bg-cyber-blue/20 border border-cyber-blue text-cyber-cyan rounded">Crisis Management</span>
-                            <span class="px-2 py-1 bg-cyber-blue/20 border border-cyber-blue text-cyber-cyan rounded">Cross-Cultural Comm</span>
-                            <span class="px-2 py-1 bg-cyber-blue/20 border border-cyber-blue text-cyber-cyan rounded">Logistics Coordination</span>
+                    <div class="hud-panel angled-cut p-6 bg-cyber-blue/20 border-cyber-blue/50">
+                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-4">>> LEADERSHIP_METRICS</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b border-cyber-cyan/30 pb-2">
+                                <span class="text-xs text-gray-300 font-bold">STEM_GPA</span>
+                                <span class="text-xl font-display font-bold text-white text-glow-cyan">3.359</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-cyber-cyan/30 pb-2">
+                                <span class="text-xs text-gray-300 font-bold">PEER_MENTORSHIP</span>
+                                <span class="text-xl font-display font-bold text-white">TRIO Program</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-cyber-cyan/30 pb-2">
+                                <span class="text-xs text-gray-300 font-bold">CAMPUS_IMPACT</span>
+                                <span class="text-xl font-display font-bold text-white">MCC Library</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-xs text-cyber-amber font-bold tracking-widest">HIGHEST_HONOR</span>
+                                <span class="text-xl font-display font-black text-cyber-amber text-glow-amber">Matt Hachee Award</span>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-400 font-mono bg-black/60 p-4 rounded backdrop-blur-md border border-white/5">
+                        <span class="text-cyber-cyan">> CAPABILITIES:</span> Crisis Management, Executive Decision-Making, Public Speaking, Cross-Cultural Communication, Unwavering Grit.
                     </div>
                 </div>
                 
-                <div class="lg:col-span-7 hud-panel angled-cut-reverse p-1 flex flex-col justify-between">
-                    <div class="w-full h-full p-6 flex flex-col bg-black/60">
-                        <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-4 border-b border-cyber-amber/30 pb-2">>> PERFORMANCE_OUTCOME</h4>
-                        <p class="text-sm text-gray-300 mb-6 leading-relaxed">
-                            Successfully established long-term housing and financial independence. Leveraged resilience to empower underrepresented students as a TRIO Peer Mentor and MCC Library Assistant. Authored and presented a core study on scholastic resilience.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 mt-auto">
-                            <div class="border border-cyber-cyan/30 bg-cyber-cyan/10 p-4 text-center pulse-border rounded">
-                                <div class="text-3xl font-display font-bold text-white text-glow-cyan mb-1">2025</div>
-                                <div class="text-[10px] text-cyber-cyan uppercase tracking-wider font-bold">Matt Hachee Award</div>
-                            </div>
-                            <div class="border border-cyber-cyan/30 bg-cyber-cyan/10 p-4 text-center pulse-border rounded">
-                                <div class="text-3xl font-display font-bold text-white text-glow-cyan mb-1">3.359</div>
-                                <div class="text-[10px] text-cyber-cyan uppercase tracking-wider font-bold">Sustained GPA Rating</div>
-                            </div>
+                <div class="lg:col-span-8 h-fit">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Media 1: Origin -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Origin.jpg" alt="Origin Context" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: ORIGIN_POINT</div>
                         </div>
+
+                        <!-- Media 2: The Journey -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Relocation.jpg" alt="Logistics" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: RESETTLEMENT</div>
+                        </div>   
+
+                        <!-- Media 3: Resettlement -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Roc.jpg" alt="Arrival in USA" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: RESETTLEMENT</div>
+                        </div>   
+
+                        <!-- Media 4: Documentary -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Doc.gif" alt="Documentary Feature" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: RESETTLEMENT</div>
+                        </div>   
+
+                        <!-- Media 5: Public Speaking -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Speech.png" alt="Keynote Speaker" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: RESETTLEMENT</div>
+                        </div>   
+
+                        <!-- Media 6: Mentorship/Award -->
+                        <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Award.jpg" alt="Matt Hachee Award" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-cyber-amber/95 text-[10px] text-black font-black px-3 py-2 tracking-widest backdrop-blur-md">RECOGNITION: MATT_HACHEE_AWARD</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-1 md:col-span-3 hud-panel p-5 bg-black/40 mt-4 border-l-2 border-cyber-cyan">
+                        <span class="text-xs text-cyber-cyan/70 uppercase block mb-2 font-bold tracking-widest">>> THE_ULTIMATE_HOOK</span>
+                        <p class="text-sm text-gray-200">Engineering is fundamentally about solving complex problems under absolute constraints. Before I designed autonomous systems or machined high-velocity chassis, I successfully engineered my family's survival and relocation to the United States. This forged an unbreakable foundation of executive leadership, high-stress decision making, and global grit.</p>
                     </div>
                 </div>
             </div>
@@ -830,7 +879,7 @@
                     <div class="hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
                         <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> MISSION_PARAMETERS: QUALITY EDUCATION</h4>
                         <p class="text-sm leading-relaxed text-gray-200" id="desc-globalgrit">
-                            Deployed internationally to Ahmedabad, India as a Global Volunteer with AIESEC. Partnered with the Jeevanthirth Foundation to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Tasked with bridging the digital divide for vulnerable youth in the rural Vadaj sector while navigating extreme cultural, linguistic, and logistical barriers.
+                            Deployed to Ahmedabad, Gujarat (India) on Feb 10, 2018, as an AIESEC Exchange Volunteer to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Partnered with the Jeevanthirth Foundation to bridge the technological divide for underprivileged youth in the rural Vadaj sector. Operated out of Juna Koba alongside an international coalition, navigating extreme cultural dynamics and austere resource constraints.
                         </p>
                     </div>
 
@@ -850,8 +899,8 @@
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Youth Empowered</div>
                         </div>
                         <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">10+</div>
-                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Nations Unified</div>
+                            <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">INTL</div>
+                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Coalition Built</div>
                         </div>
                     </div>
                 </div>
@@ -896,8 +945,8 @@
                     </div>
                     
                     <div class="col-span-1 md:col-span-3 hud-panel p-5 bg-black/40 mt-4 border-l-2 border-cyber-green">
-                        <span class="text-xs text-cyber-green/70 uppercase block mb-2 font-bold tracking-widest">>> STRATEGIC_IMPACT</span>
-                        <p class="text-sm text-gray-200">Engineered and delivered scalable educational modules based on Gandhian ideologies of social empowerment. Fostered deep multilateral collaboration with delegates from Mexico, Brazil, China, Morocco, and the Netherlands. Proved that elite technical rigor must be paired with human-centric adaptability to build truly resilient systems.</p>
+                        <span class="text-xs text-cyber-green/70 uppercase block mb-2 font-bold tracking-widest">>> STRATEGIC_IMPACT & DIPLOMACY</span>
+                        <p class="text-sm text-gray-200">Engineered and delivered scalable educational modules based on Gandhian ideologies of social empowerment. Fostered deep multilateral collaboration alongside delegates from China, Mexico, Brazil, and Morocco. Explored major historical sites like Jama Masjid and the Lotus Temple, proving that elite technical rigor must be paired with human-centric adaptability to build truly resilient global systems.</p>
                     </div>
                 </div>
             </div>
@@ -1741,6 +1790,9 @@
             
             let formattedResponse = "";
             switch(projectId) {
+                case 'leadership': 
+                    formattedResponse = "<span class=\"text-cyber-cyan font-bold\">High-Stakes Decision Making:</span> The ability to execute complex logistical operations under extreme duress is directly translatable to engineering project management and crisis mitigation in high-level corporate environments.<br><br><span class=\"text-cyber-cyan font-bold\">Extreme Adaptability:</span> Rapidly mastering new cultural and systemic frameworks proves a highly accelerated learning curve, essential for R&D and bleeding-edge tech development."; 
+                    break;
                 case 'autonomous': 
                     formattedResponse = "<span class=\"text-cyber-cyan font-bold\">Autonomous Navigation & Sensor Fusion:</span> Directly applicable to the booming autonomous vehicle industry (e.g., Tesla, Waymo) and drone delivery logistics.<br><br><span class=\"text-cyber-cyan font-bold\">Algorithm Optimization:</span> Highly valuable in aerospace robotics and planetary rover engineering where compute efficiency and timing are critical."; 
                     break;

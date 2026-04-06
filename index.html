@@ -235,7 +235,7 @@
         <div class="flex items-center gap-4">
             <div class="w-2 h-2 bg-cyber-cyan animate-ping rounded-full shadow-[0_0_10px_#00f3ff]"></div>
             <a href="#" class="text-cyber-cyan text-glow-cyan hover:text-white transition-colors font-bold tracking-widest hidden md:block border border-cyber-cyan/30 px-2 py-0.5 rounded-sm bg-cyber-cyan/10">
-            ORIGIN
+                [ /ORIGIN ]
             </a>
             <span class="text-cyber-cyan" id="nav-status">SYS.AUTH // ROKHAN_A</span>
         </div>
@@ -810,43 +810,94 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW: GLOBAL GRIT SDG 4 (NEW) -->
+        <!-- VIEW 7: GLOBAL GRIT SDG 4 (UPDATED) -->
         <!-- ========================================== -->
         <section id="globalgrit" class="scroll-mt-32 mb-32 relative">
-            <div class="flex items-end gap-4 mb-8 border-b border-cyber-green/30 pb-2">
-                <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
-                <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA_DEPLOYMENT</span>
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-green/30 pb-2 justify-between">
+                <div class="flex items-end gap-4">
+                    <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
+                    <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA // JEEVANTHIRTH</span>
+                </div>
+                <button onclick="analyzeProject('globalgrit')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                    <span>✨</span> EXTRACT_LEADERSHIP_APP
+                </button>
             </div>
             
+            <div id="ai-out-globalgrit" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
+
             <div class="grid lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-6 space-y-6">
+                <div class="lg:col-span-4 space-y-6">
                     <div class="hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
-                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> SYSTEM_LOG: FIELD_DEPLOYMENT</h4>
-                        <p class="text-sm leading-relaxed text-gray-200">
-                            Executing engineering frameworks for social good. Deployed internationally to India to target UN Sustainable Development Goal 4 (Quality Education). Engineered resilient, low-resource educational models for underprivileged sectors, demonstrating absolute adaptability in austere environments.
+                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> MISSION_PARAMETERS: QUALITY EDUCATION</h4>
+                        <p class="text-sm leading-relaxed text-gray-200" id="desc-globalgrit">
+                            Deployed internationally to Ahmedabad, India as a Global Volunteer with AIESEC. Partnered with the Jeevanthirth Foundation to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Tasked with bridging the digital divide for vulnerable youth in the rural Vadaj sector while navigating extreme cultural, linguistic, and logistical barriers.
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel angled-cut p-4 text-center border-t-2 border-t-cyber-green bg-cyber-green/10">
-                            <div class="text-4xl font-display font-black text-cyber-green text-glow-green">500+</div>
-                            <div class="text-[10px] text-gray-300 mt-2 uppercase font-bold tracking-wider">Students Impacted</div>
+                    <div class="hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
+                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> TACTICAL_SKILLS</h4>
+                        <div class="flex flex-wrap gap-2 text-xs font-bold">
+                            <span class="px-2 py-1 text-black bg-cyber-green border border-cyber-green/50 rounded">Cross-Cultural Leadership</span>
+                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">NGO Operations</span>
+                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">Pedagogical Engineering</span>
+                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">Global Networking</span>
                         </div>
-                        <div class="hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-green bg-cyber-green/10">
-                            <div class="text-4xl font-display font-black text-white">100%</div>
-                            <div class="text-[10px] text-cyber-green mt-2 uppercase font-bold tracking-wider">Resource Adaptation</div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
+                            <div class="text-3xl font-display font-black text-cyber-green text-glow-green">500+</div>
+                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Youth Empowered</div>
+                        </div>
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
+                            <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">10+</div>
+                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Nations Unified</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="lg:col-span-6 hud-panel angled-cut p-1 flex flex-col justify-between border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,102,0.15)] bg-black/60">
-                    <div class="w-full h-full p-6 flex flex-col">
-                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-4 border-b border-cyber-green/30 pb-2">>> SOCIO_TECHNICAL_OUTCOME</h4>
-                        <ul class="text-sm text-gray-200 mb-6 space-y-5 font-mono leading-relaxed">
-                            <li class="flex items-start gap-3"><span class="text-cyber-green mt-1">>></span> Translated complex pedagogical strategies into scalable, repeatable modules.</li>
-                            <li class="flex items-start gap-3"><span class="text-cyber-green mt-1">>></span> Bridged extreme cultural and logistical gaps using systematic problem-solving methodologies.</li>
-                            <li class="flex items-start gap-3"><span class="text-cyber-green mt-1">>></span> Proved that elite engineering isn't just about hardware—it's about building resilient systems for humanity.</li>
-                        </ul>
+                <div class="lg:col-span-8 h-fit">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Project Cover / India.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./India.jpg" alt="Project Cover" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">INITIATION: DIGITAL_LITERACY</div>
+                        </div>
+
+                        <!-- Teaching / Work.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Work.jpg" alt="Teaching at Jeevanthirth" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">FIELD_OPS: JEEVANTHIRTH_VADAJ</div>
+                        </div>
+
+                        <!-- Global Village / Global.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Global.jpg" alt="Global Village Flag" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">DIPLOMACY: AFGHANISTAN_REP</div>
+                        </div>   
+
+                        <!-- Team / Team.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Team.jpg" alt="International Team" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">NETWORK: INTL_COALITION</div>
+                        </div>
+
+                        <!-- Exploration / Gujarat.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Gujarat.jpg" alt="Exploration" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">TEAM_DYNAMICS: AIESEC_INDIA</div>
+                        </div>  
+
+                        <!-- Architecture / Raj.jpg -->
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48">
+                            <img src="./Raj.jpg" alt="Architecture" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">CULTURAL_SURVEY: RAJASTHAN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-1 md:col-span-3 hud-panel p-5 bg-black/40 mt-4 border-l-2 border-cyber-green">
+                        <span class="text-xs text-cyber-green/70 uppercase block mb-2 font-bold tracking-widest">>> STRATEGIC_IMPACT</span>
+                        <p class="text-sm text-gray-200">Engineered and delivered scalable educational modules based on Gandhian ideologies of social empowerment. Fostered deep multilateral collaboration with delegates from Mexico, Brazil, China, Morocco, and the Netherlands. Proved that elite technical rigor must be paired with human-centric adaptability to build truly resilient systems.</p>
                     </div>
                 </div>
             </div>
@@ -1701,6 +1752,9 @@
                     break;
                 case 'structural': 
                     formattedResponse = "<span class=\"text-cyber-cyan font-bold\">Indeterminate Structure Analysis:</span> Directly applies to civil infrastructure, bridge engineering, and large-scale architectural frameworks.<br><br><span class=\"text-cyber-cyan font-bold\">Real-world Discrepancy Modeling:</span> Crucial for aerospace material testing and failure analysis in extreme environments."; 
+                    break;
+                case 'globalgrit': 
+                    formattedResponse = "<span class=\"text-cyber-cyan font-bold\">Cross-Cultural Management & Adaptability:</span> Highly sought after in multinational corporations and global supply chain management where navigating diverse teams is critical.<br><br><span class=\"text-cyber-cyan font-bold\">Project Deployment in Austere Environments:</span> Directly translates to field engineering, defense logistics, and establishing resilient infrastructure in low-resource settings."; 
                     break;
             }
             

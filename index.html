@@ -267,6 +267,7 @@
             <a href="#structural" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80">[05] STATICS</a>
             <a href="#matlab" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80">[06] MATLAB</a>
             <a href="#globalgrit" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80">[07] IMPACT</a>
+            <a href="#resume" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80">[08] DOSSIER</a>
         </div>
         <div class="text-cyber-green text-glow-green tracking-widest hidden sm:block">SYS_ONLINE</div>
     </nav>
@@ -334,7 +335,7 @@
         </header>
 
         <!-- ========================================== -->
-        <!-- VIEW 1: GLOBAL LEADERSHIP (UPGRADED) -->
+        <!-- VIEW 1: GLOBAL LEADERSHIP -->
         <!-- ========================================== -->
         <section id="leadership" class="scroll-mt-32 mb-32 relative">
             <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
@@ -754,244 +755,193 @@
                         <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-200">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251F.mp4" type="video/mp4">
-                            </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
-                        </div>
-
-                        <!-- NEW: Mechanism GIF / Animation -->
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-300">
-                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
-                                <source src="./ENR251A.mp4" type="video/mp4">
-                            </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION DAY</div>
-                        </div>
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-400">
-                            <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
-                        </div>
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-500">
-                            <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
-                        </div>
-                    </div>
-                    
-                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black reveal delay-600">
-                        <img src="./Poster.png" alt="Statics Poster" class="w-full h-auto object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
-                        <div class="absolute top-3 right-3 bg-black/95 border border-cyber-magenta text-cyber-magenta px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
-                            DATA_VISUALIZATION_POSTER
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW: MATLAB TOOLBOX (NEW - INTERACTIVE WEB APP) -->
-        <!-- ========================================== -->
-        <section id="matlab" class="scroll-mt-32 mb-32 relative">
-            <div class="flex items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 reveal">
-                <h2 class="font-display text-4xl font-black text-white text-glow-cyan">06 // SYS.COMPUTE MATLAB</h2>
-                <span class="text-cyber-cyan/70 text-sm mb-1 hidden sm:block font-bold">KINEMATIC_ENGINEERING</span>
-            </div>
-            
-            <div class="hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)]">
-                
-                <!-- Controls Sidebar -->
-                <div class="w-full lg:w-1/3 bg-black/60 p-6 border border-cyber-cyan/30 flex flex-col reveal delay-100">
-                    <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-6 border-b border-cyber-cyan/30 pb-2">>> SYS.CONFIG</h4>
-                    
-                    <div class="space-y-4 flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-300 font-mono">Velocity (m/s)</span>
-                            <input type="number" id="phys-v" value="80" class="physics-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-300 font-mono">Angle (deg)</span>
-                            <input type="number" id="phys-theta" value="45" class="physics-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-300 font-mono">Init Height (m)</span>
-                            <input type="number" id="phys-h" value="0" class="physics-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-300 font-mono">Mass (kg)</span>
-                            <input type="number" id="phys-m" value="50" class="physics-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-300 font-mono">Gravity (m/s^2)</span>
-                            <input type="number" id="phys-g" value="9.81" step="0.01" class="physics-input">
-                        </div>
-                    </div>
-
-                    <button onclick="runPhysicsSim()" class="w-full mt-8 bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border">
-                        RUN SIMULATION
-                    </button>
-                    
-                    <div class="mt-6 border-t border-cyber-cyan/30 pt-4">
-                        <span class="text-xs text-cyber-cyan/50 block mb-2 font-bold tracking-widest">>> LIVE_STATS</span>
-                        <div class="flex justify-between text-xs font-mono">
-                            <span class="text-gray-400">Max Height:</span>
-                            <span id="stat-height" class="text-white">-- m</span>
-                        </div>
-                        <div class="flex justify-between text-xs font-mono mt-1">
-                            <span class="text-gray-400">Flight Time:</span>
-                            <span id="stat-time" class="text-white">-- s</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Display Area -->
-                <div class="w-full lg:w-2/3 bg-black/80 border border-cyber-cyan/30 flex flex-col relative overflow-hidden min-h-[400px] reveal delay-200">
-                    <!-- Tabs -->
-                    <div class="flex border-b border-cyber-cyan/30 bg-cyber-dark/80 backdrop-blur-md z-20 overflow-x-auto custom-scrollbar">
-                        <button onclick="switchPhysTab('3d')" id="btn-tab-3d" class="px-4 py-2 text-xs font-bold tracking-widest text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-cyan/10 transition-colors whitespace-nowrap">
-                            3D_SIMULATION
-                        </button>
-                        <button onclick="switchPhysTab('data')" id="btn-tab-data" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-white transition-colors whitespace-nowrap">
-                            DATA_&_REPORT
-                        </button>
-                        <button onclick="switchPhysTab('solver')" id="btn-tab-solver" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-cyber-purple transition-colors whitespace-nowrap">
-                            AI_SOLVER
-                        </button>
-                    </div>
-                    
-                    <!-- 3D Canvas View -->
-                    <div id="sim-3d-view" class="flex-1 relative w-full h-full">
-                        <div id="physics-canvas-container" class="absolute inset-0"></div>
-                        <div class="absolute bottom-2 right-2 text-[10px] text-cyber-cyan/50 font-mono z-10 bg-black/70 px-2 py-1 rounded">
-                            DRAG TO ROTATE // SCROLL TO ZOOM
-                        </div>
-                    </div>
-
-                    <!-- Data Table View -->
-                    <div id="sim-data-view" class="flex-1 hidden p-4 overflow-y-auto max-h-[500px] bg-[#050a14] custom-scrollbar">
-                        <table class="w-full text-left font-mono text-xs data-table">
-                            <thead>
-                                <tr>
-                                    <th>Time (s)</th>
-                                    <th>X (m)</th>
-                                    <th>Y (m)</th>
-                                    <th>K.E. (J)</th>
-                                    <th>P.E. (J)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="data-table-body">
-                                <tr><td colspan="5" class="text-center py-8 text-gray-500">Run simulation to generate report.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- NEW: AI Physics Solver View -->
-                    <div id="sim-solver-view" class="flex-1 hidden flex-col p-5 overflow-y-auto max-h-[500px] bg-[#020408] custom-scrollbar">
-                        <div class="mb-4">
-                            <span class="text-xs text-cyber-purple/80 block mb-2 font-bold tracking-widest">>> LOAD_PRESET_SCENARIO:</span>
-                            <div class="flex flex-wrap gap-2">
-                                <button onclick="loadSolverPreset('An Artemis II rocket stage separates at an altitude of 150 km traveling at 7,500 m/s at an angle of 10 degrees above the horizontal. Assuming standard Earth gravity (ignore air resistance for this stage), calculate the maximum altitude it will reach.')" class="border border-cyber-cyan/30 text-cyber-cyan text-[10px] px-2 py-1 hover:bg-cyber-cyan/20 transition-colors uppercase">Space Projection</button>
-                                <button onclick="loadSolverPreset('A Mars rover weighing 1025 kg drops from a lander hovering 15 meters above the Martian surface (g = 3.72 m/s^2). What is the kinetic energy of the rover the exact moment before impact?')" class="border border-cyber-amber/30 text-cyber-amber text-[10px] px-2 py-1 hover:bg-cyber-amber/20 transition-colors uppercase">Mars Dynamics</button>
-                                <button onclick="loadSolverPreset('Calculate the orbital velocity required for a satellite to maintain a circular low-Earth orbit at an altitude of 400 km. (Earth Mass = 5.97 x 10^24 kg, Earth Radius = 6371 km).')" class="border border-cyber-green/30 text-cyber-green text-[10px] px-2 py-1 hover:bg-cyber-green/20 transition-colors uppercase">Orbital Velocity</button>
-                            </div>
-                        </div>
-                        <textarea id="solver-input" class="w-full bg-black/60 border border-cyber-purple/30 text-white text-sm font-mono p-3 focus:border-cyber-purple outline-none resize-none h-24 mb-4 custom-scrollbar rounded-sm shadow-inner" placeholder="Enter custom kinematic or dynamic physics problem..."></textarea>
-                        <button onclick="solvePhysicsProblem()" class="w-full bg-cyber-purple/20 hover:bg-cyber-purple/40 border border-cyber-purple text-cyber-purple font-bold py-2 text-xs tracking-widest transition-all mb-4 shadow-[0_0_15px_rgba(188,19,254,0.2)]">
-                            INITIALIZE_SOLVER
-                        </button>
-                        <div id="solver-output" class="text-sm font-mono text-gray-300 leading-relaxed border-t border-cyber-purple/30 pt-4 mt-2">
-                            <span class="text-cyber-purple/50">> AWAITING_INPUT...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 7: GLOBAL GRIT SDG 4 (UPDATED) -->
-        <!-- ========================================== -->
-        <section id="globalgrit" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-green/30 pb-2 justify-between reveal">
-                <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
-                    <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA // JEEVANTHIRTH</span>
-                </div>
-                <button onclick="analyzeProject('globalgrit')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
-                    <span>✨</span> EXTRACT_LEADERSHIP_APP
-                </button>
-            </div>
-            
-            <div id="ai-out-globalgrit" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
-
-            <div class="grid lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
-                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> MISSION_PARAMETERS: QUALITY EDUCATION</h4>
-                        <p class="text-sm leading-relaxed text-gray-200" id="desc-globalgrit">
-                            Deployed to Ahmedabad, Gujarat (India) on Feb 10, 2018, as an AIESEC Exchange Volunteer to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Partnered with the Jeevanthirth Foundation to bridge the technological divide for underprivileged youth in the rural Vadaj sector. Operated out of Juna Koba alongside an international coalition, navigating extreme cultural dynamics and austere resource constraints.
-                        </p>
-                    </div>
-
-                    <div class="hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
-                        <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> TACTICAL_SKILLS</h4>
-                        <div class="flex flex-wrap gap-2 text-xs font-bold">
-                            <span class="px-2 py-1 text-black bg-cyber-green border border-cyber-green/50 rounded">Cross-Cultural Leadership</span>
-                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">NGO Operations</span>
-                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">Pedagogical Engineering</span>
-                            <span class="px-2 py-1 text-cyber-green bg-cyber-green/20 border border-cyber-green/50 rounded">Global Networking</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-green text-glow-green">500+</div>
-                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Youth Empowered</div>
-                        </div>
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">INTL</div>
-                            <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Coalition Built</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="lg:col-span-8 h-fit">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Project Cover / India.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100">
-                            <img src="./India.jpeg" alt="Project Cover" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">INITIATION: DIGITAL_LITERACY</div>
-                        </div>
-
-                        <!-- Teaching / Work.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200">
-                            <img src="./Work.jpg" alt="Teaching at Jeevanthirth" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">FIELD_OPS: JEEVANTHIRTH_VADAJ</div>
-                        </div>
-
-                        <!-- Global Village / Global.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300">
-                            <img src="./Global.jpg" alt="Global Village Flag" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">DIPLOMACY: AFGHANISTAN_REP</div>
-                        </div>   
-
-                        <!-- Team / Team.png -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400">
-                            <img src="./Team.png" alt="International Team" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">NETWORK: INTL_COALITION</div>
-                        </div>
-
-                        <!-- Exploration / Gujarat.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500">
-                            <img src="./Gujarat.jpeg" alt="Exploration" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">TEAM_DYNAMICS: AIESEC_INDIA</div>
-                        </div>  
-
-                        <!-- Architecture / Raj.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600">
-                            <img src="./Raj.jpg" alt="Architecture" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">CULTURAL_SURVEY: RAJASTHAN</div>
-                        </div>
-                    </div>
-                    
                     <div class="col-span-1 md:col-span-3 hud-panel p-5 bg-black/40 mt-4 border-l-2 border-cyber-green reveal delay-400">
                         <span class="text-xs text-cyber-green/70 uppercase block mb-2 font-bold tracking-widest">>> STRATEGIC_IMPACT & DIPLOMACY</span>
                         <p class="text-sm text-gray-200">Engineered and delivered scalable educational modules based on Gandhian ideologies of social empowerment. Fostered deep multilateral collaboration alongside delegates from China, Mexico, Brazil, and Morocco. Explored major historical sites like Jama Masjid and the Lotus Temple, proving that elite technical rigor must be paired with human-centric adaptability to build truly resilient global systems.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 8: RESUME DOSSIER (NEW) -->
+        <!-- ========================================== -->
+        <section id="resume" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+                <div class="flex items-end gap-4">
+                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">08 // SYS.DATA_DOSSIER</h2>
+                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CANDIDATE_PROFILE</span>
+                </div>
+                <button onclick="analyzeProject('resume')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                    <span>✨</span> INITIATE_EVALUATION
+                </button>
+            </div>
+
+            <div id="ai-out-resume" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
+
+            <div class="grid lg:grid-cols-12 gap-8">
+                <!-- Left Column: Profile & Skills -->
+                <div class="lg:col-span-4 space-y-6 reveal delay-100">
+                    <!-- Bio Panel -->
+                    <div class="hud-panel angled-cut p-6 bg-black/60 border-t-2 border-cyber-cyan">
+                        <div class="flex items-center gap-4 mb-4 border-b border-cyber-cyan/20 pb-4">
+                            <div class="w-16 h-16 rounded-full border-2 border-cyber-cyan p-1 bg-cyber-cyan/10 flex items-center justify-center">
+                                <span class="font-display font-black text-2xl text-cyber-cyan drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]">RK</span>
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl font-bold text-white tracking-widest">ROKHAN AHMADZAI</h3>
+                                <p class="text-xs text-cyber-cyan/80 font-mono mt-1">> SYSTEMS_ENGINEER</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3 text-xs font-mono text-gray-300">
+                            <div class="flex items-center gap-2">
+                                <span class="text-cyber-cyan">TEL:</span> (585) 404-8285
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-cyber-cyan">EML:</span> <a href="mailto:rokhanahmadzai5@gmail.com" class="hover:text-white transition-colors">rokhanahmadzai5@gmail.com</a>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-cyber-cyan">NET:</span> <a href="https://linkedin.com/in/rokhan-ahmadzai" target="_blank" class="hover:text-white transition-colors">linkedin.com/in/rokhan-ahmadzai</a>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-cyber-cyan">LOC:</span> Henrietta, NY
+                            </div>
+                        </div>
+                        <a href="./Rokhan Ahmadzai Resume Polished.pdf" download target="_blank" class="mt-6 w-full block text-center bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border">
+                            [ DOWNLOAD_SECURE_PDF ]
+                        </a>
+                    </div>
+
+                    <!-- Skills Data-Viz -->
+                    <div class="hud-panel p-6 bg-black/40">
+                        <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-4 border-b border-cyber-cyan/30 pb-2">>> TECHNICAL_TOOLKIT</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Software & Programming</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 text-[10px] text-black bg-cyber-cyan font-bold rounded-sm">SolidWorks (CAD)</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">MATLAB</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">Python</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">C++</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">Quartus Prime</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">AutoCAD</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Engineering & Core</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">FEA Analysis</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">GD&T</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">DFMA</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">Autonomous Robotics</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">Digital Systems</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Fabrication</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">3D Printing/Slicing</span>
+                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Aluminum Alloys</span>
+                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Composites</span>
+                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Soldering</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Languages</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">English (Pro)</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Dari (Native)</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Pashto (Native)</span>
+                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Urdu/Hindi (Speaking)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Timeline Matrix -->
+                <div class="lg:col-span-8 h-fit reveal delay-200">
+                    <div class="hud-panel angled-cut-reverse p-6 lg:p-8 bg-black/60 relative">
+                        <!-- Timeline Line -->
+                        <div class="absolute left-6 lg:left-8 top-12 bottom-12 w-px bg-gradient-to-b from-cyber-cyan via-cyber-purple to-cyber-amber opacity-50"></div>
+                        
+                        <div class="space-y-12">
+                            <!-- Education Section -->
+                            <div class="relative pl-8">
+                                <div class="absolute -left-[5px] top-1 w-3 h-3 bg-black border-2 border-cyber-cyan rounded-full shadow-[0_0_10px_#00f3ff]"></div>
+                                <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-4 uppercase">>> Academic_Nodes</h4>
+                                
+                                <div class="space-y-6">
+                                    <div class="bg-cyber-cyan/5 border border-cyber-cyan/20 p-4 rounded-sm hover:bg-cyber-cyan/10 transition-colors">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                            <div>
+                                                <h5 class="text-white font-bold text-base">Rochester Institute of Technology (RIT)</h5>
+                                                <div class="text-cyber-cyan/80 text-xs font-mono mt-1">B.S. Mechanical Engineering</div>
+                                            </div>
+                                            <span class="text-xs text-cyber-amber font-mono mt-2 sm:mt-0 bg-cyber-amber/10 px-2 py-1 rounded border border-cyber-amber/30">EXP: MAY 2028</span>
+                                        </div>
+                                        <p class="text-xs text-gray-400 font-mono mt-2">> Status: Accepted / Transitioning for Fall 2026</p>
+                                    </div>
+
+                                    <div class="bg-cyber-cyan/5 border border-cyber-cyan/20 p-4 rounded-sm hover:bg-cyber-cyan/10 transition-colors">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                            <div>
+                                                <h5 class="text-white font-bold text-base">Monroe Community College (MCC)</h5>
+                                                <div class="text-cyber-cyan/80 text-xs font-mono mt-1">A.S. Engineering Science & Physics</div>
+                                            </div>
+                                            <span class="text-xs text-cyber-amber font-mono mt-2 sm:mt-0 bg-cyber-amber/10 px-2 py-1 rounded border border-cyber-amber/30">EXP: MAY 2026</span>
+                                        </div>
+                                        <div class="text-xs text-gray-300 font-mono mt-3 leading-relaxed">
+                                            <span class="text-cyber-cyan font-bold">> GPA:</span> 3.359/4.00<br>
+                                            <span class="text-cyber-cyan font-bold">> CORE:</span> Calculus III | Dynamics | Mechanics of Materials | MATLAB | Eng. Physics II<br>
+                                            <span class="text-cyber-cyan font-bold">> HONORS:</span> Matt Hachee Award (2025), 1st Prize Statics (2025), Hon. Mention Scholars Day, 1st Place Prototyping (2024).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Experience Section -->
+                            <div class="relative pl-8">
+                                <div class="absolute -left-[5px] top-1 w-3 h-3 bg-black border-2 border-cyber-purple rounded-full shadow-[0_0_10px_#bc13fe]"></div>
+                                <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-4 uppercase">>> Professional_Deployments</h4>
+                                
+                                <div class="space-y-4">
+                                    <div class="border-l-2 border-cyber-purple/50 pl-4 py-1">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                            <h5 class="text-white font-bold text-sm">TRIO Student Support Services Peer Mentor</h5>
+                                            <span class="text-[10px] text-gray-500 font-mono mt-1 sm:mt-0">JAN 2025 - AUG 2025</span>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-2 leading-relaxed">Managed progress tracking and collaborative study strategies for a cohort of 1st-generation STEM students to improve retention.</p>
+                                    </div>
+
+                                    <div class="border-l-2 border-cyber-purple/50 pl-4 py-1">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                            <h5 class="text-white font-bold text-sm">MCC Libraries Work-Study Assistant</h5>
+                                            <span class="text-[10px] text-gray-500 font-mono mt-1 sm:mt-0">JAN 2024 - PRESENT</span>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-2 leading-relaxed">Spearheaded organization and cataloging of critical engineering research materials for an institution of 10,000+ students (3-Year Tenure).</p>
+                                    </div>
+
+                                    <div class="border-l-2 border-gray-600 pl-4 py-1 opacity-70 hover:opacity-100 transition-opacity">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                            <h5 class="text-gray-300 font-bold text-sm">Startek Technical Support Specialist</h5>
+                                            <span class="text-[10px] text-gray-500 font-mono mt-1 sm:mt-0">MAY 2023 - AUG 2024</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Resolved complex hardware, software, and network configuration failures for a 15,000+ customer database under strict time constraints.</p>
+                                    </div>
+
+                                    <div class="border-l-2 border-gray-600 pl-4 py-1 opacity-70 hover:opacity-100 transition-opacity">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                            <h5 class="text-gray-300 font-bold text-sm">Northland Controls GSOC Operator</h5>
+                                            <span class="text-[10px] text-gray-500 font-mono mt-1 sm:mt-0">JUN 2022 - APR 2023</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Monitored advanced technical infrastructure and executed real-time incident response protocols within a high-stakes GSOC environment.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1870,6 +1820,9 @@
                     break;
                 case 'globalgrit': 
                     formattedResponse = "<span class=\"text-cyber-cyan font-bold\">Cross-Cultural Management & Adaptability:</span> Highly sought after in multinational corporations and global supply chain management where navigating diverse teams is critical.<br><br><span class=\"text-cyber-cyan font-bold\">Project Deployment in Austere Environments:</span> Directly translates to field engineering, defense logistics, and establishing resilient infrastructure in low-resource settings."; 
+                    break;
+                case 'resume': 
+                    formattedResponse = "<span class=\"text-cyber-cyan font-bold\">Candidate Profile Assessed:</span> Rokhan Ahmadzai demonstrates an elite intersection of hardware fabrication, complex systems design, and executive-level crisis management.<br><br><span class=\"text-cyber-cyan font-bold\">Recommendation:</span> Exceptional hire. The candidate pairs deep technical rigor (CAD, MATLAB, C++, Robotics) with proven, real-world grit. Prioritize for roles requiring high adaptability and robust problem-solving constraints."; 
                     break;
             }
             

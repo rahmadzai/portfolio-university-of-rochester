@@ -60,7 +60,6 @@
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
             background-size: 100% 4px;
             pointer-events: none;
-            /* Pushed behind the main UI (z-index: 10) to keep images/videos crisp */
             z-index: -5; 
             opacity: 0.4;
         }
@@ -144,11 +143,15 @@
             clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
         }
 
-        /* Neon Text Utilities */
+        /* Neon Text Utilities & Uni Colors */
         .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.4); }
         .text-glow-amber { text-shadow: 0 0 10px rgba(255, 179, 0, 0.6), 0 0 20px rgba(255, 179, 0, 0.4); color: #ffb300; }
         .text-glow-magenta { text-shadow: 0 0 10px rgba(255, 0, 60, 0.6), 0 0 20px rgba(255, 0, 60, 0.4); color: #ff003c; }
         .text-glow-green { text-shadow: 0 0 10px rgba(0, 255, 102, 0.6), 0 0 20px rgba(0, 255, 102, 0.4); color: #00ff66; }
+        .text-glow-blue { text-shadow: 0 0 10px rgba(0, 102, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.4); color: #66aaff; }
+        .text-glow-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.8), 0 0 20px rgba(188, 19, 254, 0.4); color: #e066ff; }
+        .text-glow-orange { text-shadow: 0 0 10px rgba(247, 105, 2, 0.8), 0 0 20px rgba(247, 105, 2, 0.4); color: #F76902; }
+        .text-glow-yellow { text-shadow: 0 0 10px rgba(255, 209, 0, 0.8), 0 0 20px rgba(255, 209, 0, 0.4); color: #FFD100; }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
@@ -182,7 +185,7 @@
             border: 1px solid rgba(0, 102, 255, 0.4);
             box-shadow: 0 0 15px rgba(0, 102, 255, 0.1);
             position: relative;
-            background-color: #000000; /* Forced solid black to completely prevent background bleed */
+            background-color: #000000;
             overflow: hidden;
         }
         .media-frame::after {
@@ -203,79 +206,36 @@
             animation: blink 1s step-end infinite;
         }
 
-        /* 3D CSS Tilt Cards for GIFs */
+        /* 3D CSS Tilt Cards */
         .tilt-card {
             transform-style: preserve-3d;
             perspective: 1000px;
             position: relative;
         }
-        
         .tilt-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-            z-index: 50;
-            border-radius: inherit;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; mix-blend-mode: overlay; z-index: 50; border-radius: inherit;
         }
-        
-        .tilt-card:hover::after {
-            opacity: 1;
-        }
-
+        .tilt-card:hover::after { opacity: 1; }
         .tilt-content {
-            transform-style: preserve-3d;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            transform: translateZ(30px);
+            transform-style: preserve-3d; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: translateZ(30px);
         }
-
         .tilt-gif {
-            position: absolute;
-            top: 10%; left: 10%;
-            width: 80%; height: 80%;
-            object-fit: cover;
-            border-radius: 6px;
-            transform: translateZ(60px) scale(0.4);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            pointer-events: none;
-            z-index: 20;
+            position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; object-fit: cover; border-radius: 6px;
+            transform: translateZ(60px) scale(0.4); opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); pointer-events: none; z-index: 20;
         }
-
-        .tilt-card:hover .tilt-content {
-            opacity: 0;
-            transform: translateZ(-20px) scale(0.8);
-        }
-
-        .tilt-card:hover .tilt-gif {
-            opacity: 1;
-            transform: translateZ(60px) scale(1);
-        }
+        .tilt-card:hover .tilt-content { opacity: 0; transform: translateZ(-20px) scale(0.8); }
+        .tilt-card:hover .tilt-gif { opacity: 1; transform: translateZ(60px) scale(1); }
 
         /* Physics App Styling */
         .physics-input {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: #fff;
-            padding: 4px 8px;
-            font-family: 'JetBrains Mono', monospace;
-            width: 80px;
-            text-align: right;
-            outline: none;
+            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); color: #fff;
+            padding: 4px 8px; font-family: 'JetBrains Mono', monospace; width: 80px; text-align: right; outline: none;
         }
         .physics-input:focus { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.2); }
-        
-        /* Module 3D Canvas Containers */
-        #physics-canvas-container {
-            width: 100%; height: 100%; min-height: 400px; cursor: grab;
-        }
+        #physics-canvas-container { width: 100%; height: 100%; min-height: 400px; cursor: grab; }
         #physics-canvas-container:active { cursor: grabbing; }
-
-        /* Data Table Styling */
         .data-table th { border-bottom: 1px solid rgba(0, 243, 255, 0.4); padding: 8px; color: #00f3ff; }
         .data-table td { padding: 4px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 
@@ -306,28 +266,67 @@
     <!-- GLOBAL 3D BACKGROUND -->
     <canvas id="global-3d-bg"></canvas>
 
+    <!-- RIGHT SIDE DOT NAVIGATION -->
+    <div id="side-nav" class="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 hidden lg:flex">
+        <a href="#leadership" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">01_RESILIENCE</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-cyan bg-black group-hover:bg-cyber-cyan transition-colors shadow-[0_0_10px_rgba(0,243,255,0.5)]"></div>
+        </a>
+        <a href="#autonomous" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-purple opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-purple/50 shadow-[0_0_10px_rgba(188,19,254,0.2)]">02_AUTONOMY</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-purple bg-black group-hover:bg-cyber-purple transition-colors shadow-[0_0_10px_rgba(188,19,254,0.5)]"></div>
+        </a>
+        <a href="#mechanical" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-magenta opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-magenta/50 shadow-[0_0_10px_rgba(255,0,60,0.2)]">03_HARDWARE</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-magenta bg-black group-hover:bg-cyber-magenta transition-colors shadow-[0_0_10px_rgba(255,0,60,0.5)]"></div>
+        </a>
+        <a href="#ironeagle" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-[#66aaff] opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-[#66aaff]/50 shadow-[0_0_10px_rgba(102,170,255,0.2)]">04_IRON_EAGLE</span>
+            <div class="w-2 h-2 rounded-full border border-[#66aaff] bg-black group-hover:bg-[#66aaff] transition-colors shadow-[0_0_10px_rgba(102,170,255,0.5)]"></div>
+        </a>
+        <a href="#digital" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">05_FPGA_LOGIC</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-cyan bg-black group-hover:bg-cyber-cyan transition-colors shadow-[0_0_10px_rgba(0,243,255,0.5)]"></div>
+        </a>
+        <a href="#structural" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-amber opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-amber/50 shadow-[0_0_10px_rgba(255,179,0,0.2)]">06_STATICS</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-amber bg-black group-hover:bg-cyber-amber transition-colors shadow-[0_0_10px_rgba(255,179,0,0.5)]"></div>
+        </a>
+        <a href="#globalgrit" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-green opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-green/50 shadow-[0_0_10px_rgba(0,255,102,0.2)]">07_IMPACT</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-green bg-black group-hover:bg-cyber-green transition-colors shadow-[0_0_10px_rgba(0,255,102,0.5)]"></div>
+        </a>
+        <a href="#resume" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">08_DOSSIER</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-cyan bg-black group-hover:bg-cyber-cyan transition-colors shadow-[0_0_10px_rgba(0,243,255,0.5)]"></div>
+        </a>
+        <a href="#matlab" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">09_MATLAB</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-cyan bg-black group-hover:bg-cyber-cyan transition-colors shadow-[0_0_10px_rgba(0,243,255,0.5)]"></div>
+        </a>
+        <a href="#contact" class="group flex items-center justify-end gap-3 cursor-pointer">
+            <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-2 py-1 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">10_UPLINK</span>
+            <div class="w-2 h-2 rounded-full border border-cyber-cyan bg-black group-hover:bg-cyber-cyan transition-colors shadow-[0_0_10px_rgba(0,243,255,0.5)]"></div>
+        </a>
+    </div>
+
     <!-- HUD Top Bar -->
-    <nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex justify-between items-center px-4 py-3 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+    <nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex justify-between items-center px-4 py-2 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div class="flex items-center gap-4">
-            <div class="w-2 h-2 bg-cyber-cyan animate-ping rounded-full shadow-[0_0_10px_#00f3ff]"></div>
-            <a href="#" class="text-cyber-cyan text-glow-cyan hover:text-white transition-colors font-bold tracking-widest hidden md:block border border-cyber-cyan/30 px-2 py-0.5 rounded-sm bg-cyber-cyan/10">
-                [ /ORIGIN ]
+            <!-- Custom Origin Logo -->
+            <a href="#" class="group relative flex items-center justify-center w-10 h-10 bg-cyber-cyan/10 border border-cyber-cyan/30 hover:border-cyber-cyan hover:bg-cyber-cyan/20 transition-all angled-cut overflow-hidden cursor-pointer">
+                <div class="absolute w-full h-full bg-cyber-cyan/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span class="font-display font-bold text-cyber-cyan text-lg relative z-10 group-hover:animate-pulse drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]">RK</span>
             </a>
-            <span class="text-cyber-cyan" id="nav-status">SYS.AUTH // ROKHAN_A</span>
+            <div class="hidden sm:flex flex-col">
+                <span class="text-cyber-cyan font-bold drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">SPATIAL_OS v3.0</span>
+                <span class="text-[8px] text-cyber-cyan/60 font-mono tracking-widest">SYS.AUTH // ROKHAN_A</span>
+            </div>
         </div>
-        <div class="hidden lg:flex gap-3 xl:gap-5 items-center overflow-x-auto custom-scrollbar pb-1 lg:pb-0">
-            <a href="#leadership" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[01] RESILIENCE</a>
-            <a href="#autonomous" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[02] AUTONOMY</a>
-            <a href="#mechanical" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[03] HARDWARE</a>
-            <a href="#ironeagle" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[04] IRON_EAGLE</a>
-            <a href="#digital" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[05] FPGA_LOGIC</a>
-            <a href="#structural" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[06] STATICS</a>
-            <a href="#globalgrit" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[07] IMPACT</a>
-            <a href="#resume" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[08] DOSSIER</a>
-            <a href="#matlab" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[09] MATLAB</a>
-            <a href="#contact" class="hover:text-cyber-cyan transition-colors drop-shadow-md text-white/80 whitespace-nowrap">[10] UPLINK</a>
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-cyber-green animate-ping rounded-full shadow-[0_0_10px_#00ff66]"></div>
+            <div class="text-cyber-green text-glow-green tracking-widest">SYS_ONLINE</div>
         </div>
-        <div class="text-cyber-green text-glow-green tracking-widest hidden sm:block">SYS_ONLINE</div>
     </nav>
 
     <div class="max-w-7xl mx-auto px-4 pt-28 pb-32 min-h-screen flex flex-col relative z-10">
@@ -349,8 +348,8 @@
 
             <p class="mt-6 text-sm md:text-base text-cyber-cyan/90 max-w-2xl mx-auto leading-relaxed mb-10 font-sans border-l-2 border-cyber-cyan pl-4 text-left bg-black/40 p-5 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.8)] rounded-r-lg reveal delay-300">
                 <span class="text-white">> IDENTIFICATION:</span> Mechanical, Autonomy, and Aerospace.<br/>
-                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ Monroe Community College.<br/>
-                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ RIT (Fall 2026).<br/>
+                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ <span class="text-glow-yellow font-bold">MCC</span>.<br/>
+                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ <span class="text-glow-orange font-bold">RIT</span> (Fall 2026).<br/>
                 <span class="text-white">> SYSTEM_PROMPT:</span> Scroll down to initialize core system modules.
             </p>
 
@@ -358,7 +357,7 @@
             <div class="flex flex-wrap justify-center gap-6 text-sm mb-12 reveal delay-400">
                 
                 <!-- Box 1: NEXT NODE (RIT) -->
-                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-crosshair border border-cyber-cyan/30 tilt-card transition-colors hover:bg-cyber-cyan/5 rounded-sm">
+                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-pointer border border-cyber-cyan/30 tilt-card transition-colors hover:bg-cyber-cyan/5 rounded-sm">
                     <div class="tilt-content absolute inset-0 flex flex-col items-center justify-center p-4 w-full h-full">
                         <span class="text-xs text-cyber-cyan/60 mb-1 font-bold tracking-widest">NEXT_NODE</span>
                         <span class="text-xl font-display font-bold text-white text-glow-cyan">RIT <span class="text-cyber-cyan text-sm">MECH ENG</span></span>
@@ -367,7 +366,7 @@
                 </div>
 
                 <!-- Box 2: PRIMARY FOCUS -->
-                <div class="hud-panel angled-cut-reverse min-w-[260px] h-36 relative group cursor-crosshair border border-cyber-cyan/30 tilt-card transition-colors hover:bg-cyber-cyan/5 rounded-sm">
+                <div class="hud-panel angled-cut-reverse min-w-[260px] h-36 relative group cursor-pointer border border-cyber-cyan/30 tilt-card transition-colors hover:bg-cyber-cyan/5 rounded-sm">
                     <div class="tilt-content absolute inset-0 flex flex-col items-center justify-center p-4 w-full h-full">
                         <span class="text-xs text-cyber-cyan/60 mb-1 font-bold tracking-widest">PRIMARY_FOCUS</span>
                         <span class="text-lg font-display font-bold text-white text-glow-cyan text-center leading-tight">MECH, AUTONOMY<br><span class="text-sm text-cyber-cyan">& AEROSPACE</span></span>
@@ -376,7 +375,7 @@
                 </div>
 
                 <!-- Box 3: STATUS -->
-                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-crosshair border border-cyber-amber/30 tilt-card transition-colors hover:bg-cyber-amber/5 rounded-sm">
+                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-pointer border border-cyber-amber/30 tilt-card transition-colors hover:bg-cyber-amber/5 rounded-sm">
                     <div class="tilt-content absolute inset-0 flex flex-col items-center justify-center p-4 w-full h-full">
                         <span class="text-xs text-cyber-amber/60 mb-1 font-bold tracking-widest">STATUS</span>
                         <span class="text-xl font-display font-bold text-cyber-amber text-glow-amber">AWARD WINNER</span>
@@ -393,7 +392,7 @@
         </header>
 
         <!-- ========================================== -->
-        <!-- VIEW 1: GLOBAL LEADERSHIP (UPGRADED) -->
+        <!-- VIEW 1: GLOBAL LEADERSHIP -->
         <!-- ========================================== -->
         <section id="leadership" class="scroll-mt-32 mb-32 relative">
             <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
@@ -401,7 +400,7 @@
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">01 // GLOBAL_RESILIENCE</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CRISIS_MANAGEMENT_PROTOCOL</span>
                 </div>
-                <button onclick="analyzeProject('leadership')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('leadership')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_LEADERSHIP_TRAITS
                 </button>
             </div>
@@ -517,15 +516,15 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW 2: AUTONOMOUS SYSTEMS -->
+        <!-- VIEW 2: AUTONOMOUS SYSTEMS (EV3) -->
         <!-- ========================================== -->
         <section id="autonomous" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-purple/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">02 // AUTONOMOUS_SYSTEMS</h2>
-                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">ENR_161_EV3_ROBOTICS</span>
+                    <h2 class="font-display text-4xl font-black text-white text-glow-purple">02 // AUTONOMOUS_SYSTEMS</h2>
+                    <span class="text-cyber-purple/50 text-sm mb-1 hidden sm:block">ENR_161_EV3_ROBOTICS</span>
                 </div>
-                <button onclick="analyzeProject('autonomous')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('autonomous')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_INDUSTRY_APP
                 </button>
             </div>
@@ -534,20 +533,20 @@
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                    <div class="hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
+                        <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-autonomous">
                             Design, program, and refine an autonomous EV3 platform to navigate a color-coded arena, detect randomized targets, and execute precise physical manipulation to sort and score standard and challenging black pucks under strict time constraints.
                         </p>
                     </div>
 
-                    <div class="hud-panel angled-cut p-6 bg-cyber-blue/20">
-                        <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-3">>> HARDWARE_&_LOGIC</h4>
+                    <div class="hud-panel angled-cut p-6 bg-cyber-purple/10 border-cyber-purple/30">
+                        <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> HARDWARE_&_LOGIC</h4>
                         <div class="flex flex-wrap gap-2 text-xs font-bold">
                             <span class="px-2 py-1 text-white bg-black/80 border border-white/20 rounded">LEGO Mindstorms EV3</span>
-                            <span class="px-2 py-1 text-cyber-magenta bg-cyber-magenta/20 border border-cyber-magenta/50 rounded">Python (.py)</span>
-                            <span class="px-2 py-1 text-cyber-cyan bg-cyber-cyan/20 border border-cyber-cyan/50 rounded">PID Line-Following</span>
-                            <span class="px-2 py-1 text-cyber-cyan bg-cyber-cyan/20 border border-cyber-cyan/50 rounded">Sensor Fusion</span>
+                            <span class="px-2 py-1 text-cyber-purple bg-cyber-purple/20 border border-cyber-purple/50 rounded">Python (.py)</span>
+                            <span class="px-2 py-1 text-cyber-purple bg-cyber-purple/20 border border-cyber-purple/50 rounded">PID Line-Following</span>
+                            <span class="px-2 py-1 text-cyber-purple bg-cyber-purple/20 border border-cyber-purple/50 rounded">Sensor Fusion</span>
                         </div>
                     </div>
 
@@ -564,8 +563,8 @@
                 </div>
                 
                 <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit">
-                    <div class="media-frame angled-cut-reverse bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-200">
-                        <div class="bg-cyber-blue/40 text-cyber-cyan text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
+                    <div class="media-frame angled-cut-reverse bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-200 border-cyber-purple/40">
+                        <div class="bg-cyber-purple/20 text-cyber-purple text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_01 // THE_CLAW_INTRO</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
                         </div>
@@ -574,8 +573,8 @@
                         </video>
                     </div>
                     
-                    <div class="media-frame angled-cut bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-300">
-                        <div class="bg-cyber-blue/40 text-cyber-cyan text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
+                    <div class="media-frame angled-cut bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-300 border-cyber-purple/40">
+                        <div class="bg-cyber-purple/20 text-cyber-purple text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_02 // PID_TESTING_PROTOCOL</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
                         </div>
@@ -584,8 +583,8 @@
                         </video>
                     </div>
                     
-                    <div class="col-span-1 md:col-span-2 hud-panel p-5 bg-black/40 reveal delay-400">
-                        <span class="text-xs text-cyber-cyan/70 uppercase block mb-2 font-bold tracking-widest">>> SYSTEM_OUTCOME</span>
+                    <div class="col-span-1 md:col-span-2 hud-panel p-5 bg-black/40 reveal delay-400 border-l-2 border-cyber-purple/50">
+                        <span class="text-xs text-cyber-purple/70 uppercase block mb-2 font-bold tracking-widest">>> SYSTEM_OUTCOME</span>
                         <p class="text-sm text-gray-200">Developed robust sensor-fusion algorithm preventing color/light sensor conflicts. Engineered "The Claw" lever mechanism. Scored all pucks within 2m:45s parameter window.</p>
                     </div>
                 </div>
@@ -593,15 +592,15 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW 3: MECH PROTOTYPING -->
+        <!-- VIEW 3: MECH PROTOTYPING (LAVA BLITZ) -->
         <!-- ========================================== -->
         <section id="mechanical" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-magenta/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">03 // MECH_PROTOTYPING</h2>
-                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">ENR_153_LAVA_BLITZ</span>
+                    <h2 class="font-display text-4xl font-black text-white text-glow-magenta">03 // MECH_PROTOTYPING</h2>
+                    <span class="text-cyber-magenta/50 text-sm mb-1 hidden sm:block">ENR_153_LAVA_BLITZ</span>
                 </div>
-                <button onclick="analyzeProject('mechanical')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('mechanical')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_INDUSTRY_APP
                 </button>
             </div>
@@ -610,14 +609,14 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                    <div class="hud-panel p-6 border-l-2 border-cyber-magenta bg-black/40">
+                        <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-mechanical">
                             Machine, assemble, and optimize a functional high-velocity vehicle chassis to complete an array of tasks. Required balancing opposing constraints: maximizing sprint speed vs. maintaining torque for weight-lifting, alongside rigorous dimensional tolerances and turn radii.
                         </p>
                     </div>
                     
-                    <div class="hud-panel angled-cut p-6 bg-cyber-magenta/20 border-cyber-magenta/50">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-magenta/10 border-cyber-magenta/40">
                         <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-4">>> RECORD_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
@@ -633,46 +632,46 @@
                                 <span class="text-xl font-display font-bold text-white">1650g</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-xs text-cyber-cyan font-bold tracking-widest">CLASS_RANK</span>
-                                <span class="text-2xl font-display font-black text-cyber-cyan text-glow-cyan">1ST</span>
+                                <span class="text-xs text-cyber-magenta font-bold tracking-widest">CLASS_RANK</span>
+                                <span class="text-2xl font-display font-black text-cyber-magenta text-glow-magenta">1ST</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="text-xs text-gray-400 font-mono bg-black/60 p-4 rounded backdrop-blur-md border border-white/5">
-                        <span class="text-cyber-cyan">> STACK:</span> SolidWorks, Manual Milling, 3D Slicing, Gear Calibration (60/20 & 20/60).
+                        <span class="text-cyber-magenta">> STACK:</span> SolidWorks, Manual Milling, 3D Slicing, Gear Calibration (60/20 & 20/60).
                     </div>
                 </div>
 
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-magenta/30">
                             <img src="./CADENR153.png" alt="CAD Model 1" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: CAD_MODEL_A</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: CAD_MODEL_A</div>
                         </div>
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-magenta/30">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153A.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CAD_MODEL_ANIMATION</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CAD_MODEL_ANIMATION</div>
                         </div>  
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-magenta/30">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(1).mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: BARE_CHASSIS_MACHINING</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: BARE_CHASSIS_MACHINING</div>
                         </div>   
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-magenta/30">
                             <img src="./ENR153(2).jpg" alt="Hardware Assembly" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: HARDWARE_ASSEMBLY</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: HARDWARE_ASSEMBLY</div>
                         </div>
-                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500">
+                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-magenta/30">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(3).mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_05: DESIGN_TESTING</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_05: DESIGN_TESTING</div>
                         </div>  
                         <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600">
                             <img src="./ENR153(4).jpg" alt="Final Lava Blitz" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
@@ -687,12 +686,12 @@
         <!-- VIEW 4: IRON EAGLE (NEW) -->
         <!-- ========================================== -->
         <section id="ironeagle" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-[#66aaff]/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">04 // IRON_EAGLE_R&D</h2>
-                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">AUTONOMOUS_ROBOTICS_LEAD</span>
+                    <h2 class="font-display text-4xl font-black text-white text-glow-blue">04 // IRON_EAGLE_R&D</h2>
+                    <span class="text-[#66aaff]/50 text-sm mb-1 hidden sm:block">AUTONOMOUS_ROBOTICS_LEAD</span>
                 </div>
-                <button onclick="analyzeProject('ironeagle')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('ironeagle')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_INDUSTRY_APP
                 </button>
             </div>
@@ -701,29 +700,29 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                    <div class="hud-panel p-6 border-l-2 border-[#66aaff] bg-black/40">
+                        <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-ironeagle">
                             As Research Lead, tasked with engineering the "Iron Eagle" autonomous robotic platform. Focused on optimizing chassis weight while maintaining structural integrity via DFMA, and developing robust C++ pathfinding algorithms for complex real-world environment interaction.
                         </p>
                     </div>
                     
-                    <div class="hud-panel angled-cut p-6 bg-cyber-magenta/20 border-cyber-magenta/50">
-                        <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-4">>> PERFORMANCE_METRICS</h4>
+                    <div class="hud-panel angled-cut p-6 bg-[#66aaff]/10 border-[#66aaff]/30">
+                        <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-4">>> PERFORMANCE_METRICS</h4>
                         <div class="space-y-4">
-                            <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
+                            <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">WEIGHT_REDUCTION</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-magenta">15%</span>
+                                <span class="text-xl font-display font-bold text-white text-glow-blue">15%</span>
                             </div>
-                            <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
+                            <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">LOGIC_ENGINE</span>
                                 <span class="text-xl font-display font-bold text-white">C++ Navigation</span>
                             </div>
-                            <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
+                            <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">PROTOTYPE</span>
-                                <span class="text-xl font-display font-bold text-white">3D Printed & Machined</span>
+                                <span class="text-xl font-display font-bold text-white text-right">3D Printed &<br>Machined</span>
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center mt-4">
                                 <span class="text-xs text-cyber-cyan font-bold tracking-widest">VALIDATION</span>
                                 <span class="text-lg font-display font-black text-cyber-cyan text-glow-cyan">FEA Stress Analys.</span>
                             </div>
@@ -731,38 +730,38 @@
                     </div>
                     
                     <div class="text-xs text-gray-400 font-mono bg-black/60 p-4 rounded backdrop-blur-md border border-white/5">
-                        <span class="text-cyber-cyan">> STACK:</span> SolidWorks, C++, FEA, DFMA, 3D Slicing, Aluminum Fabrication.
+                        <span class="text-[#66aaff]">> STACK:</span> SolidWorks, C++, FEA, DFMA, 3D Slicing, Aluminum Fabrication.
                     </div>
                 </div>
 
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <!-- Media 1: IronA.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-100">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-100 border-[#66aaff]/40">
                             <img src="./IronA.jpeg" alt="Iron Eagle CAD/Build" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: BUILD_&_INTEGRATION</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: BUILD_&_INTEGRATION</div>
                         </div>
 
                         <!-- Media 2: IronB.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-200">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-200 border-[#66aaff]/40">
                             <img src="./IronB.jpeg" alt="Iron Eagle Chassis" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CHASSIS_OPTIMIZATION</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CHASSIS_OPTIMIZATION</div>
                         </div>  
 
                         <!-- Media 3: IronC.mp4 -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-300">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-300 border-[#66aaff]/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
                                 <source src="./IronC.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: PATHFINDING_TEST</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: PATHFINDING_TEST</div>
                         </div>   
 
                         <!-- Media 4: IronD.mp4 -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-400">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-400 border-[#66aaff]/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
                                 <source src="./IronD.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: AUTONOMOUS_NAV</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: AUTONOMOUS_NAV</div>
                         </div>
                     </div>
                 </div>
@@ -773,12 +772,12 @@
         <!-- VIEW 5: DIGITAL SYSTEMS -->
         <!-- ========================================== -->
         <section id="digital" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-purple/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">05 // DIGITAL_SYSTEMS</h2>
-                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">ENR_157_FPGA_MICROWAVE</span>
+                    <h2 class="font-display text-4xl font-black text-white text-glow-purple">05 // DIGITAL_SYSTEMS</h2>
+                    <span class="text-cyber-purple/50 text-sm mb-1 hidden sm:block">ENR_157_FPGA_MICROWAVE</span>
                 </div>
-                <button onclick="analyzeProject('digital')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('digital')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_INDUSTRY_APP
                 </button>
             </div>
@@ -787,58 +786,59 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                    <div class="hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
+                        <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-digital">
                             Engineer a functional digital microwave control system. Required mastering the complete design flow: from software-based digital logic simulation to reliable physical hardware execution utilizing a Finite State Machine (FSM).
                         </p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel angled-cut p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
-                            <div class="text-4xl font-display font-black text-cyber-cyan text-glow-cyan">52/60</div>
+                        <div class="hud-panel angled-cut p-4 text-center border-t-2 border-t-cyber-purple bg-cyber-purple/10">
+                            <div class="text-4xl font-display font-black text-cyber-purple text-glow-purple">52/60</div>
                             <div class="text-[10px] text-gray-300 mt-2 uppercase font-bold tracking-widest">Subtotal Assessment</div>
                         </div>
                         <div class="hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
-                            <div class="text-4xl font-display font-black text-white">10/10</div>
+                            <div class="text-4xl font-display font-black text-white text-glow-cyan">10/10</div>
                             <div class="text-[10px] text-cyber-cyan mt-2 uppercase font-bold tracking-widest">Perfect Wiring Score</div>
                         </div>
                     </div>
 
                     <div class="text-xs text-gray-300 font-mono bg-black/60 p-5 rounded border border-white/10 backdrop-blur-md leading-relaxed">
-                        <span class="text-cyber-magenta font-bold">> STACK_INITIALIZE:</span> Quartus Prime | VHDL | DE-Lite Max 10 FPGA | Schematic Capture | BCD 7-Segment.
+                        <span class="text-cyber-purple font-bold">> STACK_INITIALIZE:</span> Quartus Prime | VHDL | DE-Lite Max 10 FPGA | Schematic Capture | BCD 7-Segment.
                         <br/><br/>
                         <span class="text-cyber-amber font-bold">> OUTCOME:</span> Deployed and verified schematic capture design on physical FPGA board with zero final-phase logic errors.
                     </div>
                 </div>
                 
                 <div class="lg:col-span-7 flex flex-col gap-4">
-                    <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-200">
+                    <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-200 border-cyber-purple/40">
                         <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
                             <source src="./ENR157V.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute top-3 left-3 bg-black/90 border border-cyber-cyan/80 text-cyber-cyan px-4 py-2 text-xs font-bold angled-cut tracking-widest backdrop-blur-md shadow-lg">
+                        <div class="absolute top-3 left-3 bg-black/90 border border-cyber-purple/80 text-cyber-purple px-4 py-2 text-xs font-bold angled-cut tracking-widest backdrop-blur-md shadow-lg">
                             SYSTEM_DEMONSTRATION
                         </div>
                     </div>
 
-                    <div class="media-frame h-48 md:h-64 w-full relative group overflow-hidden bg-black reveal delay-300">
+                    <div class="media-frame h-48 md:h-64 w-full relative group overflow-hidden bg-black reveal delay-300 border-cyber-purple/40">
                         <img src="./Schematic.png" alt="FPGA Setup" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" onerror="this.style.display='none'">
-                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">
+                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-purple px-3 py-2 border-t border-cyber-purple/50 font-bold tracking-widest backdrop-blur-md">
                             SCHEMATIC_CAPTURE
                         </div>
                     </div>                
                     <div class="grid grid-cols-2 gap-4 h-48">
-                        <div class="media-frame relative group overflow-hidden bg-black reveal delay-400">
+                        <div class="media-frame relative group overflow-hidden bg-black reveal delay-400 border-cyber-purple/40">
                             <img src="./ENR157.jpg" alt="Breadboard Top Down" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHYSICAL_WIRING_MAP</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-purple px-3 py-2 border-t border-cyber-purple/50 font-bold tracking-widest backdrop-blur-md">PHYSICAL_WIRING_MAP</div>
                         </div>
-                        <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-500">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
-                            <source src="./ENR157A.mp4" type="video/mp4">
-                        </video>
-                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">
-                            SYSTEM_DEMONSTRATION
+                        <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-500 border-cyber-purple/40">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
+                                <source src="./ENR157A.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-purple px-3 py-2 border-t border-cyber-purple/50 font-bold tracking-widest backdrop-blur-md">
+                                SYSTEM_DEMONSTRATION
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -849,12 +849,12 @@
         <!-- VIEW 6: STRUCTURAL ANALYSIS -->
         <!-- ========================================== -->
         <section id="structural" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-amber/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
-                    <h2 class="font-display text-4xl font-black text-white text-glow-cyan">06 // STRUCTURAL_ANALYSIS</h2>
-                    <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">ENR_251_THUNDER_WHEEL</span>
+                    <h2 class="font-display text-4xl font-black text-white text-glow-amber">06 // STRUCTURAL_ANALYSIS</h2>
+                    <span class="text-cyber-amber/50 text-sm mb-1 hidden sm:block">ENR_251_THUNDER_WHEEL</span>
                 </div>
-                <button onclick="analyzeProject('structural')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('structural')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_INDUSTRY_APP
                 </button>
             </div>
@@ -863,8 +863,8 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
+                    <div class="hud-panel p-6 border-l-2 border-cyber-amber bg-black/40">
+                        <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-structural">
                             Investigate structural behavior of an original statically indeterminate truss system ("Thunder Wheel") subjected to rotating eccentric loads. Determine accuracy of classical Method of Sections analysis against real-world physical forces exhibiting redundant load paths and joint friction.
                         </p>
@@ -889,32 +889,34 @@
 
                 <div class="lg:col-span-7 flex flex-col gap-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-200">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-200 border-cyber-amber/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251F.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
                         </div>
 
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-300">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-300 border-cyber-amber/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251A.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION DAY</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">COMPETITION DAY</div>
                         </div>
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-400">
+                        
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-400 border-cyber-amber/40">
                             <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
                         </div>
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-500">
+                        
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-500 border-cyber-amber/40">
                             <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
                         </div>
                     </div>
                     
-                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black reveal delay-600">
+                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black reveal delay-600 border-cyber-amber/40">
                         <img src="./Poster.png" alt="Statics Poster" class="w-full h-auto object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
-                        <div class="absolute top-3 right-3 bg-black/95 border border-cyber-magenta text-cyber-magenta px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
+                        <div class="absolute top-3 right-3 bg-black/95 border border-cyber-amber text-cyber-amber px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
                             DATA_VISUALIZATION_POSTER
                         </div>
                     </div>
@@ -931,7 +933,7 @@
                     <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
                     <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA // JEEVANTHIRTH</span>
                 </div>
-                <button onclick="analyzeProject('globalgrit')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('globalgrit')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> EXTRACT_LEADERSHIP_APP
                 </button>
             </div>
@@ -971,32 +973,32 @@
                 
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-green/40">
                             <img src="./India.jpeg" alt="Project Cover" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">INITIATION: DIGITAL_LITERACY</div>
                         </div>
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-green/40">
                             <img src="./Work.jpg" alt="Teaching at Jeevanthirth" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">FIELD_OPS: JEEVANTHIRTH_VADAJ</div>
                         </div>
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-green/40">
                             <img src="./Global.jpg" alt="Global Village Flag" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">DIPLOMACY: AFGHANISTAN_REP</div>
                         </div>   
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-green/40">
                             <img src="./Team.png" alt="International Team" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">NETWORK: INTL_COALITION</div>
                         </div>
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-green/40">
                             <img src="./Gujarat.jpeg" alt="Exploration" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">TEAM_DYNAMICS: AIESEC_INDIA</div>
                         </div>  
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600 border-cyber-green/40">
                             <img src="./Raj.jpg" alt="Architecture" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">CULTURAL_SURVEY: RAJASTHAN</div>
                         </div>
@@ -1011,7 +1013,7 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW 8: RESUME DOSSIER (NEW) -->
+        <!-- VIEW 8: RESUME DOSSIER -->
         <!-- ========================================== -->
         <section id="resume" class="scroll-mt-32 mb-32 relative">
             <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
@@ -1019,7 +1021,7 @@
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">08 // SYS.DATA_DOSSIER</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CANDIDATE_PROFILE</span>
                 </div>
-                <button onclick="analyzeProject('resume')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md">
+                <button onclick="analyzeProject('resume')" class="border border-cyber-purple bg-cyber-purple/20 text-cyber-purple text-xs font-bold px-4 py-2 hover:bg-cyber-purple/40 transition-colors uppercase tracking-widest angled-cut flex items-center gap-2 pulse-border backdrop-blur-md cursor-pointer">
                     <span>✨</span> INITIATE_EVALUATION
                 </button>
             </div>
@@ -1054,7 +1056,7 @@
                                 <span class="text-cyber-cyan">LOC:</span> Henrietta, NY
                             </div>
                         </div>
-                        <a href="./Rokhan Ahmadzai Resume Polished.pdf" download target="_blank" class="mt-6 w-full block text-center bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border">
+                        <a href="./Rokhan Ahmadzai Resume Polished.pdf" download target="_blank" class="mt-6 w-full block text-center bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border cursor-pointer">
                             [ DOWNLOAD_SECURE_PDF ]
                         </a>
                     </div>
@@ -1123,7 +1125,7 @@
                                     <div class="bg-cyber-cyan/5 border border-cyber-cyan/20 p-4 rounded-sm hover:bg-cyber-cyan/10 transition-colors">
                                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                                             <div>
-                                                <h5 class="text-white font-bold text-base">Rochester Institute of Technology (RIT)</h5>
+                                                <h5 class="text-white font-bold text-base">Rochester Institute of Technology (<span class="text-glow-orange text-[#F76902]">RIT</span>)</h5>
                                                 <div class="text-cyber-cyan/80 text-xs font-mono mt-1">M.S. in Mechanical Engineering</div>
                                             </div>
                                             <span class="text-xs text-cyber-amber font-mono mt-2 sm:mt-0 bg-cyber-amber/10 px-2 py-1 rounded border border-cyber-amber/30">EXP: MAY 2029</span>
@@ -1134,7 +1136,7 @@
                                     <div class="bg-cyber-cyan/5 border border-cyber-cyan/20 p-4 rounded-sm hover:bg-cyber-cyan/10 transition-colors">
                                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                                             <div>
-                                                <h5 class="text-white font-bold text-base">Monroe Community College (MCC)</h5>
+                                                <h5 class="text-white font-bold text-base">Monroe Community College (<span class="text-glow-yellow text-[#FFD100]">MCC</span>)</h5>
                                                 <div class="text-cyber-cyan/80 text-xs font-mono mt-1">A.S. Engineering Science & Physics</div>
                                             </div>
                                             <span class="text-xs text-cyber-amber font-mono mt-2 sm:mt-0 bg-cyber-amber/10 px-2 py-1 rounded border border-cyber-amber/30">EXP: MAY 2026</span>
@@ -1232,7 +1234,7 @@
                         </div>
                     </div>
 
-                    <button onclick="runPhysicsSim()" class="w-full mt-8 bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border">
+                    <button onclick="runPhysicsSim()" class="w-full mt-8 bg-cyber-cyan/20 hover:bg-cyber-cyan/40 border border-cyber-cyan text-cyber-cyan font-bold py-3 text-xs tracking-widest transition-all pulse-border cursor-pointer">
                         RUN SIMULATION
                     </button>
                     
@@ -1253,13 +1255,13 @@
                 <div class="w-full lg:w-2/3 bg-black/80 border border-cyber-cyan/30 flex flex-col relative overflow-hidden min-h-[400px] reveal delay-200">
                     <!-- Tabs -->
                     <div class="flex border-b border-cyber-cyan/30 bg-cyber-dark/80 backdrop-blur-md z-20 overflow-x-auto custom-scrollbar">
-                        <button onclick="switchPhysTab('3d')" id="btn-tab-3d" class="px-4 py-2 text-xs font-bold tracking-widest text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-cyan/10 transition-colors whitespace-nowrap">
+                        <button onclick="switchPhysTab('3d')" id="btn-tab-3d" class="px-4 py-2 text-xs font-bold tracking-widest text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-cyan/10 transition-colors whitespace-nowrap cursor-pointer">
                             3D_SIMULATION
                         </button>
-                        <button onclick="switchPhysTab('data')" id="btn-tab-data" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-white transition-colors whitespace-nowrap">
+                        <button onclick="switchPhysTab('data')" id="btn-tab-data" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-white transition-colors whitespace-nowrap cursor-pointer">
                             DATA_&_REPORT
                         </button>
-                        <button onclick="switchPhysTab('solver')" id="btn-tab-solver" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-cyber-purple transition-colors whitespace-nowrap">
+                        <button onclick="switchPhysTab('solver')" id="btn-tab-solver" class="px-4 py-2 text-xs font-bold tracking-widest text-gray-500 border-b-2 border-transparent hover:text-cyber-purple transition-colors whitespace-nowrap cursor-pointer">
                             AI_SOLVER
                         </button>
                     </div>
@@ -1295,13 +1297,13 @@
                         <div class="mb-4">
                             <span class="text-xs text-cyber-purple/80 block mb-2 font-bold tracking-widest">>> LOAD_PRESET_SCENARIO:</span>
                             <div class="flex flex-wrap gap-2">
-                                <button onclick="loadSolverPreset('An Artemis II rocket stage separates at an altitude of 150 km traveling at 7,500 m/s at an angle of 10 degrees above the horizontal. Assuming standard Earth gravity (ignore air resistance for this stage), calculate the maximum altitude it will reach.')" class="border border-cyber-cyan/30 text-cyber-cyan text-[10px] px-2 py-1 hover:bg-cyber-cyan/20 transition-colors uppercase">Space Projection</button>
-                                <button onclick="loadSolverPreset('A Mars rover weighing 1025 kg drops from a lander hovering 15 meters above the Martian surface (g = 3.72 m/s^2). What is the kinetic energy of the rover the exact moment before impact?')" class="border border-cyber-amber/30 text-cyber-amber text-[10px] px-2 py-1 hover:bg-cyber-amber/20 transition-colors uppercase">Mars Dynamics</button>
-                                <button onclick="loadSolverPreset('Calculate the orbital velocity required for a satellite to maintain a circular low-Earth orbit at an altitude of 400 km. (Earth Mass = 5.97 x 10^24 kg, Earth Radius = 6371 km).')" class="border border-cyber-green/30 text-cyber-green text-[10px] px-2 py-1 hover:bg-cyber-green/20 transition-colors uppercase">Orbital Velocity</button>
+                                <button onclick="loadSolverPreset('An Artemis II rocket stage separates at an altitude of 150 km traveling at 7,500 m/s at an angle of 10 degrees above the horizontal. Assuming standard Earth gravity (ignore air resistance for this stage), calculate the maximum altitude it will reach.')" class="border border-cyber-cyan/30 text-cyber-cyan text-[10px] px-2 py-1 hover:bg-cyber-cyan/20 transition-colors uppercase cursor-pointer">Space Projection</button>
+                                <button onclick="loadSolverPreset('A Mars rover weighing 1025 kg drops from a lander hovering 15 meters above the Martian surface (g = 3.72 m/s^2). What is the kinetic energy of the rover the exact moment before impact?')" class="border border-cyber-amber/30 text-cyber-amber text-[10px] px-2 py-1 hover:bg-cyber-amber/20 transition-colors uppercase cursor-pointer">Mars Dynamics</button>
+                                <button onclick="loadSolverPreset('Calculate the orbital velocity required for a satellite to maintain a circular low-Earth orbit at an altitude of 400 km. (Earth Mass = 5.97 x 10^24 kg, Earth Radius = 6371 km).')" class="border border-cyber-green/30 text-cyber-green text-[10px] px-2 py-1 hover:bg-cyber-green/20 transition-colors uppercase cursor-pointer">Orbital Velocity</button>
                             </div>
                         </div>
                         <textarea id="solver-input" class="w-full bg-black/60 border border-cyber-purple/30 text-white text-sm font-mono p-3 focus:border-cyber-purple outline-none resize-none h-24 mb-4 custom-scrollbar rounded-sm shadow-inner" placeholder="Enter custom kinematic or dynamic physics problem..."></textarea>
-                        <button onclick="solvePhysicsProblem()" class="w-full bg-cyber-purple/20 hover:bg-cyber-purple/40 border border-cyber-purple text-cyber-purple font-bold py-2 text-xs tracking-widest transition-all mb-4 shadow-[0_0_15px_rgba(188,19,254,0.2)]">
+                        <button onclick="solvePhysicsProblem()" class="w-full bg-cyber-purple/20 hover:bg-cyber-purple/40 border border-cyber-purple text-cyber-purple font-bold py-2 text-xs tracking-widest transition-all mb-4 shadow-[0_0_15px_rgba(188,19,254,0.2)] cursor-pointer">
                             INITIALIZE_SOLVER
                         </button>
                         <div id="solver-output" class="text-sm font-mono text-gray-300 leading-relaxed border-t border-cyber-purple/30 pt-4 mt-2">
@@ -1365,14 +1367,14 @@
     </div>
 
     <!-- AI TERMINAL CHAT UI -->
-    <button onclick="toggleTerminal()" class="fixed bottom-6 right-6 z-50 hud-panel angled-cut px-5 py-4 bg-cyber-dark/90 border border-cyber-cyan text-cyber-cyan font-bold flex items-center gap-3 hover:bg-cyber-cyan/20 transition-all shadow-[0_0_20px_rgba(0,243,255,0.4)] backdrop-blur-xl hover:scale-105 reveal delay-500">
+    <button onclick="toggleTerminal()" class="fixed bottom-6 right-6 z-50 hud-panel angled-cut px-5 py-4 bg-cyber-dark/90 border border-cyber-cyan text-cyber-cyan font-bold flex items-center gap-3 hover:bg-cyber-cyan/20 transition-all shadow-[0_0_20px_rgba(0,243,255,0.4)] backdrop-blur-xl hover:scale-105 reveal delay-500 cursor-pointer">
         <span class="animate-pulse text-lg">✨</span> SYS.AI_ASSISTANT
     </button>
 
     <div id="ai-terminal" class="fixed bottom-24 right-6 z-50 w-[350px] sm:w-[450px] h-[500px] hud-panel bg-black/80 border border-cyber-cyan shadow-[0_0_40px_rgba(0,102,255,0.5)] flex-col hidden backdrop-blur-2xl">
         <div class="bg-cyber-blue/30 border-b border-cyber-cyan/50 px-5 py-3 flex justify-between items-center text-sm text-cyber-cyan font-bold font-display tracking-widest backdrop-blur-md">
             <span>TERMINAL // ROKHAN_AI</span>
-            <button onclick="toggleTerminal()" class="text-white hover:text-cyber-magenta text-lg leading-none transition-colors">×</button>
+            <button onclick="toggleTerminal()" class="text-white hover:text-cyber-magenta text-lg leading-none transition-colors cursor-pointer">×</button>
         </div>
         <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-5 text-sm font-mono custom-scrollbar">
             <div class="text-cyber-cyan/80 leading-relaxed">
@@ -1433,7 +1435,7 @@
             animateCursor();
 
             // Hover states
-            const hoverElements = document.querySelectorAll('a, button, .tilt-card, .media-frame, input, textarea, canvas');
+            const hoverElements = document.querySelectorAll('a, button, .tilt-card, .media-frame, input, textarea, canvas, .cursor-pointer');
             hoverElements.forEach(el => {
                 el.addEventListener('mouseenter', () => {
                     outline.classList.add('hover-state');

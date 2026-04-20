@@ -67,62 +67,6 @@
             opacity: 0.4;
         }
 
-        /* Custom Cyberpunk Cursor (Only on Non-Touch Devices) */
-        @media (pointer: fine) {
-            body, a, button, .tilt-card, .media-frame, .hud-panel {
-                cursor: none !important;
-            }
-            input, textarea {
-                cursor: text !important;
-            }
-        }
-        
-        .cyber-cursor-dot {
-            position: fixed;
-            width: 6px; height: 6px;
-            background-color: #00f3ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            box-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
-            will-change: transform;
-        }
-        
-        .cyber-cursor-outline {
-            position: fixed;
-            width: 40px; height: 40px;
-            border: 1px solid rgba(0, 243, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transition: width 0.2s, height 0.2s, border-color 0.2s;
-            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
-            will-change: transform;
-        }
-        
-        .cyber-cursor-outline::before, .cyber-cursor-outline::after {
-            content: '';
-            position: absolute;
-            background-color: rgba(0, 243, 255, 0.8);
-            transition: background-color 0.2s;
-        }
-        .cyber-cursor-outline::before { top: -5px; bottom: -5px; left: 50%; width: 1px; transform: translateX(-50%); }
-        .cyber-cursor-outline::after { left: -5px; right: -5px; top: 50%; height: 1px; transform: translateY(-50%); }
-        
-        .cyber-cursor-outline.hover-state {
-            width: 60px; height: 60px;
-            border-color: #ff003c;
-            background-color: rgba(255, 0, 60, 0.1);
-            box-shadow: inset 0 0 15px rgba(255, 0, 60, 0.4);
-        }
-        .cyber-cursor-outline.hover-state::before, .cyber-cursor-outline.hover-state::after {
-            background-color: rgba(255, 0, 60, 0.8);
-        }
-        .cyber-cursor-dot.hover-state {
-            background-color: #ff003c;
-            box-shadow: 0 0 10px #ff003c, 0 0 20px #ff003c;
-        }
-
         /* Spatial Glass UI Elements */
         .hud-panel {
             background: rgba(5, 10, 20, 0.55);
@@ -416,12 +360,12 @@
             <div class="flex flex-wrap justify-center gap-6 text-sm mb-12 reveal delay-400">
                 
                 <!-- Box 1: NEXT NODE (RIT) -->
-                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-pointer border border-cyber-orange/50 tilt-card transition-colors hover:bg-cyber-orange/10 rounded-sm">
+                <div class="hud-panel angled-cut min-w-[240px] h-36 relative group cursor-pointer border-2 border-cyber-orange bg-cyber-orange/20 tilt-card transition-colors hover:bg-cyber-orange/30 rounded-sm shadow-[0_0_20px_rgba(247,105,2,0.4)]">
                     <div class="tilt-content absolute inset-0 flex flex-col items-center justify-center p-4 w-full h-full">
-                        <span class="text-xs text-cyber-orange/80 mb-1 font-bold tracking-widest">NEXT_NODE</span>
-                        <span class="text-xl font-display font-bold text-white text-glow-orange">RIT <span class="text-cyber-orange text-sm">MECH ENG</span></span>
+                        <span class="text-xs text-white mb-1 font-bold tracking-widest">NEXT_NODE</span>
+                        <span class="text-2xl font-display font-black text-white text-glow-orange tracking-widest">RIT <span class="text-cyber-orange text-sm">MECH ENG</span></span>
                     </div>
-                    <img src="./RIT.gif" alt="Displacement Animation" class="tilt-gif border border-cyber-orange shadow-[0_0_20px_rgba(247,105,2,0.4)]">
+                    <img src="./RIT.gif" alt="Displacement Animation" class="tilt-gif border border-cyber-orange shadow-[0_0_20px_rgba(247,105,2,0.8)]">
                 </div>
 
                 <!-- Box 2: PRIMARY FOCUS -->
@@ -1030,31 +974,37 @@
                 
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Project Cover / India.jpeg -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-green/40">
                             <img src="./India.jpeg" alt="Project Cover" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">INITIATION: DIGITAL_LITERACY</div>
                         </div>
 
+                        <!-- Teaching / Work.jpg -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-green/40">
                             <img src="./Work.jpg" alt="Teaching at Jeevanthirth" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">FIELD_OPS: JEEVANTHIRTH_VADAJ</div>
                         </div>
 
+                        <!-- Global Village / Global.jpg -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-green/40">
                             <img src="./Global.jpg" alt="Global Village Flag" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">DIPLOMACY: AFGHANISTAN_REP</div>
                         </div>   
 
+                        <!-- Team / Team.png -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-green/40">
                             <img src="./Team.png" alt="International Team" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">NETWORK: INTL_COALITION</div>
                         </div>
 
+                        <!-- Exploration / Gujarat.jpeg -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-green/40">
                             <img src="./Gujarat.jpeg" alt="Exploration" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">TEAM_DYNAMICS: AIESEC_INDIA</div>
                         </div>  
 
+                        <!-- Architecture / Raj.jpg -->
                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600 border-cyber-green/40">
                             <img src="./Raj.jpg" alt="Architecture" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">CULTURAL_SURVEY: RAJASTHAN</div>
@@ -1459,52 +1409,6 @@
 
     <!-- LOGIC INTEGRATION SCRIPT -->
     <script>
-        // ==========================================
-        // CUSTOM CYBERPUNK CURSOR
-        // ==========================================
-        function initCyberCursor() {
-            if (!window.matchMedia("(pointer: fine)").matches) return; // Prevent on mobile/touch devices
-
-            const dot = document.createElement('div');
-            dot.className = 'cyber-cursor-dot';
-            const outline = document.createElement('div');
-            outline.className = 'cyber-cursor-outline';
-            document.body.appendChild(dot);
-            document.body.appendChild(outline);
-
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
-            let outlineX = mouseX;
-            let outlineY = mouseY;
-
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-            });
-
-            function animateCursor() {
-                outlineX += (mouseX - outlineX) * 0.15;
-                outlineY += (mouseY - outlineY) * 0.15;
-                outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
-
-            // Hover states
-            const hoverElements = document.querySelectorAll('a, button, .tilt-card, .media-frame, input, textarea, canvas, .cursor-pointer');
-            hoverElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    outline.classList.add('hover-state');
-                    dot.classList.add('hover-state');
-                });
-                el.addEventListener('mouseleave', () => {
-                    outline.classList.remove('hover-state');
-                    dot.classList.remove('hover-state');
-                });
-            });
-        }
-
         // ==========================================
         // SCROLL REVEAL ANIMATION SYSTEM
         // ==========================================
@@ -2306,7 +2210,6 @@
             initTiltCards();
             initPhysicsEngine();
             initScrollReveal();
-            initCyberCursor();
         });
 
         // ==========================================

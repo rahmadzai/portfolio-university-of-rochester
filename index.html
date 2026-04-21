@@ -101,6 +101,8 @@
         .text-glow-blue { text-shadow: 0 0 10px rgba(102, 170, 255, 0.8), 0 0 20px rgba(102, 170, 255, 0.4); color: #66aaff; }
         .text-glow-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.8), 0 0 20px rgba(188, 19, 254, 0.4); color: #bc13fe; }
         .text-glow-teal { text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4); color: #00ffcc; }
+        
+        /* University Colors */
         .text-glow-orange { text-shadow: 0 0 10px rgba(247, 105, 2, 0.8), 0 0 20px rgba(247, 105, 2, 0.4); color: #F76902; }
         .text-glow-yellow { text-shadow: 0 0 10px rgba(255, 209, 0, 0.8), 0 0 20px rgba(255, 209, 0, 0.4); color: #FFD100; }
 
@@ -351,8 +353,8 @@
 
             <p class="mt-6 text-sm md:text-base text-cyber-cyan/90 max-w-2xl mx-auto leading-relaxed mb-10 font-sans border-l-2 border-cyber-cyan pl-4 text-left bg-black/40 p-5 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.8)] rounded-r-lg reveal delay-300">
                 <span class="text-white">> IDENTIFICATION:</span> Mechanical, Autonomy, and Aerospace.<br/>
-                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ <span class="text-glow-yellow font-bold text-cyber-yellow">MCC</span>.<br/>
-                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ <span class="text-glow-orange font-bold text-cyber-orange">RIT</span> (Fall 2026).<br/>
+                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ <span class="text-glow-yellow font-bold text-[#FFD100]">MCC</span>.<br/>
+                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ <span class="text-glow-orange font-bold text-[#F76902]">RIT</span> (Fall 2026).<br/>
                 <span class="text-white">> SYSTEM_PROMPT:</span> Scroll down to initialize core system modules.
             </p>
 
@@ -426,8 +428,8 @@
                         <h4 class="text-cyber-blue font-display text-sm tracking-widest mb-4">>> LEADERSHIP_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-blue/30 pb-2">
-                                <span class="text-xs text-gray-300 font-bold">STEM_GPA</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-cyan">3.359</span>
+                                <span class="text-xs text-gray-300 font-bold">ACADEMIC_TIER</span>
+                                <span class="text-xl font-display font-bold text-white text-glow-cyan">HONORS</span>
                             </div>
                             <div class="flex justify-between items-center border-b border-cyber-blue/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">PEER_MENTORSHIP</span>
@@ -849,7 +851,7 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW 6: STRUCTURAL ANALYSIS -->
+        <!-- VIEW 6: STRUCTURAL ANALYSIS (FIXED) -->
         <!-- ========================================== -->
         <section id="structural" class="scroll-mt-32 mb-32 relative">
             <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-amber/30 pb-2 justify-between reveal">
@@ -891,39 +893,37 @@
                 </div>
 
                 <div class="lg:col-span-7 flex flex-col gap-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-200 border-cyber-amber/40">
+                    <!-- Top Row: Videos & Trophy -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-200 border-cyber-amber/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251F.mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
                         </div>
-                        <!-- NEW: Mechanism GIF / Animation -->
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-300">
+
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-300 border-cyber-amber/40">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251A.mp4" type="video/mp4">
                             </video>
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION DAY</div>
-                        </div>
-
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-300 border-cyber-amber/40">
-                            <img src="./StaticsHonor.jpeg" alt="Mechanism Animation" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">2025 Honors Leaderboard</div>
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION_DAY</div>
                         </div>
                         
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-400 border-cyber-amber/40">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-400 border-cyber-amber/40">
                             <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
                         </div>
-                        
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square md:aspect-[4/3] reveal delay-500 border-cyber-amber/40">
-                            <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
-                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
-                        </div>
                     </div>
                     
-                    <div class="media-frame w-full relative group overflow-hidden min-h-[250px] bg-black reveal delay-600 border-cyber-amber/40">
-                        <img src="./Poster.png" alt="Statics Poster" class="w-full h-auto object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
+                    <!-- Middle Row: Landscape Design Display -->
+                    <div class="media-frame w-full relative group overflow-hidden bg-black reveal delay-500 border-cyber-amber/40 min-h-[200px] sm:min-h-[250px]">
+                        <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
+                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
+                    </div>
+                    
+                    <!-- Bottom Row: Landscape Poster -->
+                    <div class="media-frame w-full relative group overflow-hidden bg-black reveal delay-600 border-cyber-amber/40 min-h-[200px] sm:min-h-[250px]">
+                        <img src="./Poster.png" alt="Statics Poster" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
                         <div class="absolute top-3 right-3 bg-black/95 border border-cyber-magenta text-cyber-magenta px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
                             DATA_VISUALIZATION_POSTER
                         </div>
@@ -1156,7 +1156,6 @@
                                             <span class="text-xs text-cyber-amber font-mono mt-2 sm:mt-0 bg-cyber-amber/10 px-2 py-1 rounded border border-cyber-amber/30">EXP: MAY 2026</span>
                                         </div>
                                         <div class="text-xs text-gray-300 font-mono mt-3 leading-relaxed">
-                                            <span class="text-cyber-cyan font-bold">> GPA:</span> 3.359/4.00<br>
                                             <span class="text-cyber-cyan font-bold">> CORE:</span> Calculus III | Dynamics | Mechanics of Materials | MATLAB | Eng. Physics II<br>
                                             <span class="text-cyber-cyan font-bold">> HONORS:</span> Matt Hachee Award (2025), 1st Prize Statics (2025), Hon. Mention Scholars Day, 1st Place Prototyping (2024).
                                         </div>
@@ -1219,10 +1218,20 @@
                 <span class="text-cyber-cyan/70 text-sm mb-1 hidden sm:block font-bold">KINEMATIC_ENGINEERING</span>
             </div>
             
-            <div class="hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)]">
+            <div class="hud-panel p-6 mb-6 bg-black/40 border-l-2 border-cyber-cyan reveal delay-100">
+                <span class="text-xs text-cyber-cyan uppercase block mb-2 font-bold tracking-widest">>> SYSTEM_LOG: INTERACTIVE KINEMATICS ENGINE</span>
+                <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                    <span class="text-white font-bold">What is this?</span> I originally developed this physics engine in MATLAB to computationally model, plot, and validate the kinematic trajectories of high-velocity projectiles. To demonstrate my software integration capabilities, I have fully recreated that MATLAB environment here as an interactive web application, utilizing a custom JavaScript physics solver and Three.js for live 3D visualization.
+                </p>
+                <p class="text-sm text-gray-300 leading-relaxed">
+                    <span class="text-white font-bold">User Instructions:</span> Enter custom initial parameters (Velocity, Angle, Mass) in the <span class="text-cyber-cyan font-mono">SYS.CONFIG</span> panel and click <span class="text-cyber-cyan font-bold tracking-widest">RUN SIMULATION</span>. Rotate and zoom the 3D environment to inspect the flight path, switch to the <span class="text-white font-bold">DATA_&_REPORT</span> tab to view frame-by-frame energy states, or open the <span class="text-cyber-purple font-bold">AI_SOLVER</span> to execute complex orbital mechanics calculations.
+                </p>
+            </div>
+            
+            <div class="hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)] reveal delay-200">
                 
                 <!-- Controls Sidebar -->
-                <div class="w-full lg:w-1/3 bg-black/60 p-6 border border-cyber-cyan/30 flex flex-col reveal delay-100">
+                <div class="w-full lg:w-1/3 bg-black/60 p-6 border border-cyber-cyan/30 flex flex-col">
                     <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-6 border-b border-cyber-cyan/30 pb-2">>> SYS.CONFIG</h4>
                     
                     <div class="space-y-4 flex-1">
@@ -1266,7 +1275,7 @@
                 </div>
                 
                 <!-- Display Area -->
-                <div class="w-full lg:w-2/3 bg-black/80 border border-cyber-cyan/30 flex flex-col relative overflow-hidden min-h-[400px] reveal delay-200">
+                <div class="w-full lg:w-2/3 bg-black/80 border border-cyber-cyan/30 flex flex-col relative overflow-hidden min-h-[400px]">
                     <!-- Tabs -->
                     <div class="flex border-b border-cyber-cyan/30 bg-cyber-dark/80 backdrop-blur-md z-20 overflow-x-auto custom-scrollbar">
                         <button onclick="switchPhysTab('3d')" id="btn-tab-3d" class="px-4 py-2 text-xs font-bold tracking-widest text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-cyan/10 transition-colors whitespace-nowrap cursor-pointer">
@@ -2305,7 +2314,7 @@
             } else if (lowerMsg.includes('rit') || lowerMsg.includes('transfer') || lowerMsg.includes('mcc') || lowerMsg.includes('school')) {
                 response = "Rokhan is currently excelling in Engineering Science & Physics at Monroe Community College. He is scheduled to transfer to Rochester Institute of Technology (RIT) for Mechanical Engineering in Fall 2026.";
             } else if (lowerMsg.includes('afghanistan') || lowerMsg.includes('crisis') || lowerMsg.includes('resilience') || lowerMsg.includes('background')) {
-                response = "Rokhan successfully managed the emergency international relocation of his family from Afghanistan to the US. This required extreme crisis management, legal navigation, and resilience, all while maintaining a 3.35+ STEM GPA.";
+                response = "Rokhan successfully managed the emergency international relocation of his family from Afghanistan to the US. This required extreme crisis management, legal navigation, and resilience, all while maintaining rigorous STEM academic standing.";
             } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
                 response = "GREETINGS. I am the simulated AI construct of Rokhan Ahmadzai's portfolio. How may I assist your evaluation today?";
             } else {

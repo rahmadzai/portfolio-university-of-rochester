@@ -1,225 +1,143 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROKHAN // SPATIAL OS v3.0</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;700;800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <!-- THREE.JS for 3D Interactivity -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            cyan: '#00f3ff',
-                            blue: '#0066ff',
-                            purple: '#bc13fe',
-                            magenta: '#ff003c',
-                            amber: '#ffb300', 
-                            green: '#00ff66',
-                            orange: '#F76902',
-                            yellow: '#FFD100',
-                            teal: '#00ffcc',
-                            dark: '#020305',
-                            panel: '#050a14'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['JetBrains Mono', 'monospace'],
-                        display: ['Orbitron', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #020305;
-            color: #00f3ff;
-            overflow-x: hidden;
-        }
-
-        /* 3D Global Background Canvas */
-        #global-3d-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -10;
-            pointer-events: none; 
-        }
-
-        /* CRT Scanline Overlay */
-        .crt-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: -5; 
-            opacity: 0.4;
-        }
-
-        /* Spatial Glass UI Elements */
-        .hud-panel {
-            background: rgba(5, 10, 20, 0.55);
-            border: 1px solid rgba(0, 243, 255, 0.15);
-            box-shadow: inset 0 0 20px rgba(0, 102, 255, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            position: relative;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-        
-        .hud-panel::before, .hud-panel::after {
-            content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid rgba(0, 243, 255, 0.8);
-        }
-        .hud-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-        .hud-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-
-        .angled-cut {
-            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-        }
-        .angled-cut-reverse {
-            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
-        }
-        .hex-cut {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-
-        /* Neon Text Utilities & Uni Colors */
-        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.4); }
-        .text-glow-amber { text-shadow: 0 0 10px rgba(255, 179, 0, 0.6), 0 0 20px rgba(255, 179, 0, 0.4); color: #ffb300; }
-        .text-glow-magenta { text-shadow: 0 0 10px rgba(255, 0, 60, 0.6), 0 0 20px rgba(255, 0, 60, 0.4); color: #ff003c; }
-        .text-glow-green { text-shadow: 0 0 10px rgba(0, 255, 102, 0.6), 0 0 20px rgba(0, 255, 102, 0.4); color: #00ff66; }
-        .text-glow-blue { text-shadow: 0 0 10px rgba(102, 170, 255, 0.8), 0 0 20px rgba(102, 170, 255, 0.4); color: #66aaff; }
-        .text-glow-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.8), 0 0 20px rgba(188, 19, 254, 0.4); color: #bc13fe; }
-        .text-glow-teal { text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4); color: #00ffcc; }
-        
-        /* University Colors */
-        .text-glow-orange { text-shadow: 0 0 10px rgba(247, 105, 2, 0.8), 0 0 20px rgba(247, 105, 2, 0.4); color: #F76902; }
-        .text-glow-yellow { text-shadow: 0 0 10px rgba(255, 209, 0, 0.8), 0 0 20px rgba(255, 209, 0, 0.4); color: #FFD100; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 102, 255, 0.5); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
-
-        /* Enhanced Glitch Animations */
-        @keyframes glitch {
-            0% { transform: translate(0); text-shadow: none; }
-            20% { transform: translate(-2px, 1px); text-shadow: -2px 0 #ff003c, 2px 0 #00f3ff; }
-            40% { transform: translate(-1px, -1px); text-shadow: 2px 0 #ff003c, -2px 0 #00f3ff; }
-            60% { transform: translate(2px, 1px); text-shadow: -2px 0 #ff003c, 2px 0 #00f3ff; }
-            80% { transform: translate(1px, -1px); text-shadow: 2px 0 #ff003c, -2px 0 #00f3ff; }
-            100% { transform: translate(0); text-shadow: none; }
-        }
-        .glitch-hover:hover { 
-            animation: glitch 0.15s cubic-bezier(.25, .46, .45, .94) infinite both;
-            color: #ffffff;
-        }
-        
-        .pulse-border { animation: pulseBorder 2s infinite; }
-        @keyframes pulseBorder {
-            0% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 rgba(0,243,255,0); }
-            50% { border-color: rgba(0, 243, 255, 0.8); box-shadow: 0 0 15px rgba(0,243,255,0.4); }
-            100% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 rgba(0,243,255,0); }
-        }
-
-        .media-frame {
-            border: 1px solid rgba(0, 102, 255, 0.4);
-            box-shadow: 0 0 15px rgba(0, 102, 255, 0.1);
-            position: relative;
-            background-color: #000000;
-            overflow: hidden;
-        }
-        .media-frame::after {
-            content: 'REC •';
-            position: absolute;
-            top: 8px; right: 8px;
-            color: #ff003c;
-            font-size: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            animation: blink 1s step-end infinite;
-            text-shadow: 0 0 5px #ff003c;
-            z-index: 10;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-        
-        .typing-indicator::after {
-            content: '█';
-            animation: blink 1s step-end infinite;
-        }
-
-        /* 3D CSS Tilt Cards */
-        .tilt-card {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            position: relative;
-        }
-        .tilt-card::after {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
-            opacity: 0; transition: opacity 0.3s; pointer-events: none; mix-blend-mode: overlay; z-index: 50; border-radius: inherit;
-        }
-        .tilt-card:hover::after { opacity: 1; }
-        .tilt-content {
-            transform-style: preserve-3d; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: translateZ(30px);
-        }
-        .tilt-gif {
-            position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; object-fit: cover; border-radius: 6px;
-            transform: translateZ(60px) scale(0.4); opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); pointer-events: none; z-index: 20;
-        }
-        .tilt-card:hover .tilt-content { opacity: 0; transform: translateZ(-20px) scale(0.8); }
-        .tilt-card:hover .tilt-gif { opacity: 1; transform: translateZ(60px) scale(1); }
-
-        /* Physics App Styling */
-        .physics-input {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); color: #fff;
-            padding: 4px 8px; font-family: 'JetBrains Mono', monospace; width: 80px; text-align: right; outline: none;
-        }
-        .physics-input:focus { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.2); }
-        #physics-canvas-container { width: 100%; height: 100%; min-height: 400px; cursor: grab; }
-        #physics-canvas-container:active { cursor: grabbing; }
-        .data-table th { border-bottom: 1px solid rgba(0, 243, 255, 0.4); padding: 8px; color: #00f3ff; }
-        .data-table td { padding: 4px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-
-        /* ========================================== */
-        /* SCROLL REVEAL ANIMATIONS */
-        /* ========================================== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Stagger Delays for Grid Cascades */
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
-        .delay-500 { transition-delay: 500ms; }
-        .delay-600 { transition-delay: 600ms; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ROKHAN // SPATIAL OS v4.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;700;800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{cyber:{cyan:'#00f3ff',blue:'#0066ff',purple:'#bc13fe',magenta:'#ff003c',amber:'#ffb300',green:'#00ff66',orange:'#F76902',yellow:'#FFD100',teal:'#00ffcc',dark:'#020305',panel:'#050a14'}}}}}</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-padding-top:5rem;}
+body{background:#020305;color:#00f3ff;overflow-x:hidden;font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased;}
+::selection{background:rgba(0,243,255,.25);color:#fff;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,102,255,.4);border-radius:4px;}
+/* CURSOR */
+*{cursor:none!important;}
+#cur-o{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,243,255,.75);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s,background .18s;mix-blend-mode:screen;will-change:transform;}
+#cur-i{position:fixed;width:5px;height:5px;background:#00f3ff;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 8px #00f3ff,0 0 16px rgba(0,243,255,.5);will-change:transform;}
+#cur-h{position:fixed;width:18px;height:1px;background:rgba(0,243,255,.35);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);}
+#cur-v{position:fixed;width:1px;height:18px;background:rgba(0,243,255,.35);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);}
+body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:rgba(188,19,254,.06);}
+/* BOOT */
+#boot{position:fixed;inset:0;background:#000;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;}
+#boot.off{animation:bootOut .7s ease forwards;pointer-events:none;}
+@keyframes bootOut{to{opacity:0;visibility:hidden;}}
+.b-logo{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,8vw,4.5rem);font-weight:900;color:#fff;letter-spacing:.15em;text-shadow:0 0 30px rgba(0,243,255,.8),0 0 60px rgba(0,243,255,.4);margin-bottom:.3rem;animation:logoFlick 2.8s ease;}
+@keyframes logoFlick{0%,100%{opacity:1;}3%{opacity:.1;}5%{opacity:1;}7%{opacity:.4;}9%{opacity:1;}}
+.b-sub{color:rgba(0,243,255,.4);font-size:.62rem;letter-spacing:.4em;margin-bottom:2.2rem;}
+.b-lines{width:min(560px,90vw);font-size:.68rem;color:rgba(0,243,255,.7);}
+.b-line{display:flex;align-items:center;gap:.8rem;padding:3px 0;opacity:0;border-bottom:1px solid rgba(0,243,255,.06);}
+.b-line.show{opacity:1;}
+.b-lbl{color:rgba(255,255,255,.35);flex:1;min-width:180px;}
+.b-ok{color:#00ff66;font-weight:700;}.b-warn{color:#ffb300;}
+.b-pw{width:min(560px,90vw);margin-top:1rem;background:rgba(0,243,255,.08);height:3px;border-radius:2px;overflow:hidden;}
+.b-pb{height:100%;background:linear-gradient(90deg,#0066ff,#00f3ff);width:0;box-shadow:0 0 10px rgba(0,243,255,.7);}
+.b-pct{color:rgba(0,243,255,.4);font-size:.6rem;margin-top:.4rem;text-align:right;width:min(560px,90vw);}
+/* 3D BG */
+#bg3d{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-10;pointer-events:none;}
+/* OVERLAYS */
+.crt-overlay{position:fixed;inset:0;background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.1) 50%);background-size:100% 4px;pointer-events:none;z-index:-5;opacity:.3;}
+.vig{position:fixed;inset:0;pointer-events:none;z-index:-4;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.6) 100%);}
+/* HUD PANEL */
+.hud-panel{background:rgba(5,10,20,.6);border:1px solid rgba(0,243,255,.15);box-shadow:inset 0 0 20px rgba(0,102,255,.07),0 8px 32px rgba(0,0,0,.5);position:relative;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+.hud-panel::before,.hud-panel::after{content:'';position:absolute;width:14px;height:14px;border:2px solid rgba(0,243,255,.65);}
+.hud-panel::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.hud-panel::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+/* CLIPS */
+.angled-cut{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);}
+/* GLOW TEXTS */
+.text-glow-cyan{text-shadow:0 0 10px rgba(0,243,255,.7),0 0 20px rgba(0,243,255,.4);}
+.text-glow-amber{text-shadow:0 0 10px rgba(255,179,0,.7);color:#ffb300;}
+.text-glow-green{text-shadow:0 0 10px rgba(0,255,102,.7);color:#00ff66;}
+.text-glow-blue{text-shadow:0 0 10px rgba(102,170,255,.8);color:#66aaff;}
+.text-glow-purple{text-shadow:0 0 10px rgba(188,19,254,.8);color:#bc13fe;}
+.text-glow-teal{text-shadow:0 0 10px rgba(0,255,204,.8);color:#00ffcc;}
+.text-glow-magenta{text-shadow:0 0 10px rgba(255,0,60,.7);color:#ff003c;}
+.text-glow-orange{text-shadow:0 0 10px rgba(247,105,2,.8);color:#F76902;}
+.text-glow-yellow{text-shadow:0 0 10px rgba(255,209,0,.8);color:#FFD100;}
+/* KEYFRAMES */
+@keyframes glitch{0%,100%{transform:translate(0);}20%{transform:translate(-2px,1px);text-shadow:-2px 0 #ff003c,2px 0 #00f3ff;}40%{transform:translate(-1px,-1px);text-shadow:2px 0 #ff003c,-2px 0 #00f3ff;}60%{transform:translate(2px,1px);}80%{transform:translate(1px,-1px);}}
+.glitch-hover:hover{animation:glitch .15s infinite;color:#fff;}
+@keyframes blink{50%{opacity:0;}}
+@keyframes radarSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes pulseBorder{0%,100%{border-color:rgba(0,243,255,.2);}50%{border-color:rgba(0,243,255,.8);box-shadow:0 0 15px rgba(0,243,255,.4);}}
+.pulse-border{animation:pulseBorder 2s infinite;}
+@keyframes hudFlicker{0%,100%{opacity:1;}3%{opacity:.4;}6%{opacity:1;}88%{opacity:1;}92%{opacity:.7;}96%{opacity:1;}}
+.hud-flicker{animation:hudFlicker 8s infinite;}
+@keyframes scanLine{0%{transform:translateY(-100%);}100%{transform:translateY(100vh);}}
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.25,.46,.45,.94),transform .8s cubic-bezier(.25,.46,.45,.94);}
+.reveal.active{opacity:1;transform:translateY(0);}
+.delay-1{transition-delay:.1s;}.delay-2{transition-delay:.2s;}.delay-3{transition-delay:.3s;}
+.delay-4{transition-delay:.4s;}.delay-5{transition-delay:.5s;}.delay-6{transition-delay:.6s;}
+/* SCAN REVEAL */
+.scan-reveal{clip-path:inset(0 100% 0 0);transition:clip-path .9s cubic-bezier(.16,1,.3,1);}
+.scan-reveal.active{clip-path:inset(0 0% 0 0);}
+/* TYPE CURSOR */
+.type-cursor::after{content:'█';animation:blink .7s step-end infinite;font-size:.75em;vertical-align:middle;margin-left:3px;}
+/* SKILL BARS */
+.skill-bar{width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1);}
+/* RADAR SVG */
+.radar-ring{fill:none;stroke:rgba(0,243,255,.12);stroke-width:1;}
+.radar-spoke{stroke:rgba(0,243,255,.14);stroke-width:1;}
+.radar-fill{fill:rgba(0,243,255,.1);stroke:#00f3ff;stroke-width:2;transition:all 1.5s cubic-bezier(.16,1,.3,1);}
+.radar-fill2{fill:rgba(188,19,254,.08);stroke:#bc13fe;stroke-width:1.5;transition:all 1.5s cubic-bezier(.16,1,.3,1) .2s;}
+.radar-dot{fill:#00f3ff;filter:drop-shadow(0 0 4px #00f3ff);transition:cx 1.5s cubic-bezier(.16,1,.3,1),cy 1.5s cubic-bezier(.16,1,.3,1);}
+/* TILT CARDS */
+.tilt-card{transform-style:preserve-3d;perspective:900px;transition:box-shadow .35s ease;position:relative;}
+.tilt-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15) 0%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;mix-blend-mode:overlay;z-index:20;border-radius:inherit;}
+.tilt-card:hover::after{opacity:1;}
+/* MEDIA */
+.media-frame{border:1px solid rgba(0,102,255,.35);position:relative;background:#000;overflow:hidden;}
+.media-frame::after{content:'REC ●';position:absolute;top:6px;right:8px;color:#ff003c;font-size:9px;animation:blink 1s step-end infinite;text-shadow:0 0 5px #ff003c;z-index:10;}
+/* COUNTER */
+.count-up{display:inline-block;}
+/* NAV ACTIVE */
+.nav-active>div{background:rgba(0,243,255,.2)!important;box-shadow:0 0 18px rgba(0,243,255,.5)!important;}
+/* PHYSICS */
+.physics-input{background:rgba(0,243,255,.05);border:1px solid rgba(0,243,255,.3);color:#fff;padding:4px 8px;font-family:'JetBrains Mono',monospace;width:80px;text-align:right;outline:none;}
+.physics-input:focus{border-color:#00f3ff;box-shadow:0 0 10px rgba(0,243,255,.2);}
+.data-table th{border-bottom:1px solid rgba(0,243,255,.4);padding:8px;color:#00f3ff;}
+.data-table td{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.08);}
+</style>
 </head>
-<body class="selection:bg-cyber-cyan selection:text-black">
-    <div class="crt-overlay"></div>
-    
-    <!-- GLOBAL 3D BACKGROUND -->
-    <canvas id="global-3d-bg"></canvas>
+<body class="font-mono">
 
-    <!-- RIGHT SIDE ICON MATRIX (DESKTOP) -->
-    <div id="side-nav" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
+<!-- CURSOR -->
+<div id="cur-o"></div><div id="cur-i"></div><div id="cur-h"></div><div id="cur-v"></div>
+
+<!-- CRT + VIG -->
+<div class="crt-overlay"></div>
+<div class="vig"></div>
+
+<!-- THREE.JS BG -->
+<canvas id="bg3d"></canvas>
+
+<!-- ══ BOOT SCREEN ══════════════════════════════════════════ -->
+<div id="boot">
+  <div class="b-logo">ROKHAN</div>
+  <div class="b-sub">SPATIAL OS v4.0 — ENGINEERING TERMINAL</div>
+  <div class="b-lines" id="b-lines">
+    <div class="b-line" id="bl0"><span class="b-lbl">BIOS v4.0 POST CHECK</span><span class="b-ok">PASS</span></div>
+    <div class="b-line" id="bl1"><span class="b-lbl">LOADING NEURAL MESH RENDERER</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl2"><span class="b-lbl">INITIALIZING CAD MODULE</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl3"><span class="b-lbl">MOUNTING PHYSICS ENGINE</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl4"><span class="b-lbl">SPATIAL AUTONOMY SUBSYSTEM</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl5"><span class="b-lbl">FPGA BRIDGE HANDSHAKE</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl6"><span class="b-lbl">RESUME DATABASE DECRYPTED</span><span class="b-ok">OK</span></div>
+    <div class="b-line" id="bl7"><span class="b-lbl">AI TERMINAL ONLINE</span><span class="b-ok">ACTIVE</span></div>
+    <div class="b-line" id="bl8"><span class="b-lbl">SECURITY LAYER</span><span class="b-warn">BYPASSED</span></div>
+    <div class="b-line" id="bl9"><span class="b-lbl">OPERATOR: ROKHAN RAHMADZAI</span><span class="b-ok">CONFIRMED</span></div>
+  </div>
+  <div class="b-pw"><div class="b-pb" id="b-pb"></div></div>
+  <div class="b-pct" id="b-pct">0%</div>
+</div>
+<div id="side-nav" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
         <!-- 01 Resilience -->
         <a href="#leadership" class="group flex items-center justify-end gap-3 cursor-pointer">
             <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-3 py-1.5 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">01_RESILIENCE</span>
@@ -291,9 +209,7 @@
             </div>
         </a>
     </div>
-
-    <!-- HUD Top Bar -->
-    <nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex flex-col sm:flex-row justify-between items-center px-4 py-2 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex flex-col sm:flex-row justify-between items-center px-4 py-2 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div class="flex items-center justify-between w-full sm:w-auto">
             <div class="flex items-center gap-4">
                 <!-- Custom Origin Logo -->
@@ -334,12 +250,8 @@
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 pt-32 pb-32 min-h-screen flex flex-col relative z-10">
-
-        <!-- ========================================== -->
-        <!-- HEADER SECTION -->
-        <!-- ========================================== -->
-        <header class="pt-6 pb-24 relative flex flex-col items-center text-center">
+<div class="max-w-7xl mx-auto px-4 pt-28 pb-32 min-h-screen flex flex-col relative z-10">
+<header class="pt-6 pb-24 relative flex flex-col items-center text-center">
             <div class="inline-block border border-cyber-cyan/50 text-cyber-cyan px-5 py-1.5 mb-6 text-xs font-bold tracking-widest uppercase angled-cut bg-cyber-cyan/10 backdrop-blur-md shadow-[0_0_15px_rgba(0,243,255,0.2)] reveal">
                 DATA UPLINK ESTABLISHED
             </div>
@@ -395,12 +307,8 @@
                 <div class="w-px h-12 bg-gradient-to-b from-cyber-cyan/50 to-transparent mx-auto mt-4"></div>
             </div>
         </header>
-
-        <!-- ========================================== -->
-        <!-- VIEW 1: GLOBAL LEADERSHIP (UPGRADED) -->
-        <!-- ========================================== -->
-        <section id="leadership" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+<section id="leadership" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">01 // GLOBAL_RESILIENCE</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CRISIS_MANAGEMENT_PROTOCOL</span>
@@ -414,7 +322,7 @@
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40 relative overflow-hidden">
+                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40 relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-cyan to-transparent"></div>
                         <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3 animate-pulse">>> MISSION_CRITICAL: EXTREME_RELOCATION</h4>
                         <div class="space-y-3 text-sm leading-relaxed text-gray-300" id="desc-leadership">
@@ -424,7 +332,7 @@
                         </div>
                     </div>
                     
-                    <div class="hud-panel angled-cut p-6 bg-cyber-blue/10 border-cyber-blue/40">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-blue/10 border-cyber-blue/40">
                         <h4 class="text-cyber-blue font-display text-sm tracking-widest mb-4">>> LEADERSHIP_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-blue/30 pb-2">
@@ -505,7 +413,7 @@
                     </div>
                     
                     <!-- THE ULTIMATE HOOK -->
-                    <div class="hud-panel p-6 bg-cyber-cyan/5 border-l-4 border-l-cyber-cyan shadow-[0_0_25px_rgba(0,243,255,0.1)] relative reveal delay-300">
+                    <div class="reveal hud-panel p-6 bg-cyber-cyan/5 border-l-4 border-l-cyber-cyan shadow-[0_0_25px_rgba(0,243,255,0.1)] relative reveal delay-300">
                         <div class="absolute top-0 right-0 p-2 opacity-30">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         </div>
@@ -519,12 +427,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 2: AUTONOMOUS SYSTEMS (EV3) -->
-        <!-- ========================================== -->
-        <section id="autonomous" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-purple/30 pb-2 justify-between reveal">
+<section id="autonomous" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-purple">02 // AUTONOMOUS_SYSTEMS</h2>
                     <span class="text-cyber-purple/50 text-sm mb-1 hidden sm:block">ENR_161_EV3_ROBOTICS</span>
@@ -538,14 +442,14 @@
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
                         <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-autonomous">
                             Design, program, and refine an autonomous EV3 platform to navigate a color-coded arena, detect randomized targets, and execute precise physical manipulation to sort and score standard and challenging black pucks under strict time constraints.
                         </p>
                     </div>
 
-                    <div class="hud-panel angled-cut p-6 bg-cyber-purple/10 border-cyber-purple/30">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-purple/10 border-cyber-purple/30">
                         <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> HARDWARE_&_LOGIC</h4>
                         <div class="flex flex-wrap gap-2 text-xs font-bold">
                             <span class="px-2 py-1 text-white bg-black/80 border border-white/20 rounded">LEGO Mindstorms EV3</span>
@@ -556,11 +460,11 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-amber bg-black/40">
+                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-amber bg-black/40">
                             <div class="text-3xl font-display font-black text-cyber-amber text-glow-amber">24/20</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Total Score (Maxed)</div>
                         </div>
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-magenta bg-black/40">
+                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-magenta bg-black/40">
                             <div class="text-3xl font-display font-black text-cyber-magenta text-glow-magenta">14+</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Hours PID Debugging</div>
                         </div>
@@ -595,12 +499,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 3: MECH PROTOTYPING (LAVA BLITZ) -->
-        <!-- ========================================== -->
-        <section id="mechanical" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-magenta/30 pb-2 justify-between reveal">
+<section id="mechanical" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-magenta">03 // MECH_PROTOTYPING</h2>
                     <span class="text-cyber-magenta/50 text-sm mb-1 hidden sm:block">ENR_153_LAVA_BLITZ</span>
@@ -614,27 +514,27 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-magenta bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-magenta bg-black/40">
                         <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-mechanical">
                             Machine, assemble, and optimize a functional high-velocity vehicle chassis to complete an array of tasks. Required balancing opposing constraints: maximizing sprint speed vs. maintaining torque for weight-lifting, alongside rigorous dimensional tolerances and turn radii.
                         </p>
                     </div>
                     
-                    <div class="hud-panel angled-cut p-6 bg-cyber-magenta/10 border-cyber-magenta/40">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-magenta/10 border-cyber-magenta/40">
                         <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-4">>> RECORD_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">SPRINT_RECORD</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-magenta">2.09s</span>
+                                <span class="text-xl font-display font-bold text-white text-glow-magenta"><span class="count-up" data-target="2.09s">2.09s</span></span
                             </div>
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">OVAL_TIME</span>
-                                <span class="text-xl font-display font-bold text-white">10.01s</span>
+                                <span class="text-xl font-display font-bold text-white"><span class="count-up" data-target="10.01s">10.01s</span></span
                             </div>
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">MASS_TOWED</span>
-                                <span class="text-xl font-display font-bold text-white">1650g</span>
+                                <span class="text-xl font-display font-bold text-white"><span class="count-up" data-target="1650g">1650g</span></span
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-cyber-magenta font-bold tracking-widest">CLASS_RANK</span>
@@ -686,12 +586,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 4: IRON EAGLE (NEW) -->
-        <!-- ========================================== -->
-        <section id="ironeagle" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-[#66aaff]/30 pb-2 justify-between reveal">
+<section id="ironeagle" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-blue">04 // IRON_EAGLE_R&D</h2>
                     <span class="text-[#66aaff]/50 text-sm mb-1 hidden sm:block">AUTONOMOUS_ROBOTICS_LEAD</span>
@@ -705,19 +601,19 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-[#66aaff] bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-[#66aaff] bg-black/40">
                         <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-ironeagle">
                             As Research Lead, tasked with engineering the "Iron Eagle" autonomous robotic platform. Focused on optimizing chassis weight while maintaining structural integrity via DFMA, and developing robust C++ pathfinding algorithms for complex real-world environment interaction.
                         </p>
                     </div>
                     
-                    <div class="hud-panel angled-cut p-6 bg-[#66aaff]/10 border-[#66aaff]/30">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-[#66aaff]/10 border-[#66aaff]/30">
                         <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-4">>> PERFORMANCE_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">WEIGHT_REDUCTION</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-blue">15%</span>
+                                <span class="text-xl font-display font-bold text-white text-glow-blue"><span class="count-up" data-target="15%">15%</span></span
                             </div>
                             <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">LOGIC_ENGINE</span>
@@ -772,12 +668,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 5: DIGITAL SYSTEMS -->
-        <!-- ========================================== -->
-        <section id="digital" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-[#00ffcc]/30 pb-2 justify-between reveal">
+<section id="digital" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-teal">05 // DIGITAL_SYSTEMS</h2>
                     <span class="text-[#00ffcc]/50 text-sm mb-1 hidden sm:block">ENR_157_FPGA_MICROWAVE</span>
@@ -791,7 +683,7 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-[#00ffcc] bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-[#00ffcc] bg-black/40">
                         <h4 class="text-[#00ffcc] font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-digital">
                             Engineer a functional digital microwave control system. Required mastering the complete design flow: from software-based digital logic simulation to reliable physical hardware execution utilizing a Finite State Machine (FSM).
@@ -799,11 +691,11 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel angled-cut p-4 text-center border-t-2 border-t-[#00ffcc] bg-[#00ffcc]/10">
+                        <div class="reveal tilt-card hud-panel angled-cut p-4 text-center border-t-2 border-t-[#00ffcc] bg-[#00ffcc]/10">
                             <div class="text-4xl font-display font-black text-[#00ffcc] text-glow-teal">52/60</div>
                             <div class="text-[10px] text-gray-300 mt-2 uppercase font-bold tracking-widest">Subtotal Assessment</div>
                         </div>
-                        <div class="hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
+                        <div class="reveal tilt-card hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
                             <div class="text-4xl font-display font-black text-white text-glow-cyan">10/10</div>
                             <div class="text-[10px] text-cyber-cyan mt-2 uppercase font-bold tracking-widest">Perfect Wiring Score</div>
                         </div>
@@ -849,12 +741,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 6: STRUCTURAL ANALYSIS (FIXED) -->
-        <!-- ========================================== -->
-        <section id="structural" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-amber/30 pb-2 justify-between reveal">
+<section id="structural" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-amber">06 // STRUCTURAL_ANALYSIS</h2>
                     <span class="text-cyber-amber/50 text-sm mb-1 hidden sm:block">ENR_251_THUNDER_WHEEL</span>
@@ -868,14 +756,14 @@
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-amber bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-amber bg-black/40">
                         <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-structural">
                             Investigate structural behavior of an original statically indeterminate truss system ("Thunder Wheel") subjected to rotating eccentric loads. Determine accuracy of classical Method of Sections analysis against real-world physical forces exhibiting redundant load paths and joint friction.
                         </p>
                     </div>
 
-                    <div class="hud-panel angled-cut p-6 bg-cyber-amber/10 border-cyber-amber/40">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-amber/10 border-cyber-amber/40">
                         <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-4">>> ANALYSIS_RESULTS</h4>
                         <div class="flex items-center gap-6 mb-4">
                             <div class="text-5xl font-display font-black text-cyber-amber text-glow-amber">46.9%</div>
@@ -886,7 +774,7 @@
                         </p>
                     </div>
 
-                    <div class="hud-panel p-5 text-center border border-cyber-amber bg-black/60 pulse-border shadow-[0_0_20px_rgba(255,179,0,0.15)]">
+                    <div class="reveal hud-panel p-5 text-center border border-cyber-amber bg-black/60 pulse-border shadow-[0_0_20px_rgba(255,179,0,0.15)]">
                         <div class="text-2xl font-display font-black text-white uppercase tracking-widest text-glow-amber">1st Prize Winner</div>
                         <div class="text-xs text-cyber-amber mt-2 uppercase font-bold tracking-widest">Design Champion Trophy</div>
                     </div>
@@ -931,12 +819,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 7: GLOBAL GRIT SDG 4 (UPDATED) -->
-        <!-- ========================================== -->
-        <section id="globalgrit" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-green/30 pb-2 justify-between reveal">
+<section id="globalgrit" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
                     <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA // JEEVANTHIRTH</span>
@@ -950,14 +834,14 @@
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
+                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
                         <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> MISSION_PARAMETERS: QUALITY EDUCATION</h4>
                         <p class="text-sm leading-relaxed text-gray-200" id="desc-globalgrit">
                             Deployed to Ahmedabad, Gujarat (India) on Feb 10, 2018, as an AIESEC Exchange Volunteer to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Partnered with the Jeevanthirth Foundation to bridge the technological divide for underprivileged youth in the rural Vadaj sector. Operated out of Juna Koba alongside an international coalition, navigating extreme cultural dynamics and austere resource constraints.
                         </p>
                     </div>
 
-                    <div class="hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
                         <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> TACTICAL_SKILLS</h4>
                         <div class="flex flex-wrap gap-2 text-xs font-bold">
                             <span class="px-2 py-1 text-black bg-cyber-green border border-cyber-green/50 rounded">Cross-Cultural Leadership</span>
@@ -968,11 +852,11 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
+                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
                             <div class="text-3xl font-display font-black text-cyber-green text-glow-green">500+</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Youth Empowered</div>
                         </div>
-                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
+                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
                             <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">INTL</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Coalition Built</div>
                         </div>
@@ -1025,12 +909,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 8: RESUME DOSSIER -->
-        <!-- ========================================== -->
-        <section id="resume" class="scroll-mt-32 mb-32 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+<section id="resume" class="scroll-mt-32 mb-32 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">08 // SYS.DATA_DOSSIER</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CANDIDATE_PROFILE</span>
@@ -1042,11 +922,64 @@
 
             <div id="ai-out-resume" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
 
-            <div class="grid lg:grid-cols-12 gap-8">
+            
+<div class="reveal my-10" id="skills-radar-wrap">
+  <div class="reveal hud-panel p-6 rounded-sm">
+    <h3 class="font-display text-xs tracking-widest text-cyber-cyan mb-6 text-center uppercase">&gt;&gt; competency_matrix // skill_radar</h3>
+    <div class="flex flex-col lg:flex-row items-center gap-8">
+      <div class="flex-shrink-0" style="width:260px;height:260px;">
+        <svg width="260" height="260" viewBox="0 0 260 260">
+          <g transform="translate(130,130)">
+            <polygon class="radar-ring" points="0,-96 83.1,-48 83.1,48 0,96 -83.1,48 -83.1,-48"/>
+            <polygon class="radar-ring" points="0,-72 62.4,-36 62.4,36 0,72 -62.4,36 -62.4,-36"/>
+            <polygon class="radar-ring" points="0,-48 41.6,-24 41.6,24 0,48 -41.6,24 -41.6,-24"/>
+            <polygon class="radar-ring" points="0,-24 20.8,-12 20.8,12 0,24 -20.8,12 -20.8,-12"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="0" y2="-105"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="90.9" y2="-52.5"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="90.9" y2="52.5"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="0" y2="105"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="-90.9" y2="52.5"/>
+            <line class="radar-spoke" x1="0" y1="0" x2="-90.9" y2="-52.5"/>
+            <polygon class="radar-fill" id="radar-a1" points="0,0 0,0 0,0 0,0 0,0 0,0"
+              data-final="0,-86 72,-43 66,43 0,72 -66,38 -75,-43"/>
+            <polygon class="radar-fill2" id="radar-a2" points="0,0 0,0 0,0 0,0 0,0 0,0"
+              data-final="0,-62 53,-31 41,48 0,58 -54,31 -54,-43"/>
+            <circle class="radar-dot" id="rd0" cx="0" cy="0" r="4"/>
+            <circle class="radar-dot" id="rd1" cx="0" cy="0" r="4"/>
+            <circle class="radar-dot" id="rd2" cx="0" cy="0" r="4"/>
+            <circle class="radar-dot" id="rd3" cx="0" cy="0" r="4"/>
+            <circle class="radar-dot" id="rd4" cx="0" cy="4" r="4"/>
+            <circle class="radar-dot" id="rd5" cx="0" cy="0" r="4"/>
+            <text x="0" y="-111" text-anchor="middle" fill="#00f3ff" font-size="8.5" font-family="JetBrains Mono,monospace">CAD/3D</text>
+            <text x="100" y="-47" text-anchor="start" fill="#00f3ff" font-size="8.5" font-family="JetBrains Mono,monospace">MATLAB</text>
+            <text x="100" y="58" text-anchor="start" fill="#00ffcc" font-size="8.5" font-family="JetBrains Mono,monospace">PYTHON</text>
+            <text x="0" y="118" text-anchor="middle" fill="#bc13fe" font-size="8.5" font-family="JetBrains Mono,monospace">STATICS</text>
+            <text x="-100" y="58" text-anchor="end" fill="#ffb300" font-size="8.5" font-family="JetBrains Mono,monospace">CIRCUITS</text>
+            <text x="-100" y="-47" text-anchor="end" fill="#ff003c" font-size="8.5" font-family="JetBrains Mono,monospace">AUTONOMY</text>
+            <line id="radar-sweep" x1="0" y1="0" x2="0" y2="-96"
+              stroke="rgba(0,243,255,0.35)" stroke-width="1.5"
+              style="transform-origin:0 0;animation:radarSpin 4s linear infinite;"/>
+          </g>
+        </svg>
+      </div>
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">SolidWorks / Fusion 360</span><span class="text-cyber-cyan font-bold"><span class="count-up" data-target="90%">90%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="90"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">MATLAB / Simulink</span><span class="text-cyber-cyan font-bold"><span class="count-up" data-target="85%">85%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="85"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Python / C++</span><span class="text-cyber-teal font-bold"><span class="count-up" data-target="80%">80%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-teal to-cyber-cyan" data-w="80"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Statics / Dynamics</span><span class="text-cyber-purple font-bold"><span class="count-up" data-target="88%">88%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-purple to-cyber-cyan" data-w="88"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">FPGA / Verilog HDL</span><span class="text-cyber-amber font-bold"><span class="count-up" data-target="75%">75%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-amber to-cyber-orange" data-w="75"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">ROS / Autonomous Nav</span><span class="text-cyber-magenta font-bold"><span class="count-up" data-target="78%">78%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-magenta to-cyber-purple" data-w="78"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">3D Printing / FDM</span><span class="text-cyber-green font-bold"><span class="count-up" data-target="82%">82%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-green to-cyber-teal" data-w="82"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Calculus / Physics</span><span class="text-cyber-blue font-bold"><span class="count-up" data-target="87%">87%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="87"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="grid lg:grid-cols-12 gap-8">
                 <!-- Left Column: Profile & Skills -->
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
                     <!-- Bio Panel -->
-                    <div class="hud-panel angled-cut p-6 bg-black/60 border-t-2 border-cyber-cyan">
+                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-black/60 border-t-2 border-cyber-cyan">
                         <div class="flex items-center gap-4 mb-4 border-b border-cyber-cyan/20 pb-4">
                             <div class="w-16 h-16 rounded-full border-2 border-cyber-cyan p-1 bg-cyber-cyan/10 flex items-center justify-center">
                                 <span class="font-display font-black text-2xl text-cyber-cyan drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]">RK</span>
@@ -1076,7 +1009,7 @@
                     </div>
 
                     <!-- Skills Data-Viz -->
-                    <div class="hud-panel p-6 bg-black/40">
+                    <div class="reveal hud-panel p-6 bg-black/40">
                         <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-4 border-b border-cyber-cyan/30 pb-2">>> TECHNICAL_TOOLKIT</h4>
                         
                         <div class="space-y-4">
@@ -1125,7 +1058,7 @@
 
                 <!-- Right Column: Timeline Matrix -->
                 <div class="lg:col-span-8 h-fit reveal delay-200">
-                    <div class="hud-panel angled-cut-reverse p-6 lg:p-8 bg-black/60 relative">
+                    <div class="reveal tilt-card hud-panel angled-cut-reverse p-6 lg:p-8 bg-black/60 relative">
                         <!-- Timeline Line -->
                         <div class="absolute left-6 lg:left-8 top-12 bottom-12 w-px bg-gradient-to-b from-cyber-cyan via-cyber-purple to-cyber-amber opacity-50"></div>
                         
@@ -1208,17 +1141,13 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 9: MATLAB TOOLBOX (MOVED DOWN) -->
-        <!-- ========================================== -->
-        <section id="matlab" class="scroll-mt-32 mb-32 relative">
+<section id="matlab" class="scroll-mt-32 mb-32 relative">
             <div class="flex items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 reveal">
                 <h2 class="font-display text-4xl font-black text-white text-glow-cyan">09 // SYS.COMPUTE MATLAB</h2>
                 <span class="text-cyber-cyan/70 text-sm mb-1 hidden sm:block font-bold">KINEMATIC_ENGINEERING</span>
             </div>
             
-            <div class="hud-panel p-6 mb-6 bg-black/40 border-l-2 border-cyber-cyan reveal delay-100">
+            <div class="reveal hud-panel p-6 mb-6 bg-black/40 border-l-2 border-cyber-cyan reveal delay-100">
                 <span class="text-xs text-cyber-cyan uppercase block mb-2 font-bold tracking-widest">>> SYSTEM_LOG: INTERACTIVE KINEMATICS ENGINE</span>
                 <p class="text-sm text-gray-300 leading-relaxed mb-4">
                     <span class="text-white font-bold">What is this?</span> I originally developed this physics engine in MATLAB to computationally model, plot, and validate the kinematic trajectories of high-velocity projectiles. To demonstrate my software integration capabilities, I have fully recreated that MATLAB environment here as an interactive web application, utilizing a custom JavaScript physics solver and Three.js for live 3D visualization.
@@ -1228,7 +1157,7 @@
                 </p>
             </div>
             
-            <div class="hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)] reveal delay-200">
+            <div class="reveal hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)] reveal delay-200">
                 
                 <!-- Controls Sidebar -->
                 <div class="w-full lg:w-1/3 bg-black/60 p-6 border border-cyber-cyan/30 flex flex-col">
@@ -1336,12 +1265,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========================================== -->
-        <!-- VIEW 10: CONTACT NODE (UPLINK) -->
-        <!-- ========================================== -->
-        <section id="contact" class="scroll-mt-32 mb-16 relative">
-            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
+<section id="contact" class="scroll-mt-32 mb-16 relative">
+            <div class="scan-reveal flex flex-wrap items-end">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">10 // SYS.UPLINK</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">COMMUNICATION_CHANNELS</span>
@@ -1386,10 +1311,8 @@
                 </a>
             </div>
         </section>
-
-    </div>
-
-    <!-- AI TERMINAL CHAT UI -->
+</div>
+<!-- AI TERMINAL CHAT UI -->
     <button onclick="toggleTerminal()" class="fixed bottom-6 right-6 z-50 hud-panel angled-cut px-5 py-4 bg-cyber-dark/90 border border-cyber-cyan text-cyber-cyan font-bold flex items-center gap-3 hover:bg-cyber-cyan/20 transition-all shadow-[0_0_20px_rgba(0,243,255,0.4)] backdrop-blur-xl hover:scale-105 reveal delay-500 cursor-pointer">
         <span class="animate-pulse text-lg">✨</span> SYS.AI_ASSISTANT
     </button>
@@ -1424,7 +1347,8 @@
     </footer>
 
     <!-- LOGIC INTEGRATION SCRIPT -->
-    <script>
+<script>
+
         // ==========================================
         // SCROLL REVEAL ANIMATION SYSTEM
         // ==========================================
@@ -2328,6 +2252,278 @@
         document.querySelector('.crt-overlay').insertAdjacentHTML('afterend', `
             <div id="top-anchor" class="absolute top-0"></div>
         `);
-    </script>
+    
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  SPATIAL OS v4.0 — ENHANCEMENT LAYER
+// ══════════════════════════════════════════════════════════════════
+
+// ── 1. BOOT SEQUENCE ─────────────────────────────────────────────
+(function(){
+  const lines = document.querySelectorAll('.b-line');
+  const pb = document.getElementById('b-pb');
+  const pct = document.getElementById('b-pct');
+  const boot = document.getElementById('boot');
+  let i = 0;
+  const delays = [120,180,140,160,200,150,130,110,180,220];
+  function showLine(){
+    if(i < lines.length){
+      lines[i].classList.add('show');
+      const p = Math.round(((i+1)/lines.length)*100);
+      pb.style.width = p+'%';
+      pct.textContent = p+'%';
+      i++;
+      setTimeout(showLine, delays[i-1]||150);
+    } else {
+      setTimeout(()=>{
+        boot.classList.add('off');
+        setTimeout(()=>{ boot.style.display='none'; startThreeJS(); }, 750);
+      }, 500);
+    }
+  }
+  setTimeout(showLine, 400);
+})();
+
+// ── 2. CUSTOM CURSOR ─────────────────────────────────────────────
+(function(){
+  const co = document.getElementById('cur-o');
+  const ci = document.getElementById('cur-i');
+  const ch = document.getElementById('cur-h');
+  const cv = document.getElementById('cur-v');
+  let mx=window.innerWidth/2, my=window.innerHeight/2;
+  let ox=mx, oy=my;
+  document.addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
+    ci.style.left=mx+'px'; ci.style.top=my+'px';
+    ch.style.left=mx+'px'; ch.style.top=my+'px';
+    cv.style.left=mx+'px'; cv.style.top=my+'px';
+  });
+  function loopO(){
+    ox+=(mx-ox)*.12; oy+=(my-oy)*.12;
+    co.style.left=ox+'px'; co.style.top=oy+'px';
+    requestAnimationFrame(loopO);
+  }
+  loopO();
+  document.querySelectorAll('a,button,[role="button"],input,textarea,select,.tilt-card,.nav-node').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+})();
+
+// ── 3. THREE.JS NEURAL MESH BACKGROUND ───────────────────────────
+function startThreeJS(){
+  const canvas = document.getElementById('bg3d');
+  if(!canvas || typeof THREE==='undefined') return;
+  const W=window.innerWidth, H=window.innerHeight;
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:false, alpha:true});
+  renderer.setSize(W,H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60,W/H,0.1,2000);
+  camera.position.set(0,0,300);
+
+  // Nodes
+  const N = 80;
+  const positions = [];
+  const nodeGeo = new THREE.SphereGeometry(1.2,6,6);
+  const nodeMat = new THREE.MeshBasicMaterial({color:0x00f3ff, transparent:true, opacity:0.55});
+  for(let i=0;i<N;i++){
+    const m = new THREE.Mesh(nodeGeo, nodeMat.clone());
+    const x=(Math.random()-.5)*600, y=(Math.random()-.5)*400, z=(Math.random()-.5)*300;
+    m.position.set(x,y,z);
+    m.userData = {vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.12, vz:(Math.random()-.5)*.1};
+    scene.add(m);
+    positions.push(m);
+  }
+
+  // Edges
+  const edgeMat = new THREE.LineBasicMaterial({color:0x0066ff, transparent:true, opacity:0.18});
+  let edgeMesh = null;
+  function buildEdges(){
+    if(edgeMesh) scene.remove(edgeMesh);
+    const verts = [];
+    const DIST = 160;
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const d=positions[i].position.distanceTo(positions[j].position);
+        if(d<DIST){
+          verts.push(positions[i].position.x, positions[i].position.y, positions[i].position.z);
+          verts.push(positions[j].position.x, positions[j].position.y, positions[j].position.z);
+        }
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(verts,3));
+    edgeMesh = new THREE.LineSegments(geo, edgeMat);
+    scene.add(edgeMesh);
+  }
+  buildEdges();
+  let edgeTick=0;
+
+  // Mouse parallax
+  let mpx=0,mpy=0;
+  document.addEventListener('mousemove',e=>{mpx=(e.clientX/window.innerWidth-.5)*30;mpy=(e.clientY/window.innerHeight-.5)*20;});
+
+  function animate(){
+    requestAnimationFrame(animate);
+    positions.forEach(m=>{
+      m.position.x+=m.userData.vx; m.position.y+=m.userData.vy; m.position.z+=m.userData.vz;
+      if(Math.abs(m.position.x)>300){m.userData.vx*=-1;}
+      if(Math.abs(m.position.y)>200){m.userData.vy*=-1;}
+      if(Math.abs(m.position.z)>150){m.userData.vz*=-1;}
+    });
+    edgeTick++;
+    if(edgeTick%2===0) buildEdges();
+    camera.position.x += (mpx - camera.position.x)*.015;
+    camera.position.y += (-mpy - camera.position.y)*.015;
+    renderer.render(scene,camera);
+  }
+  animate();
+  window.addEventListener('resize',()=>{
+    const W2=window.innerWidth,H2=window.innerHeight;
+    camera.aspect=W2/H2; camera.updateProjectionMatrix();
+    renderer.setSize(W2,H2);
+  });
+}
+
+// ── 4. SCROLL REVEAL ─────────────────────────────────────────────
+(function(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('active');
+        // trigger skill bars inside
+        e.target.querySelectorAll('.skill-bar[data-w]').forEach(b=>{
+          setTimeout(()=>{ b.style.width=b.dataset.w+'%'; },200);
+        });
+        // trigger radar inside
+        if(e.target.id==='skills-radar-wrap') animateRadar();
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal,.scan-reveal').forEach(el=>obs.observe(el));
+  // also observe radar wrap specifically
+  const radarEl = document.getElementById('skills-radar-wrap');
+  if(radarEl) obs.observe(radarEl);
+})();
+
+// ── 5. ANIMATED METRIC COUNTERS ───────────────────────────────────
+(function(){
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+  function animCount(el){
+    const raw = el.dataset.target || el.textContent;
+    const suffix = raw.replace(/[\d.]/g,'');
+    const num = parseFloat(raw);
+    if(isNaN(num)) return;
+    const dur = 1400, start = performance.now();
+    function tick(now){
+      const p = Math.min((now-start)/dur,1);
+      const val = num*easeOut(p);
+      el.textContent = (Number.isInteger(num)?Math.round(val):val.toFixed(1)) + suffix;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.count-up').forEach(animCount);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.2});
+  document.querySelectorAll('section').forEach(s=>obs.observe(s));
+})();
+
+// ── 6. TILT CARDS ────────────────────────────────────────────────
+(function(){
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const cx=(e.clientX-r.left)/r.width, cy=(e.clientY-r.top)/r.height;
+      const rx=(cy-.5)*16, ry=(cx-.5)*-16;
+      card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+      card.style.setProperty('--mx',(cx*100)+'%');
+      card.style.setProperty('--my',(cy*100)+'%');
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+    });
+  });
+})();
+
+// ── 7. TYPEWRITER SECTION HEADERS ────────────────────────────────
+(function(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !e.target.dataset.typed){
+        e.target.dataset.typed='1';
+        const full = e.target.dataset.text || e.target.textContent;
+        e.target.textContent='';
+        e.target.classList.add('type-cursor');
+        let i=0;
+        const iv=setInterval(()=>{
+          e.target.textContent+=full[i++];
+          if(i>=full.length){clearInterval(iv);e.target.classList.remove('type-cursor');}
+        },28);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.5});
+  document.querySelectorAll('.typewriter').forEach(el=>{
+    el.dataset.text = el.textContent;
+    obs.observe(el);
+  });
+})();
+
+// ── 8. RADAR ANIMATION ────────────────────────────────────────────
+function animateRadar(){
+  const a1 = document.getElementById('radar-a1');
+  const a2 = document.getElementById('radar-a2');
+  const dots = [0,1,2,3,4,5].map(i=>document.getElementById('rd'+i));
+  if(!a1||!a2) return;
+  const pts1 = a1.dataset.final.split(' ').map(p=>p.split(',').map(Number));
+  const pts2 = a2.dataset.final.split(' ').map(p=>p.split(',').map(Number));
+  setTimeout(()=>{
+    a1.setAttribute('points', a1.dataset.final);
+    a2.setAttribute('points', a2.dataset.final);
+    dots.forEach((d,i)=>{
+      if(d && pts1[i]){d.setAttribute('cx',pts1[i][0]);d.setAttribute('cy',pts1[i][1]);}
+    });
+  },100);
+}
+
+// ── 9. ACTIVE NAV HIGHLIGHT ───────────────────────────────────────
+(function(){
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('#side-nav a[href^="#"]');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      const id=e.target.getAttribute('id');
+      const link=document.querySelector(`#side-nav a[href="#${id}"]`);
+      if(link){
+        if(e.isIntersecting){ link.classList.add('nav-active'); }
+        else { link.classList.remove('nav-active'); }
+      }
+    });
+  },{rootMargin:'-40% 0px -40% 0px'});
+  sections.forEach(s=>obs.observe(s));
+})();
+
+// ── 10. SECTION HEADER SCAN REVEALS ──────────────────────────────
+(function(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('active'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.sec-header').forEach(el=>obs.observe(el));
+})();
+
+</script>
+
 </body>
 </html>

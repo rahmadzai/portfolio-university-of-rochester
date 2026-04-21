@@ -1,143 +1,233 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ROKHAN // SPATIAL OS v4.0</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;700;800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
-<script>tailwind.config={theme:{extend:{colors:{cyber:{cyan:'#00f3ff',blue:'#0066ff',purple:'#bc13fe',magenta:'#ff003c',amber:'#ffb300',green:'#00ff66',orange:'#F76902',yellow:'#FFD100',teal:'#00ffcc',dark:'#020305',panel:'#050a14'}}}}}</script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-padding-top:5rem;}
-body{background:#020305;color:#00f3ff;overflow-x:hidden;font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased;}
-::selection{background:rgba(0,243,255,.25);color:#fff;}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,102,255,.4);border-radius:4px;}
-/* CURSOR */
-*{cursor:none!important;}
-#cur-o{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,243,255,.75);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s,background .18s;mix-blend-mode:screen;will-change:transform;}
-#cur-i{position:fixed;width:5px;height:5px;background:#00f3ff;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 8px #00f3ff,0 0 16px rgba(0,243,255,.5);will-change:transform;}
-#cur-h{position:fixed;width:18px;height:1px;background:rgba(0,243,255,.35);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);}
-#cur-v{position:fixed;width:1px;height:18px;background:rgba(0,243,255,.35);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);}
-body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:rgba(188,19,254,.06);}
-/* BOOT */
-#boot{position:fixed;inset:0;background:#000;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;}
-#boot.off{animation:bootOut .7s ease forwards;pointer-events:none;}
-@keyframes bootOut{to{opacity:0;visibility:hidden;}}
-.b-logo{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,8vw,4.5rem);font-weight:900;color:#fff;letter-spacing:.15em;text-shadow:0 0 30px rgba(0,243,255,.8),0 0 60px rgba(0,243,255,.4);margin-bottom:.3rem;animation:logoFlick 2.8s ease;}
-@keyframes logoFlick{0%,100%{opacity:1;}3%{opacity:.1;}5%{opacity:1;}7%{opacity:.4;}9%{opacity:1;}}
-.b-sub{color:rgba(0,243,255,.4);font-size:.62rem;letter-spacing:.4em;margin-bottom:2.2rem;}
-.b-lines{width:min(560px,90vw);font-size:.68rem;color:rgba(0,243,255,.7);}
-.b-line{display:flex;align-items:center;gap:.8rem;padding:3px 0;opacity:0;border-bottom:1px solid rgba(0,243,255,.06);}
-.b-line.show{opacity:1;}
-.b-lbl{color:rgba(255,255,255,.35);flex:1;min-width:180px;}
-.b-ok{color:#00ff66;font-weight:700;}.b-warn{color:#ffb300;}
-.b-pw{width:min(560px,90vw);margin-top:1rem;background:rgba(0,243,255,.08);height:3px;border-radius:2px;overflow:hidden;}
-.b-pb{height:100%;background:linear-gradient(90deg,#0066ff,#00f3ff);width:0;box-shadow:0 0 10px rgba(0,243,255,.7);}
-.b-pct{color:rgba(0,243,255,.4);font-size:.6rem;margin-top:.4rem;text-align:right;width:min(560px,90vw);}
-/* 3D BG */
-#bg3d{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-10;pointer-events:none;}
-/* OVERLAYS */
-.crt-overlay{position:fixed;inset:0;background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.1) 50%);background-size:100% 4px;pointer-events:none;z-index:-5;opacity:.3;}
-.vig{position:fixed;inset:0;pointer-events:none;z-index:-4;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.6) 100%);}
-/* HUD PANEL */
-.hud-panel{background:rgba(5,10,20,.6);border:1px solid rgba(0,243,255,.15);box-shadow:inset 0 0 20px rgba(0,102,255,.07),0 8px 32px rgba(0,0,0,.5);position:relative;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
-.hud-panel::before,.hud-panel::after{content:'';position:absolute;width:14px;height:14px;border:2px solid rgba(0,243,255,.65);}
-.hud-panel::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
-.hud-panel::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
-/* CLIPS */
-.angled-cut{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);}
-/* GLOW TEXTS */
-.text-glow-cyan{text-shadow:0 0 10px rgba(0,243,255,.7),0 0 20px rgba(0,243,255,.4);}
-.text-glow-amber{text-shadow:0 0 10px rgba(255,179,0,.7);color:#ffb300;}
-.text-glow-green{text-shadow:0 0 10px rgba(0,255,102,.7);color:#00ff66;}
-.text-glow-blue{text-shadow:0 0 10px rgba(102,170,255,.8);color:#66aaff;}
-.text-glow-purple{text-shadow:0 0 10px rgba(188,19,254,.8);color:#bc13fe;}
-.text-glow-teal{text-shadow:0 0 10px rgba(0,255,204,.8);color:#00ffcc;}
-.text-glow-magenta{text-shadow:0 0 10px rgba(255,0,60,.7);color:#ff003c;}
-.text-glow-orange{text-shadow:0 0 10px rgba(247,105,2,.8);color:#F76902;}
-.text-glow-yellow{text-shadow:0 0 10px rgba(255,209,0,.8);color:#FFD100;}
-/* KEYFRAMES */
-@keyframes glitch{0%,100%{transform:translate(0);}20%{transform:translate(-2px,1px);text-shadow:-2px 0 #ff003c,2px 0 #00f3ff;}40%{transform:translate(-1px,-1px);text-shadow:2px 0 #ff003c,-2px 0 #00f3ff;}60%{transform:translate(2px,1px);}80%{transform:translate(1px,-1px);}}
-.glitch-hover:hover{animation:glitch .15s infinite;color:#fff;}
-@keyframes blink{50%{opacity:0;}}
-@keyframes radarSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-@keyframes pulseBorder{0%,100%{border-color:rgba(0,243,255,.2);}50%{border-color:rgba(0,243,255,.8);box-shadow:0 0 15px rgba(0,243,255,.4);}}
-.pulse-border{animation:pulseBorder 2s infinite;}
-@keyframes hudFlicker{0%,100%{opacity:1;}3%{opacity:.4;}6%{opacity:1;}88%{opacity:1;}92%{opacity:.7;}96%{opacity:1;}}
-.hud-flicker{animation:hudFlicker 8s infinite;}
-@keyframes scanLine{0%{transform:translateY(-100%);}100%{transform:translateY(100vh);}}
-/* SCROLL REVEAL */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.25,.46,.45,.94),transform .8s cubic-bezier(.25,.46,.45,.94);}
-.reveal.active{opacity:1;transform:translateY(0);}
-.delay-1{transition-delay:.1s;}.delay-2{transition-delay:.2s;}.delay-3{transition-delay:.3s;}
-.delay-4{transition-delay:.4s;}.delay-5{transition-delay:.5s;}.delay-6{transition-delay:.6s;}
-/* SCAN REVEAL */
-.scan-reveal{clip-path:inset(0 100% 0 0);transition:clip-path .9s cubic-bezier(.16,1,.3,1);}
-.scan-reveal.active{clip-path:inset(0 0% 0 0);}
-/* TYPE CURSOR */
-.type-cursor::after{content:'█';animation:blink .7s step-end infinite;font-size:.75em;vertical-align:middle;margin-left:3px;}
-/* SKILL BARS */
-.skill-bar{width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1);}
-/* RADAR SVG */
-.radar-ring{fill:none;stroke:rgba(0,243,255,.12);stroke-width:1;}
-.radar-spoke{stroke:rgba(0,243,255,.14);stroke-width:1;}
-.radar-fill{fill:rgba(0,243,255,.1);stroke:#00f3ff;stroke-width:2;transition:all 1.5s cubic-bezier(.16,1,.3,1);}
-.radar-fill2{fill:rgba(188,19,254,.08);stroke:#bc13fe;stroke-width:1.5;transition:all 1.5s cubic-bezier(.16,1,.3,1) .2s;}
-.radar-dot{fill:#00f3ff;filter:drop-shadow(0 0 4px #00f3ff);transition:cx 1.5s cubic-bezier(.16,1,.3,1),cy 1.5s cubic-bezier(.16,1,.3,1);}
-/* TILT CARDS */
-.tilt-card{transform-style:preserve-3d;perspective:900px;transition:box-shadow .35s ease;position:relative;}
-.tilt-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15) 0%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;mix-blend-mode:overlay;z-index:20;border-radius:inherit;}
-.tilt-card:hover::after{opacity:1;}
-/* MEDIA */
-.media-frame{border:1px solid rgba(0,102,255,.35);position:relative;background:#000;overflow:hidden;}
-.media-frame::after{content:'REC ●';position:absolute;top:6px;right:8px;color:#ff003c;font-size:9px;animation:blink 1s step-end infinite;text-shadow:0 0 5px #ff003c;z-index:10;}
-/* COUNTER */
-.count-up{display:inline-block;}
-/* NAV ACTIVE */
-.nav-active>div{background:rgba(0,243,255,.2)!important;box-shadow:0 0 18px rgba(0,243,255,.5)!important;}
-/* PHYSICS */
-.physics-input{background:rgba(0,243,255,.05);border:1px solid rgba(0,243,255,.3);color:#fff;padding:4px 8px;font-family:'JetBrains Mono',monospace;width:80px;text-align:right;outline:none;}
-.physics-input:focus{border-color:#00f3ff;box-shadow:0 0 10px rgba(0,243,255,.2);}
-.data-table th{border-bottom:1px solid rgba(0,243,255,.4);padding:8px;color:#00f3ff;}
-.data-table td{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.08);}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKHAN // SPATIAL OS v4.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;700;800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- THREE.JS for 3D Interactivity -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            cyan: '#00f3ff',
+                            blue: '#0066ff',
+                            purple: '#bc13fe',
+                            magenta: '#ff003c',
+                            amber: '#ffb300', 
+                            green: '#00ff66',
+                            orange: '#F76902',
+                            yellow: '#FFD100',
+                            teal: '#00ffcc',
+                            dark: '#020305',
+                            panel: '#050a14'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['JetBrains Mono', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020305;
+            color: #00f3ff;
+            overflow-x: hidden;
+        }
+        
+        /* Stop scrolling during boot sequence */
+        body.booting { overflow: hidden; }
+
+        /* OS Boot Sequence Screen */
+        #boot-screen {
+            position: fixed; inset: 0; z-index: 99999;
+            background-color: #020305;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+            color: #00f3ff; text-shadow: 0 0 8px rgba(0,243,255,0.8);
+        }
+        .hidden-boot {
+            opacity: 0; pointer-events: none; transition: opacity 0.8s ease-out;
+        }
+
+        /* 3D Global Background Canvas */
+        #global-3d-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -10; pointer-events: none; 
+        }
+
+        /* CRT Scanline Overlay */
+        .crt-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px; pointer-events: none; z-index: -5; opacity: 0.4;
+        }
+
+        /* Custom Cyberpunk Cursor */
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+        }
+        .cyber-cursor-dot {
+            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+            background-color: #00f3ff; border-radius: 50%; pointer-events: none;
+            z-index: 99999; box-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
+            transform: translate(-50%, -50%); will-change: transform;
+        }
+        .cyber-cursor-outline {
+            position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+            border: 1px solid rgba(0, 243, 255, 0.5); border-radius: 50%;
+            pointer-events: none; z-index: 99998;
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
+            transform: translate(-50%, -50%); will-change: transform;
+        }
+        .cyber-cursor-outline::before, .cyber-cursor-outline::after {
+            content: ''; position: absolute; background-color: rgba(0, 243, 255, 0.8);
+            transition: background-color 0.2s;
+        }
+        .cyber-cursor-outline::before { top: -5px; bottom: -5px; left: 50%; width: 1px; transform: translateX(-50%); }
+        .cyber-cursor-outline::after { left: -5px; right: -5px; top: 50%; height: 1px; transform: translateY(-50%); }
+        .cyber-cursor-outline.hover-state {
+            width: 60px; height: 60px; border-color: #ff003c;
+            background-color: rgba(255, 0, 60, 0.1); box-shadow: inset 0 0 15px rgba(255, 0, 60, 0.4);
+        }
+        .cyber-cursor-outline.hover-state::before, .cyber-cursor-outline.hover-state::after {
+            background-color: rgba(255, 0, 60, 0.8);
+        }
+        .cyber-cursor-dot.hover-state {
+            background-color: #ff003c; box-shadow: 0 0 10px #ff003c, 0 0 20px #ff003c;
+        }
+
+        /* Spatial Glass UI Elements */
+        .hud-panel {
+            background: rgba(5, 10, 20, 0.55); border: 1px solid rgba(0, 243, 255, 0.15);
+            box-shadow: inset 0 0 20px rgba(0, 102, 255, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            position: relative; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        .hud-panel::before, .hud-panel::after {
+            content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid rgba(0, 243, 255, 0.8);
+        }
+        .hud-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .hud-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .angled-cut { clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
+        .angled-cut-reverse { clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
+        .hex-cut { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+
+        /* Neon Text Utilities & Uni Colors */
+        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.4); }
+        .text-glow-amber { text-shadow: 0 0 10px rgba(255, 179, 0, 0.6), 0 0 20px rgba(255, 179, 0, 0.4); color: #ffb300; }
+        .text-glow-magenta { text-shadow: 0 0 10px rgba(255, 0, 60, 0.6), 0 0 20px rgba(255, 0, 60, 0.4); color: #ff003c; }
+        .text-glow-green { text-shadow: 0 0 10px rgba(0, 255, 102, 0.6), 0 0 20px rgba(0, 255, 102, 0.4); color: #00ff66; }
+        .text-glow-blue { text-shadow: 0 0 10px rgba(102, 170, 255, 0.8), 0 0 20px rgba(102, 170, 255, 0.4); color: #66aaff; }
+        .text-glow-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.8), 0 0 20px rgba(188, 19, 254, 0.4); color: #bc13fe; }
+        .text-glow-teal { text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4); color: #00ffcc; }
+        .text-glow-orange { text-shadow: 0 0 10px rgba(247, 105, 2, 0.8), 0 0 20px rgba(247, 105, 2, 0.4); color: #F76902; }
+        .text-glow-yellow { text-shadow: 0 0 10px rgba(255, 209, 0, 0.8), 0 0 20px rgba(255, 209, 0, 0.4); color: #FFD100; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 102, 255, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+        /* Glitch Hover */
+        @keyframes glitch {
+            0% { transform: translate(0); text-shadow: none; }
+            20% { transform: translate(-2px, 1px); text-shadow: -2px 0 #ff003c, 2px 0 #00f3ff; }
+            40% { transform: translate(-1px, -1px); text-shadow: 2px 0 #ff003c, -2px 0 #00f3ff; }
+            60% { transform: translate(2px, 1px); text-shadow: -2px 0 #ff003c, 2px 0 #00f3ff; }
+            80% { transform: translate(1px, -1px); text-shadow: 2px 0 #ff003c, -2px 0 #00f3ff; }
+            100% { transform: translate(0); text-shadow: none; }
+        }
+        .glitch-hover:hover { animation: glitch 0.15s cubic-bezier(.25, .46, .45, .94) infinite both; color: #ffffff; }
+        
+        .pulse-border { animation: pulseBorder 2s infinite; }
+        @keyframes pulseBorder {
+            0% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 rgba(0,243,255,0); }
+            50% { border-color: rgba(0, 243, 255, 0.8); box-shadow: 0 0 15px rgba(0,243,255,0.4); }
+            100% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 rgba(0,243,255,0); }
+        }
+
+        /* Animated Media Frame with Scanline */
+        .media-frame {
+            border: 1px solid rgba(0, 102, 255, 0.4); box-shadow: 0 0 15px rgba(0, 102, 255, 0.1);
+            position: relative; background-color: #000000; overflow: hidden;
+        }
+        .media-frame::before {
+            content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 30%;
+            background: linear-gradient(to bottom, rgba(0,243,255,0), rgba(0,243,255,0.3) 50%, rgba(0,243,255,0));
+            z-index: 10; animation: scan 4s linear infinite; pointer-events: none;
+        }
+        @keyframes scan { 0% { top: -50%; } 100% { top: 150%; } }
+
+        .media-frame::after {
+            content: 'REC •'; position: absolute; top: 8px; right: 8px; color: #ff003c;
+            font-size: 10px; font-family: 'JetBrains Mono', monospace;
+            animation: blink 1s step-end infinite; text-shadow: 0 0 5px #ff003c; z-index: 10;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* 3D CSS Tilt Cards */
+        .tilt-card { transform-style: preserve-3d; perspective: 1000px; position: relative; }
+        .tilt-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; mix-blend-mode: overlay; z-index: 50; border-radius: inherit;
+        }
+        .tilt-card:hover::after { opacity: 1; }
+        .tilt-content { transform-style: preserve-3d; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: translateZ(30px); }
+        .tilt-gif {
+            position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; object-fit: cover; border-radius: 6px;
+            transform: translateZ(60px) scale(0.4); opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); pointer-events: none; z-index: 20;
+        }
+        .tilt-card:hover .tilt-content { opacity: 0; transform: translateZ(-20px) scale(0.8); }
+        .tilt-card:hover .tilt-gif { opacity: 1; transform: translateZ(60px) scale(1); }
+
+        /* Physics App Styling */
+        .physics-input {
+            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); color: #fff;
+            padding: 4px 8px; font-family: 'JetBrains Mono', monospace; width: 80px; text-align: right; outline: none;
+        }
+        .physics-input:focus { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.2); }
+        #physics-canvas-container { width: 100%; height: 100%; min-height: 400px; }
+        .data-table th { border-bottom: 1px solid rgba(0, 243, 255, 0.4); padding: 8px; color: #00f3ff; }
+        .data-table td { padding: 4px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+        /* ========================================== */
+        /* SCROLL REVEAL ANIMATIONS */
+        /* ========================================== */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; } .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; } .delay-600 { transition-delay: 600ms; }
+    </style>
 </head>
-<body class="font-mono">
+<body class="selection:bg-cyber-cyan selection:text-black booting">
 
-<!-- CURSOR -->
-<div id="cur-o"></div><div id="cur-i"></div><div id="cur-h"></div><div id="cur-v"></div>
+    <!-- OS BOOT SEQUENCE SCREEN -->
+    <div id="boot-screen">
+        <div id="boot-log" class="max-w-3xl mx-auto w-full h-full flex flex-col justify-end pb-24 font-mono text-sm leading-loose"></div>
+    </div>
 
-<!-- CRT + VIG -->
-<div class="crt-overlay"></div>
-<div class="vig"></div>
+    <div class="crt-overlay"></div>
+    
+    <!-- GLOBAL 3D BACKGROUND -->
+    <canvas id="global-3d-bg"></canvas>
 
-<!-- THREE.JS BG -->
-<canvas id="bg3d"></canvas>
-
-<!-- ══ BOOT SCREEN ══════════════════════════════════════════ -->
-<div id="boot">
-  <div class="b-logo">ROKHAN</div>
-  <div class="b-sub">SPATIAL OS v4.0 — ENGINEERING TERMINAL</div>
-  <div class="b-lines" id="b-lines">
-    <div class="b-line" id="bl0"><span class="b-lbl">BIOS v4.0 POST CHECK</span><span class="b-ok">PASS</span></div>
-    <div class="b-line" id="bl1"><span class="b-lbl">LOADING NEURAL MESH RENDERER</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl2"><span class="b-lbl">INITIALIZING CAD MODULE</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl3"><span class="b-lbl">MOUNTING PHYSICS ENGINE</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl4"><span class="b-lbl">SPATIAL AUTONOMY SUBSYSTEM</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl5"><span class="b-lbl">FPGA BRIDGE HANDSHAKE</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl6"><span class="b-lbl">RESUME DATABASE DECRYPTED</span><span class="b-ok">OK</span></div>
-    <div class="b-line" id="bl7"><span class="b-lbl">AI TERMINAL ONLINE</span><span class="b-ok">ACTIVE</span></div>
-    <div class="b-line" id="bl8"><span class="b-lbl">SECURITY LAYER</span><span class="b-warn">BYPASSED</span></div>
-    <div class="b-line" id="bl9"><span class="b-lbl">OPERATOR: ROKHAN RAHMADZAI</span><span class="b-ok">CONFIRMED</span></div>
-  </div>
-  <div class="b-pw"><div class="b-pb" id="b-pb"></div></div>
-  <div class="b-pct" id="b-pct">0%</div>
-</div>
-<div id="side-nav" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
+    <!-- RIGHT SIDE ICON MATRIX (DESKTOP) -->
+    <div id="side-nav" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
         <!-- 01 Resilience -->
         <a href="#leadership" class="group flex items-center justify-end gap-3 cursor-pointer">
             <span class="text-[10px] font-mono text-cyber-cyan opacity-0 group-hover:opacity-100 transition-opacity tracking-widest bg-black/80 px-3 py-1.5 rounded backdrop-blur-md border border-cyber-cyan/50 shadow-[0_0_10px_rgba(0,243,255,0.2)]">01_RESILIENCE</span>
@@ -209,7 +299,9 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             </div>
         </a>
     </div>
-<nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex flex-col sm:flex-row justify-between items-center px-4 py-2 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+
+    <!-- HUD Top Bar -->
+    <nav class="fixed top-0 w-full z-40 bg-cyber-dark/40 border-b border-cyber-cyan/20 backdrop-blur-xl flex flex-col sm:flex-row justify-between items-center px-4 py-2 font-display text-[10px] lg:text-xs tracking-[0.2em] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div class="flex items-center justify-between w-full sm:w-auto">
             <div class="flex items-center gap-4">
                 <!-- Custom Origin Logo -->
@@ -218,7 +310,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     <span class="font-display font-bold text-cyber-cyan text-lg relative z-10 group-hover:animate-pulse drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]">RK</span>
                 </a>
                 <div class="hidden sm:flex flex-col">
-                    <span class="text-cyber-cyan font-bold drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">SPATIAL_OS v3.0</span>
+                    <span class="text-cyber-cyan font-bold drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">SPATIAL_OS v4.0</span>
                     <span class="text-[8px] text-cyber-cyan/60 font-mono tracking-widest">SYS.AUTH // ROKHAN_A</span>
                 </div>
             </div>
@@ -231,16 +323,16 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
         <!-- Mobile Horizontal Nav (Hidden on Desktop) -->
         <div class="flex lg:hidden w-full overflow-x-auto custom-scrollbar pb-1 pt-3 gap-3">
-            <a href="#leadership" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors">01_RESILIENCE</a>
-            <a href="#autonomous" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-purple/30 rounded-sm bg-black/50 text-cyber-purple hover:bg-cyber-purple/20 transition-colors">02_AUTONOMY</a>
-            <a href="#mechanical" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-magenta/30 rounded-sm bg-black/50 text-cyber-magenta hover:bg-cyber-magenta/20 transition-colors">03_HARDWARE</a>
-            <a href="#ironeagle" class="text-[9px] whitespace-nowrap px-3 py-1 border border-[#66aaff]/30 rounded-sm bg-black/50 text-[#66aaff] hover:bg-[#66aaff]/20 transition-colors">04_IRON_EAGLE</a>
-            <a href="#digital" class="text-[9px] whitespace-nowrap px-3 py-1 border border-[#00ffcc]/30 rounded-sm bg-black/50 text-[#00ffcc] hover:bg-[#00ffcc]/20 transition-colors">05_FPGA</a>
-            <a href="#structural" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-amber/30 rounded-sm bg-black/50 text-cyber-amber hover:bg-cyber-amber/20 transition-colors">06_STATICS</a>
-            <a href="#globalgrit" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-green/30 rounded-sm bg-black/50 text-cyber-green hover:bg-cyber-green/20 transition-colors">07_IMPACT</a>
-            <a href="#resume" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors">08_DOSSIER</a>
-            <a href="#matlab" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors">09_MATLAB</a>
-            <a href="#contact" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors">10_UPLINK</a>
+            <a href="#leadership" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors cursor-pointer">01_RESILIENCE</a>
+            <a href="#autonomous" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-purple/30 rounded-sm bg-black/50 text-cyber-purple hover:bg-cyber-purple/20 transition-colors cursor-pointer">02_AUTONOMY</a>
+            <a href="#mechanical" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-magenta/30 rounded-sm bg-black/50 text-cyber-magenta hover:bg-cyber-magenta/20 transition-colors cursor-pointer">03_HARDWARE</a>
+            <a href="#ironeagle" class="text-[9px] whitespace-nowrap px-3 py-1 border border-[#66aaff]/30 rounded-sm bg-black/50 text-[#66aaff] hover:bg-[#66aaff]/20 transition-colors cursor-pointer">04_IRON_EAGLE</a>
+            <a href="#digital" class="text-[9px] whitespace-nowrap px-3 py-1 border border-[#00ffcc]/30 rounded-sm bg-black/50 text-[#00ffcc] hover:bg-[#00ffcc]/20 transition-colors cursor-pointer">05_FPGA</a>
+            <a href="#structural" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-amber/30 rounded-sm bg-black/50 text-cyber-amber hover:bg-cyber-amber/20 transition-colors cursor-pointer">06_STATICS</a>
+            <a href="#globalgrit" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-green/30 rounded-sm bg-black/50 text-cyber-green hover:bg-cyber-green/20 transition-colors cursor-pointer">07_IMPACT</a>
+            <a href="#resume" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors cursor-pointer">08_DOSSIER</a>
+            <a href="#matlab" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors cursor-pointer">09_MATLAB</a>
+            <a href="#contact" class="text-[9px] whitespace-nowrap px-3 py-1 border border-cyber-cyan/30 rounded-sm bg-black/50 text-cyber-cyan hover:bg-cyber-cyan/20 transition-colors cursor-pointer">10_UPLINK</a>
         </div>
 
         <!-- Desktop Sys Status -->
@@ -250,8 +342,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
         </div>
     </nav>
 
-<div class="relative z-10">
-<header class="max-w-7xl mx-auto px-4 pt-28 pb-20 relative flex flex-col items-center text-center">
+    <div class="max-w-7xl mx-auto px-4 pt-32 pb-32 min-h-screen flex flex-col relative z-10">
+
+        <!-- ========================================== -->
+        <!-- HEADER SECTION -->
+        <!-- ========================================== -->
+        <header class="pt-6 pb-24 relative flex flex-col items-center text-center">
             <div class="inline-block border border-cyber-cyan/50 text-cyber-cyan px-5 py-1.5 mb-6 text-xs font-bold tracking-widest uppercase angled-cut bg-cyber-cyan/10 backdrop-blur-md shadow-[0_0_15px_rgba(0,243,255,0.2)] reveal">
                 DATA UPLINK ESTABLISHED
             </div>
@@ -259,14 +355,14 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white mb-2 leading-none uppercase tracking-tighter drop-shadow-2xl reveal delay-100">
                 Technical <span class="text-cyber-cyan text-glow-cyan">Rigor.</span>
             </h1>
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-none uppercase tracking-tighter drop-shadow-2xl glitch-hover transition-colors duration-300 reveal delay-200">
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-none uppercase tracking-tighter drop-shadow-2xl glitch-hover transition-colors duration-300 reveal delay-200 cursor-crosshair">
                 Global <span class="text-cyber-amber text-glow-amber transition-colors duration-300">Grit.</span>
             </h1>
 
             <p class="mt-6 text-sm md:text-base text-cyber-cyan/90 max-w-2xl mx-auto leading-relaxed mb-10 font-sans border-l-2 border-cyber-cyan pl-4 text-left bg-black/40 p-5 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.8)] rounded-r-lg reveal delay-300">
                 <span class="text-white">> IDENTIFICATION:</span> Mechanical, Autonomy, and Aerospace.<br/>
-                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ <span class="text-glow-yellow font-bold text-[#FFD100]">MCC</span>.<br/>
-                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ <span class="text-glow-orange font-bold text-[#F76902]">RIT</span> (Fall 2026).<br/>
+                <span class="text-white">> CURRENT_NODE:</span> Eng. Science & Physics @ <span class="text-glow-yellow font-bold text-cyber-yellow">MCC</span>.<br/>
+                <span class="text-white">> DESTINATION_NODE:</span> Mechanical Engineering @ <span class="text-glow-orange font-bold text-cyber-orange">RIT</span> (Fall 2026).<br/>
                 <span class="text-white">> SYSTEM_PROMPT:</span> Scroll down to initialize core system modules.
             </p>
 
@@ -307,8 +403,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 <div class="w-px h-12 bg-gradient-to-b from-cyber-cyan/50 to-transparent mx-auto mt-4"></div>
             </div>
         </header>
-<section id="leadership" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: GLOBAL LEADERSHIP (UPGRADED) -->
+        <!-- ========================================== -->
+        <section id="leadership" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">01 // GLOBAL_RESILIENCE</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CRISIS_MANAGEMENT_PROTOCOL</span>
@@ -322,7 +422,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40 relative overflow-hidden">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-cyan bg-black/40 relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-cyan to-transparent"></div>
                         <h4 class="text-cyber-cyan font-display text-sm tracking-widest mb-3 animate-pulse">>> MISSION_CRITICAL: EXTREME_RELOCATION</h4>
                         <div class="space-y-3 text-sm leading-relaxed text-gray-300" id="desc-leadership">
@@ -332,7 +432,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </div>
                     </div>
                     
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-blue/10 border-cyber-blue/40">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-blue/10 border-cyber-blue/40">
                         <h4 class="text-cyber-blue font-display text-sm tracking-widest mb-4">>> LEADERSHIP_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-blue/30 pb-2">
@@ -364,7 +464,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[10rem] md:auto-rows-[12rem]">
                         
                         <!-- Media 4: Documentary (HERO SIZE: 2x2) -->
-                        <div class="col-span-2 md:col-span-2 row-span-2 media-frame group overflow-hidden relative bg-black reveal delay-100">
+                        <div class="col-span-2 md:col-span-2 row-span-2 media-frame group overflow-hidden relative bg-black reveal delay-100 cursor-pointer">
                             <img src="./Doc.gif" alt="Documentary Feature" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" onerror="this.style.display='none'">
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <div class="w-16 h-16 border-2 border-cyber-cyan rounded-full flex items-center justify-center bg-black/50 backdrop-blur-sm shadow-[0_0_15px_rgba(0,243,255,0.5)]">
@@ -377,7 +477,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </div>
 
                         <!-- Media 5: Public Speaking (Wide: 2x1) -->
-                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-200">
+                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-200 cursor-pointer">
                             <img src="./Speech.png" alt="Keynote Speaker" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <div class="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -388,32 +488,32 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </div>  
 
                         <!-- Media 1: Origin (1x1) -->
-                        <div class="col-span-1 md:col-span-1 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-300">
+                        <div class="col-span-1 md:col-span-1 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-300 cursor-pointer">
                             <img src="./Origin.avif" alt="Origin Context" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md truncate">PHASE_01: AFG</div>
                         </div>
 
                         <!-- Media 2: The Journey (1x1) -->
-                        <div class="col-span-1 md:col-span-1 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-400">
+                        <div class="col-span-1 md:col-span-1 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-400 cursor-pointer">
                             <img src="./Relocation.jpg" alt="Logistics" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md truncate">PHASE_02: JOURNEY</div>
                         </div>   
 
                         <!-- Media 3: Resettlement (Wide: 2x1) -->
-                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-500">
+                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative bg-black reveal delay-500 cursor-pointer">
                             <img src="./Roc.jpg" alt="Arrival in USA" class="w-full h-full object-cover object-center opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: USA_RESETTLEMENT</div>
                         </div>   
 
                         <!-- Media 6: Mentorship/Award (Wide: 2x1) -->
-                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.15)] bg-black reveal delay-600">
+                        <div class="col-span-2 md:col-span-2 row-span-1 media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.15)] bg-black reveal delay-600 cursor-pointer">
                             <img src="./Award.jpg" alt="Matt Hachee Award" class="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-cyber-amber/95 text-[10px] text-black font-black px-3 py-2 tracking-widest backdrop-blur-md">RECOGNITION: MATT_HACHEE_AWARD</div>
                         </div>
                     </div>
                     
                     <!-- THE ULTIMATE HOOK -->
-                    <div class="reveal hud-panel p-6 bg-cyber-cyan/5 border-l-4 border-l-cyber-cyan shadow-[0_0_25px_rgba(0,243,255,0.1)] relative reveal delay-300">
+                    <div class="hud-panel p-6 bg-cyber-cyan/5 border-l-4 border-l-cyber-cyan shadow-[0_0_25px_rgba(0,243,255,0.1)] relative reveal delay-300">
                         <div class="absolute top-0 right-0 p-2 opacity-30">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         </div>
@@ -427,8 +527,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="autonomous" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: AUTONOMOUS SYSTEMS (EV3) -->
+        <!-- ========================================== -->
+        <section id="autonomous" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-purple/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-purple">02 // AUTONOMOUS_SYSTEMS</h2>
                     <span class="text-cyber-purple/50 text-sm mb-1 hidden sm:block">ENR_161_EV3_ROBOTICS</span>
@@ -442,14 +546,14 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-purple bg-black/40">
                         <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-autonomous">
                             Design, program, and refine an autonomous EV3 platform to navigate a color-coded arena, detect randomized targets, and execute precise physical manipulation to sort and score standard and challenging black pucks under strict time constraints.
                         </p>
                     </div>
 
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-purple/10 border-cyber-purple/30">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-purple/10 border-cyber-purple/30">
                         <h4 class="text-cyber-purple font-display text-sm tracking-widest mb-3">>> HARDWARE_&_LOGIC</h4>
                         <div class="flex flex-wrap gap-2 text-xs font-bold">
                             <span class="px-2 py-1 text-white bg-black/80 border border-white/20 rounded">LEGO Mindstorms EV3</span>
@@ -460,19 +564,19 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-amber bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-amber text-glow-amber">24/20</div>
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-amber bg-black/40">
+                            <div class="text-3xl font-display font-black text-cyber-amber text-glow-amber"><span class="metric-count" data-target="24">0</span>/20</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Total Score (Maxed)</div>
                         </div>
-                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-magenta bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-magenta text-glow-magenta">14+</div>
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-magenta bg-black/40">
+                            <div class="text-3xl font-display font-black text-cyber-magenta text-glow-magenta"><span class="metric-count" data-target="14">0</span>+</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Hours PID Debugging</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit">
-                    <div class="media-frame angled-cut-reverse bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-200 border-cyber-purple/40">
+                    <div class="media-frame angled-cut-reverse bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-200 border-cyber-purple/40 cursor-pointer">
                         <div class="bg-cyber-purple/20 text-cyber-purple text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_01 // THE_CLAW_INTRO</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
@@ -482,7 +586,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </video>
                     </div>
                     
-                    <div class="media-frame angled-cut bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-300 border-cyber-purple/40">
+                    <div class="media-frame angled-cut bg-black w-full aspect-[4/3] lg:aspect-video flex flex-col group overflow-hidden relative reveal delay-300 border-cyber-purple/40 cursor-pointer">
                         <div class="bg-cyber-purple/20 text-cyber-purple text-[10px] font-bold px-3 py-2 flex justify-between absolute w-full top-0 z-10 backdrop-blur-md">
                             <span>CAM_02 // PID_TESTING_PROTOCOL</span>
                             <span class="text-cyber-magenta animate-pulse">LIVE_FEED</span>
@@ -499,8 +603,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="mechanical" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: MECH PROTOTYPING (LAVA BLITZ) -->
+        <!-- ========================================== -->
+        <section id="mechanical" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-magenta/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-magenta">03 // MECH_PROTOTYPING</h2>
                     <span class="text-cyber-magenta/50 text-sm mb-1 hidden sm:block">ENR_153_LAVA_BLITZ</span>
@@ -514,27 +622,27 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-magenta bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-magenta bg-black/40">
                         <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-mechanical">
                             Machine, assemble, and optimize a functional high-velocity vehicle chassis to complete an array of tasks. Required balancing opposing constraints: maximizing sprint speed vs. maintaining torque for weight-lifting, alongside rigorous dimensional tolerances and turn radii.
                         </p>
                     </div>
                     
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-magenta/10 border-cyber-magenta/40">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-magenta/10 border-cyber-magenta/40">
                         <h4 class="text-cyber-magenta font-display text-sm tracking-widest mb-4">>> RECORD_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">SPRINT_RECORD</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-magenta"><span class="count-up" data-target="2.09s">2.09s</span></span
+                                <span class="text-xl font-display font-bold text-white text-glow-magenta"><span class="metric-count" data-target="2.09" data-is-float="true">0.00</span>s</span>
                             </div>
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">OVAL_TIME</span>
-                                <span class="text-xl font-display font-bold text-white"><span class="count-up" data-target="10.01s">10.01s</span></span
+                                <span class="text-xl font-display font-bold text-white"><span class="metric-count" data-target="10.01" data-is-float="true">0.00</span>s</span>
                             </div>
                             <div class="flex justify-between items-center border-b border-cyber-magenta/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">MASS_TOWED</span>
-                                <span class="text-xl font-display font-bold text-white"><span class="count-up" data-target="1650g">1650g</span></span
+                                <span class="text-xl font-display font-bold text-white"><span class="metric-count" data-target="1650">0</span>g</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-cyber-magenta font-bold tracking-widest">CLASS_RANK</span>
@@ -550,35 +658,35 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-magenta/30">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-magenta/30 cursor-pointer">
                             <img src="./CADENR153.png" alt="CAD Model 1" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: CAD_MODEL_A</div>
                         </div>
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-magenta/30">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-magenta/30 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153A.mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CAD_MODEL_ANIMATION</div>
                         </div>  
 
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-magenta/30">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-magenta/30 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(1).mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_03: BARE_CHASSIS_MACHINING</div>
                         </div>   
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-magenta/30">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-magenta/30 cursor-pointer">
                             <img src="./ENR153(2).jpg" alt="Hardware Assembly" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_04: HARDWARE_ASSEMBLY</div>
                         </div>
-                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-magenta/30">
+                         <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-magenta/30 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
                                 <source src="./ENR153(3).mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-magenta px-3 py-2 border-t border-cyber-magenta/50 font-bold tracking-widest backdrop-blur-md">PHASE_05: DESIGN_TESTING</div>
                         </div>  
-                        <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600">
+                        <div class="media-frame group overflow-hidden relative border-cyber-amber shadow-[0_0_30px_rgba(255,179,0,0.2)] bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600 cursor-pointer">
                             <img src="./ENR153(4).jpg" alt="Final Lava Blitz" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-cyber-amber/95 text-[10px] text-black font-black px-3 py-2 tracking-widest backdrop-blur-md">FINAL_ASSEMBLY: LAVA_BLITZ</div>
                         </div>
@@ -586,8 +694,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="ironeagle" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: IRON EAGLE (NEW) -->
+        <!-- ========================================== -->
+        <section id="ironeagle" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-[#66aaff]/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-blue">04 // IRON_EAGLE_R&D</h2>
                     <span class="text-[#66aaff]/50 text-sm mb-1 hidden sm:block">AUTONOMOUS_ROBOTICS_LEAD</span>
@@ -601,19 +713,19 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-[#66aaff] bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-[#66aaff] bg-black/40">
                         <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-ironeagle">
                             As Research Lead, tasked with engineering the "Iron Eagle" autonomous robotic platform. Focused on optimizing chassis weight while maintaining structural integrity via DFMA, and developing robust C++ pathfinding algorithms for complex real-world environment interaction.
                         </p>
                     </div>
                     
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-[#66aaff]/10 border-[#66aaff]/30">
+                    <div class="hud-panel angled-cut p-6 bg-[#66aaff]/10 border-[#66aaff]/30">
                         <h4 class="text-[#66aaff] font-display text-sm tracking-widest mb-4">>> PERFORMANCE_METRICS</h4>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">WEIGHT_REDUCTION</span>
-                                <span class="text-xl font-display font-bold text-white text-glow-blue"><span class="count-up" data-target="15%">15%</span></span
+                                <span class="text-xl font-display font-bold text-white text-glow-blue"><span class="metric-count" data-target="15">0</span>%</span>
                             </div>
                             <div class="flex justify-between items-center border-b border-[#66aaff]/30 pb-2">
                                 <span class="text-xs text-gray-300 font-bold">LOGIC_ENGINE</span>
@@ -638,19 +750,19 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <!-- Media 1: IronA.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-100 border-[#66aaff]/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-100 border-[#66aaff]/40 cursor-pointer">
                             <img src="./IronA.jpeg" alt="Iron Eagle CAD/Build" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_01: BUILD_&_INTEGRATION</div>
                         </div>
 
                         <!-- Media 2: IronB.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-200 border-[#66aaff]/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-200 border-[#66aaff]/40 cursor-pointer">
                             <img src="./IronB.jpeg" alt="Iron Eagle Chassis" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#66aaff] px-3 py-2 border-t border-[#66aaff]/50 font-bold tracking-widest backdrop-blur-md">PHASE_02: CHASSIS_OPTIMIZATION</div>
                         </div>  
 
                         <!-- Media 3: IronC.mp4 -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-300 border-[#66aaff]/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-300 border-[#66aaff]/40 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
                                 <source src="./IronC.mp4" type="video/mp4">
                             </video>
@@ -658,7 +770,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </div>   
 
                         <!-- Media 4: IronD.mp4 -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-400 border-[#66aaff]/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-video sm:aspect-[4/3] reveal delay-400 border-[#66aaff]/40 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
                                 <source src="./IronD.mp4" type="video/mp4">
                             </video>
@@ -668,8 +780,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="digital" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: DIGITAL SYSTEMS -->
+        <!-- ========================================== -->
+        <section id="digital" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-[#00ffcc]/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-teal">05 // DIGITAL_SYSTEMS</h2>
                     <span class="text-[#00ffcc]/50 text-sm mb-1 hidden sm:block">ENR_157_FPGA_MICROWAVE</span>
@@ -683,7 +799,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-[#00ffcc] bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-[#00ffcc] bg-black/40">
                         <h4 class="text-[#00ffcc] font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-digital">
                             Engineer a functional digital microwave control system. Required mastering the complete design flow: from software-based digital logic simulation to reliable physical hardware execution utilizing a Finite State Machine (FSM).
@@ -691,12 +807,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="reveal tilt-card hud-panel angled-cut p-4 text-center border-t-2 border-t-[#00ffcc] bg-[#00ffcc]/10">
-                            <div class="text-4xl font-display font-black text-[#00ffcc] text-glow-teal">52/60</div>
+                        <div class="hud-panel angled-cut p-4 text-center border-t-2 border-t-[#00ffcc] bg-[#00ffcc]/10">
+                            <div class="text-4xl font-display font-black text-[#00ffcc] text-glow-teal"><span class="metric-count" data-target="52">0</span>/60</div>
                             <div class="text-[10px] text-gray-300 mt-2 uppercase font-bold tracking-widest">Subtotal Assessment</div>
                         </div>
-                        <div class="reveal tilt-card hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
-                            <div class="text-4xl font-display font-black text-white text-glow-cyan">10/10</div>
+                        <div class="hud-panel angled-cut-reverse p-4 text-center border-t-2 border-t-cyber-cyan bg-cyber-cyan/10">
+                            <div class="text-4xl font-display font-black text-white text-glow-cyan"><span class="metric-count" data-target="10">0</span>/10</div>
                             <div class="text-[10px] text-cyber-cyan mt-2 uppercase font-bold tracking-widest">Perfect Wiring Score</div>
                         </div>
                     </div>
@@ -709,7 +825,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
                 
                 <div class="lg:col-span-7 flex flex-col gap-4">
-                    <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-200 border-[#00ffcc]/40">
+                    <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-200 border-[#00ffcc]/40 cursor-pointer">
                         <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
                             <source src="./ENR157V.mp4" type="video/mp4">
                         </video>
@@ -718,18 +834,18 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </div>
                     </div>
 
-                    <div class="media-frame h-48 md:h-64 w-full relative group overflow-hidden bg-black reveal delay-300 border-[#00ffcc]/40">
+                    <div class="media-frame h-48 md:h-64 w-full relative group overflow-hidden bg-black reveal delay-300 border-[#00ffcc]/40 cursor-pointer">
                         <img src="./Schematic.png" alt="FPGA Setup" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" onerror="this.style.display='none'">
                         <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#00ffcc] px-3 py-2 border-t border-[#00ffcc]/50 font-bold tracking-widest backdrop-blur-md">
                             SCHEMATIC_CAPTURE
                         </div>
                     </div>                
                     <div class="grid grid-cols-2 gap-4 h-48">
-                        <div class="media-frame relative group overflow-hidden bg-black reveal delay-400 border-[#00ffcc]/40">
+                        <div class="media-frame relative group overflow-hidden bg-black reveal delay-400 border-[#00ffcc]/40 cursor-pointer">
                             <img src="./ENR157.jpg" alt="Breadboard Top Down" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-[#00ffcc] px-3 py-2 border-t border-[#00ffcc]/50 font-bold tracking-widest backdrop-blur-md">PHYSICAL_WIRING_MAP</div>
                         </div>
-                        <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-500 border-[#00ffcc]/40">
+                        <div class="media-frame aspect-video w-full relative group overflow-hidden bg-black reveal delay-500 border-[#00ffcc]/40 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700">
                                 <source src="./ENR157A.mp4" type="video/mp4">
                             </video>
@@ -741,8 +857,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="structural" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: STRUCTURAL ANALYSIS (FIXED) -->
+        <!-- ========================================== -->
+        <section id="structural" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-amber/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-amber">06 // STRUCTURAL_ANALYSIS</h2>
                     <span class="text-cyber-amber/50 text-sm mb-1 hidden sm:block">ENR_251_THUNDER_WHEEL</span>
@@ -756,17 +876,17 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-amber bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-amber bg-black/40">
                         <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-3">>> PROBLEM_STATEMENT</h4>
                         <p class="text-sm leading-relaxed text-gray-300" id="desc-structural">
                             Investigate structural behavior of an original statically indeterminate truss system ("Thunder Wheel") subjected to rotating eccentric loads. Determine accuracy of classical Method of Sections analysis against real-world physical forces exhibiting redundant load paths and joint friction.
                         </p>
                     </div>
 
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-amber/10 border-cyber-amber/40">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-amber/10 border-cyber-amber/40">
                         <h4 class="text-cyber-amber font-display text-sm tracking-widest mb-4">>> ANALYSIS_RESULTS</h4>
                         <div class="flex items-center gap-6 mb-4">
-                            <div class="text-5xl font-display font-black text-cyber-amber text-glow-amber">46.9%</div>
+                            <div class="text-5xl font-display font-black text-cyber-amber text-glow-amber"><span class="metric-count" data-target="46.9" data-is-float="true">0.0</span>%</div>
                             <div class="text-xs text-gray-300 uppercase leading-tight font-bold tracking-wider">Calculated Force<br/>Discrepancy</div>
                         </div>
                         <p class="text-sm text-gray-300 leading-relaxed">
@@ -774,7 +894,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         </p>
                     </div>
 
-                    <div class="reveal hud-panel p-5 text-center border border-cyber-amber bg-black/60 pulse-border shadow-[0_0_20px_rgba(255,179,0,0.15)]">
+                    <div class="hud-panel p-5 text-center border border-cyber-amber bg-black/60 pulse-border shadow-[0_0_20px_rgba(255,179,0,0.15)]">
                         <div class="text-2xl font-display font-black text-white uppercase tracking-widest text-glow-amber">1st Prize Winner</div>
                         <div class="text-xs text-cyber-amber mt-2 uppercase font-bold tracking-widest">Design Champion Trophy</div>
                     </div>
@@ -783,34 +903,41 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 <div class="lg:col-span-7 flex flex-col gap-4">
                     <!-- Top Row: Videos & Trophy -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-200 border-cyber-amber/40">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-200 border-cyber-amber/40 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251F.mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">PRODUCT_TESTING</div>
                         </div>
 
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-300 border-cyber-amber/40">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-300 border-cyber-amber/40 cursor-pointer">
                             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500">
                                 <source src="./ENR251A.mp4" type="video/mp4">
                             </video>
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-cyan px-3 py-2 border-t border-cyber-cyan/50 font-bold tracking-widest backdrop-blur-md">COMPETITION_DAY</div>
                         </div>
                         
-                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-400 border-cyber-amber/40">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-square reveal delay-400 border-cyber-amber/40 cursor-pointer">
                             <img src="./ENR251.png" alt="Trophy" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">CHAMPION_ACHIEVEMENT</div>
                         </div>
                     </div>
                     
-                    <!-- Middle Row: Landscape Design Display -->
-                    <div class="media-frame w-full relative group overflow-hidden bg-black reveal delay-500 border-cyber-amber/40 min-h-[200px] sm:min-h-[250px]">
-                        <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
-                        <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
+                    <!-- Middle Row: Landscape Design Display Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-[4/3] reveal delay-400 border-cyber-amber/40 cursor-pointer">
+                            <img src="./StaticsHonor.jpeg" alt="2025 Honors Leaderboard" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">2025_HONORS_LEADERBOARD</div>
+                        </div>
+                        
+                        <div class="media-frame relative group overflow-hidden bg-black aspect-video sm:aspect-[4/3] reveal delay-500 border-cyber-amber/40 cursor-pointer">
+                            <img src="./ENR251(1).jpg" alt="Thunder Wheel Team" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
+                            <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-amber px-3 py-2 border-t border-cyber-amber/50 font-bold tracking-widest backdrop-blur-md">DESIGN_DISPLAY</div>
+                        </div>
                     </div>
                     
                     <!-- Bottom Row: Landscape Poster -->
-                    <div class="media-frame w-full relative group overflow-hidden bg-black reveal delay-600 border-cyber-amber/40 min-h-[200px] sm:min-h-[250px]">
+                    <div class="media-frame w-full relative group overflow-hidden bg-black reveal delay-600 border-cyber-amber/40 min-h-[200px] sm:min-h-[250px] cursor-pointer">
                         <img src="./Poster.png" alt="Statics Poster" class="w-full h-full object-cover object-center opacity-60 group-hover:opacity-100 transition-opacity duration-300" onerror="this.style.display='none'">
                         <div class="absolute top-3 right-3 bg-black/95 border border-cyber-magenta text-cyber-magenta px-4 py-2 text-xs font-bold tracking-widest backdrop-blur-md shadow-lg">
                             DATA_VISUALIZATION_POSTER
@@ -819,8 +946,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="globalgrit" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 7: GLOBAL GRIT SDG 4 (UPDATED) -->
+        <!-- ========================================== -->
+        <section id="globalgrit" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-green/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-green">07 // SYS.IMPACT GLOBAL_GRIT</h2>
                     <span class="text-cyber-green/70 text-sm mb-1 hidden sm:block font-bold">AIESEC_INDIA // JEEVANTHIRTH</span>
@@ -834,14 +965,14 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             <div class="grid lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
-                    <div class="reveal hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
+                    <div class="hud-panel p-6 border-l-2 border-cyber-green bg-black/40">
                         <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> MISSION_PARAMETERS: QUALITY EDUCATION</h4>
                         <p class="text-sm leading-relaxed text-gray-200" id="desc-globalgrit">
                             Deployed to Ahmedabad, Gujarat (India) on Feb 10, 2018, as an AIESEC Exchange Volunteer to execute the "Digital Literacy for Quality Education" project (UN SDG 4). Partnered with the Jeevanthirth Foundation to bridge the technological divide for underprivileged youth in the rural Vadaj sector. Operated out of Juna Koba alongside an international coalition, navigating extreme cultural dynamics and austere resource constraints.
                         </p>
                     </div>
 
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
+                    <div class="hud-panel angled-cut p-6 bg-cyber-green/10 border-cyber-green/30">
                         <h4 class="text-cyber-green font-display text-sm tracking-widest mb-3">>> TACTICAL_SKILLS</h4>
                         <div class="flex flex-wrap gap-2 text-xs font-bold">
                             <span class="px-2 py-1 text-black bg-cyber-green border border-cyber-green/50 rounded">Cross-Cultural Leadership</span>
@@ -852,11 +983,11 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
-                            <div class="text-3xl font-display font-black text-cyber-green text-glow-green">500+</div>
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-green bg-black/40">
+                            <div class="text-3xl font-display font-black text-cyber-green text-glow-green"><span class="metric-count" data-target="500">0</span>+</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Youth Empowered</div>
                         </div>
-                        <div class="reveal hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
+                        <div class="hud-panel p-4 text-center border-t-2 border-t-cyber-cyan bg-black/40">
                             <div class="text-3xl font-display font-black text-cyber-cyan text-glow-cyan">INTL</div>
                             <div class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Coalition Built</div>
                         </div>
@@ -866,37 +997,37 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 <div class="lg:col-span-8 h-fit">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <!-- Project Cover / India.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-100 border-cyber-green/40 cursor-pointer">
                             <img src="./India.jpeg" alt="Project Cover" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">INITIATION: DIGITAL_LITERACY</div>
                         </div>
 
                         <!-- Teaching / Work.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-200 border-cyber-green/40 cursor-pointer">
                             <img src="./Work.jpg" alt="Teaching at Jeevanthirth" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">FIELD_OPS: JEEVANTHIRTH_VADAJ</div>
                         </div>
 
                         <!-- Global Village / Global.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-300 border-cyber-green/40 cursor-pointer">
                             <img src="./Global.jpg" alt="Global Village Flag" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">DIPLOMACY: AFGHANISTAN_REP</div>
                         </div>   
 
                         <!-- Team / Team.png -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-400 border-cyber-green/40 cursor-pointer">
                             <img src="./Team.png" alt="International Team" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">NETWORK: INTL_COALITION</div>
                         </div>
 
                         <!-- Exploration / Gujarat.jpeg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-500 border-cyber-green/40 cursor-pointer">
                             <img src="./Gujarat.jpeg" alt="Exploration" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">TEAM_DYNAMICS: AIESEC_INDIA</div>
                         </div>  
 
                         <!-- Architecture / Raj.jpg -->
-                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600 border-cyber-green/40">
+                        <div class="media-frame group overflow-hidden relative bg-black aspect-square lg:aspect-auto lg:h-48 reveal delay-600 border-cyber-green/40 cursor-pointer">
                             <img src="./Raj.jpg" alt="Architecture" class="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onerror="this.style.display='none'">
                             <div class="absolute bottom-0 w-full bg-black/90 text-[10px] text-cyber-green px-3 py-2 border-t border-cyber-green/50 font-bold tracking-widest backdrop-blur-md">CULTURAL_SURVEY: RAJASTHAN</div>
                         </div>
@@ -909,8 +1040,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="resume" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 8: RESUME DOSSIER (UPGRADED RADAR) -->
+        <!-- ========================================== -->
+        <section id="resume" class="scroll-mt-32 mb-32 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">08 // SYS.DATA_DOSSIER</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">CANDIDATE_PROFILE</span>
@@ -922,64 +1057,11 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             <div id="ai-out-resume" class="hidden hud-panel p-4 mb-6 border-l-4 border-l-cyber-purple bg-cyber-purple/10 text-sm text-gray-200 font-mono"></div>
 
-            
-<div class="reveal my-10" id="skills-radar-wrap">
-  <div class="reveal hud-panel p-6 rounded-sm">
-    <h3 class="font-display text-xs tracking-widest text-cyber-cyan mb-6 text-center uppercase">&gt;&gt; competency_matrix // skill_radar</h3>
-    <div class="flex flex-col lg:flex-row items-center gap-8">
-      <div class="flex-shrink-0" style="width:260px;height:260px;">
-        <svg width="260" height="260" viewBox="0 0 260 260">
-          <g transform="translate(130,130)">
-            <polygon class="radar-ring" points="0,-96 83.1,-48 83.1,48 0,96 -83.1,48 -83.1,-48"/>
-            <polygon class="radar-ring" points="0,-72 62.4,-36 62.4,36 0,72 -62.4,36 -62.4,-36"/>
-            <polygon class="radar-ring" points="0,-48 41.6,-24 41.6,24 0,48 -41.6,24 -41.6,-24"/>
-            <polygon class="radar-ring" points="0,-24 20.8,-12 20.8,12 0,24 -20.8,12 -20.8,-12"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="0" y2="-105"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="90.9" y2="-52.5"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="90.9" y2="52.5"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="0" y2="105"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="-90.9" y2="52.5"/>
-            <line class="radar-spoke" x1="0" y1="0" x2="-90.9" y2="-52.5"/>
-            <polygon class="radar-fill" id="radar-a1" points="0,0 0,0 0,0 0,0 0,0 0,0"
-              data-final="0,-86 72,-43 66,43 0,72 -66,38 -75,-43"/>
-            <polygon class="radar-fill2" id="radar-a2" points="0,0 0,0 0,0 0,0 0,0 0,0"
-              data-final="0,-62 53,-31 41,48 0,58 -54,31 -54,-43"/>
-            <circle class="radar-dot" id="rd0" cx="0" cy="0" r="4"/>
-            <circle class="radar-dot" id="rd1" cx="0" cy="0" r="4"/>
-            <circle class="radar-dot" id="rd2" cx="0" cy="0" r="4"/>
-            <circle class="radar-dot" id="rd3" cx="0" cy="0" r="4"/>
-            <circle class="radar-dot" id="rd4" cx="0" cy="4" r="4"/>
-            <circle class="radar-dot" id="rd5" cx="0" cy="0" r="4"/>
-            <text x="0" y="-111" text-anchor="middle" fill="#00f3ff" font-size="8.5" font-family="JetBrains Mono,monospace">CAD/3D</text>
-            <text x="100" y="-47" text-anchor="start" fill="#00f3ff" font-size="8.5" font-family="JetBrains Mono,monospace">MATLAB</text>
-            <text x="100" y="58" text-anchor="start" fill="#00ffcc" font-size="8.5" font-family="JetBrains Mono,monospace">PYTHON</text>
-            <text x="0" y="118" text-anchor="middle" fill="#bc13fe" font-size="8.5" font-family="JetBrains Mono,monospace">STATICS</text>
-            <text x="-100" y="58" text-anchor="end" fill="#ffb300" font-size="8.5" font-family="JetBrains Mono,monospace">CIRCUITS</text>
-            <text x="-100" y="-47" text-anchor="end" fill="#ff003c" font-size="8.5" font-family="JetBrains Mono,monospace">AUTONOMY</text>
-            <line id="radar-sweep" x1="0" y1="0" x2="0" y2="-96"
-              stroke="rgba(0,243,255,0.35)" stroke-width="1.5"
-              style="transform-origin:0 0;animation:radarSpin 4s linear infinite;"/>
-          </g>
-        </svg>
-      </div>
-      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">SolidWorks / Fusion 360</span><span class="text-cyber-cyan font-bold"><span class="count-up" data-target="90%">90%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="90"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">MATLAB / Simulink</span><span class="text-cyber-cyan font-bold"><span class="count-up" data-target="85%">85%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="85"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Python / C++</span><span class="text-cyber-teal font-bold"><span class="count-up" data-target="80%">80%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-teal to-cyber-cyan" data-w="80"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Statics / Dynamics</span><span class="text-cyber-purple font-bold"><span class="count-up" data-target="88%">88%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-purple to-cyber-cyan" data-w="88"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">FPGA / Verilog HDL</span><span class="text-cyber-amber font-bold"><span class="count-up" data-target="75%">75%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-amber to-cyber-orange" data-w="75"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">ROS / Autonomous Nav</span><span class="text-cyber-magenta font-bold"><span class="count-up" data-target="78%">78%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-magenta to-cyber-purple" data-w="78"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">3D Printing / FDM</span><span class="text-cyber-green font-bold"><span class="count-up" data-target="82%">82%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-green to-cyber-teal" data-w="82"></div></div></div>
-        <div><div class="flex justify-between text-xs mb-1"><span class="text-white/60">Calculus / Physics</span><span class="text-cyber-blue font-bold"><span class="count-up" data-target="87%">87%</span></span</div><div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-cyber-blue to-cyber-cyan" data-w="87"></div></div></div>
-      </div>
-    </div>
-  </div>
-</div>
-    <div class="grid lg:grid-cols-12 gap-8">
-                <!-- Left Column: Profile & Skills -->
+            <div class="grid lg:grid-cols-12 gap-8">
+                <!-- Left Column: Profile -->
                 <div class="lg:col-span-4 space-y-6 reveal delay-100">
                     <!-- Bio Panel -->
-                    <div class="reveal tilt-card hud-panel angled-cut p-6 bg-black/60 border-t-2 border-cyber-cyan">
+                    <div class="hud-panel angled-cut p-6 bg-black/60 border-t-2 border-cyber-cyan">
                         <div class="flex items-center gap-4 mb-4 border-b border-cyber-cyan/20 pb-4">
                             <div class="w-16 h-16 rounded-full border-2 border-cyber-cyan p-1 bg-cyber-cyan/10 flex items-center justify-center">
                                 <span class="font-display font-black text-2xl text-cyber-cyan drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]">RK</span>
@@ -1007,58 +1089,50 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                             [ DOWNLOAD_SECURE_PDF ]
                         </a>
                     </div>
-
-                    <!-- Skills Data-Viz -->
-                    <div class="reveal hud-panel p-6 bg-black/40">
-                        <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-4 border-b border-cyber-cyan/30 pb-2">>> TECHNICAL_TOOLKIT</h4>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Software & Programming</span>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 text-[10px] text-black bg-cyber-cyan font-bold rounded-sm">SolidWorks (CAD)</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">MATLAB</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">Python</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">C++</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">Quartus Prime</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-cyan border border-cyber-cyan/50 bg-cyber-cyan/10 rounded-sm">AutoCAD</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Engineering & Core</span>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">FEA Analysis</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">GD&T</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">DFMA</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">Autonomous Robotics</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-amber border border-cyber-amber/50 bg-cyber-amber/10 rounded-sm">Digital Systems</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Fabrication</span>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">3D Printing/Slicing</span>
-                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Aluminum Alloys</span>
-                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Composites</span>
-                                    <span class="px-2 py-1 text-[10px] text-gray-300 border border-gray-600 bg-gray-800 rounded-sm">Soldering</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-2">Languages</span>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">English (Pro)</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Dari (Native)</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Pashto (Native)</span>
-                                    <span class="px-2 py-1 text-[10px] text-cyber-magenta border border-cyber-magenta/50 bg-cyber-magenta/10 rounded-sm">Urdu/Hindi (Speaking)</span>
-                                </div>
-                            </div>
+                    
+                    <!-- Animated Radar Chart -->
+                    <div class="hud-panel p-6 bg-black/40">
+                        <h4 class="text-cyber-cyan font-display text-xs tracking-widest mb-4 border-b border-cyber-cyan/30 pb-2">>> CAPABILITY_RADAR</h4>
+                        <div class="relative w-full aspect-square flex justify-center items-center p-2">
+                            <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible max-w-[250px] drop-shadow-[0_0_10px_rgba(0,243,255,0.3)]">
+                                <!-- Concentric hex/polygons -->
+                                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="rgba(0,243,255,0.15)"/>
+                                <polygon points="50,20 76,35 76,65 50,80 24,65 24,35" fill="none" stroke="rgba(0,243,255,0.15)"/>
+                                <polygon points="50,35 63,42.5 63,57.5 50,65 37,57.5 37,42.5" fill="none" stroke="rgba(0,243,255,0.15)"/>
+                                <!-- Axes -->
+                                <line x1="50" y1="50" x2="50" y2="5" stroke="rgba(0,243,255,0.15)"/>
+                                <line x1="50" y1="50" x2="95" y2="27.5" stroke="rgba(0,243,255,0.15)"/>
+                                <line x1="50" y1="50" x2="95" y2="72.5" stroke="rgba(0,243,255,0.15)"/>
+                                <line x1="50" y1="50" x2="50" y2="95" stroke="rgba(0,243,255,0.15)"/>
+                                <line x1="50" y1="50" x2="5" y2="72.5" stroke="rgba(0,243,255,0.15)"/>
+                                <line x1="50" y1="50" x2="5" y2="27.5" stroke="rgba(0,243,255,0.15)"/>
+                    
+                                <!-- The Skill Polygon -->
+                                <polygon id="skill-poly" points="50,50 50,50 50,50 50,50 50,50 50,50" fill="rgba(0,243,255,0.3)" stroke="#00f3ff" stroke-width="1.5" class="transition-all duration-[1500ms] ease-out"/>
+                    
+                                <!-- Labels -->
+                                <text x="50" y="2" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="middle">CAD/FEA</text>
+                                <text x="98" y="27.5" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="start">Robotics</text>
+                                <text x="98" y="74.5" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="start">C++/Python</text>
+                                <text x="50" y="100" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="middle">Fabrication</text>
+                                <text x="2" y="74.5" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="end">FPGA/Logic</text>
+                                <text x="2" y="27.5" font-size="4" font-family="monospace" font-weight="bold" fill="#fff" text-anchor="end">Leadership</text>
+                                
+                                <!-- Nodes -->
+                                <circle id="node-0" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out shadow-[0_0_5px_#00f3ff]"/>
+                                <circle id="node-1" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out"/>
+                                <circle id="node-2" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out"/>
+                                <circle id="node-3" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out"/>
+                                <circle id="node-4" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out"/>
+                                <circle id="node-5" cx="50" cy="50" r="1.5" fill="#00f3ff" class="transition-all duration-[1500ms] ease-out"/>
+                            </svg>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column: Timeline Matrix -->
                 <div class="lg:col-span-8 h-fit reveal delay-200">
-                    <div class="reveal tilt-card hud-panel angled-cut-reverse p-6 lg:p-8 bg-black/60 relative">
+                    <div class="hud-panel angled-cut-reverse p-6 lg:p-8 bg-black/60 relative">
                         <!-- Timeline Line -->
                         <div class="absolute left-6 lg:left-8 top-12 bottom-12 w-px bg-gradient-to-b from-cyber-cyan via-cyber-purple to-cyber-amber opacity-50"></div>
                         
@@ -1141,23 +1215,27 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="matlab" class="scroll-mt-32 mb-32 relative px-4 sm:px-6 lg:px-8">
+
+        <!-- ========================================== -->
+        <!-- VIEW 9: MATLAB TOOLBOX (MOVED DOWN) -->
+        <!-- ========================================== -->
+        <section id="matlab" class="scroll-mt-32 mb-32 relative">
             <div class="flex items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 reveal">
                 <h2 class="font-display text-4xl font-black text-white text-glow-cyan">09 // SYS.COMPUTE MATLAB</h2>
                 <span class="text-cyber-cyan/70 text-sm mb-1 hidden sm:block font-bold">KINEMATIC_ENGINEERING</span>
             </div>
             
-            <div class="reveal hud-panel p-6 mb-6 bg-black/40 border-l-2 border-cyber-cyan reveal delay-100">
+            <div class="hud-panel p-6 mb-6 bg-black/40 border-l-2 border-cyber-cyan reveal delay-100">
                 <span class="text-xs text-cyber-cyan uppercase block mb-2 font-bold tracking-widest">>> SYSTEM_LOG: INTERACTIVE KINEMATICS ENGINE</span>
                 <p class="text-sm text-gray-300 leading-relaxed mb-4">
-                    <span class="text-white font-bold">What is this?</span> I originally developed this physics engine in MATLAB to computationally model, plot, and validate the kinematic trajectories of high-velocity projectiles. To demonstrate my software integration capabilities, I have fully recreated that MATLAB environment here as an interactive web application, utilizing a custom JavaScript physics solver and Three.js for live 3D visualization.
+                    <span class="text-white font-bold">Project Origin:</span> Originally developed as a custom MATLAB Physics Toolbox to streamline kinematics and dynamics problem-solving, plot trajectories, and validate theoretical models. To demonstrate my software engineering and system integration capabilities, I have fully recreated that MATLAB environment here as an interactive web application utilizing a JavaScript physics solver and Three.js for 3D spatial rendering.
                 </p>
                 <p class="text-sm text-gray-300 leading-relaxed">
-                    <span class="text-white font-bold">User Instructions:</span> Enter custom initial parameters (Velocity, Angle, Mass) in the <span class="text-cyber-cyan font-mono">SYS.CONFIG</span> panel and click <span class="text-cyber-cyan font-bold tracking-widest">RUN SIMULATION</span>. Rotate and zoom the 3D environment to inspect the flight path, switch to the <span class="text-white font-bold">DATA_&_REPORT</span> tab to view frame-by-frame energy states, or open the <span class="text-cyber-purple font-bold">AI_SOLVER</span> to execute complex orbital mechanics calculations.
+                    <span class="text-white font-bold">User Instructions:</span> Enter your desired initial parameters (Velocity, Angle, Initial Height, Mass) in the <span class="text-cyber-cyan font-mono">SYS.CONFIG</span> panel on the left and click <span class="text-cyber-cyan font-bold tracking-widest">RUN SIMULATION</span>. You can click and drag to rotate the 3D flight path, scroll to zoom, switch to the <span class="text-white font-bold">DATA_&_REPORT</span> tab to view frame-by-frame kinetic/potential energy states, or open the <span class="text-cyber-purple font-bold">AI_SOLVER</span> for automated calculations.
                 </p>
             </div>
             
-            <div class="reveal hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)] reveal delay-200">
+            <div class="hud-panel p-1 flex flex-col lg:flex-row gap-1 shadow-[0_0_30px_rgba(0,102,255,0.15)] reveal delay-200">
                 
                 <!-- Controls Sidebar -->
                 <div class="w-full lg:w-1/3 bg-black/60 p-6 border border-cyber-cyan/30 flex flex-col">
@@ -1265,8 +1343,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </div>
             </div>
         </section>
-<section id="contact" class="scroll-mt-32 mb-16 relative">
-            <div class="scan-reveal flex flex-wrap items-end">
+
+        <!-- ========================================== -->
+        <!-- VIEW 10: CONTACT NODE (UPLINK) -->
+        <!-- ========================================== -->
+        <section id="contact" class="scroll-mt-32 mb-16 relative">
+            <div class="flex flex-wrap items-end gap-4 mb-8 border-b border-cyber-cyan/30 pb-2 justify-between reveal">
                 <div class="flex items-end gap-4">
                     <h2 class="font-display text-4xl font-black text-white text-glow-cyan">10 // SYS.UPLINK</h2>
                     <span class="text-cyber-cyan/50 text-sm mb-1 hidden sm:block">COMMUNICATION_CHANNELS</span>
@@ -1311,8 +1393,10 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 </a>
             </div>
         </section>
-</div>
-<!-- AI TERMINAL CHAT UI -->
+
+    </div>
+
+    <!-- AI TERMINAL CHAT UI -->
     <button onclick="toggleTerminal()" class="fixed bottom-6 right-6 z-50 hud-panel angled-cut px-5 py-4 bg-cyber-dark/90 border border-cyber-cyan text-cyber-cyan font-bold flex items-center gap-3 hover:bg-cyber-cyan/20 transition-all shadow-[0_0_20px_rgba(0,243,255,0.4)] backdrop-blur-xl hover:scale-105 reveal delay-500 cursor-pointer">
         <span class="animate-pulse text-lg">✨</span> SYS.AI_ASSISTANT
     </button>
@@ -1347,7 +1431,85 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
     </footer>
 
     <!-- LOGIC INTEGRATION SCRIPT -->
-<script>
+    <script>
+        // ==========================================
+        // OS BOOT SEQUENCE
+        // ==========================================
+        function initBootSequence() {
+            const bootScreen = document.getElementById('boot-screen');
+            const bootLog = document.getElementById('boot-log');
+            const lines = [
+                "INITIALIZING SPATIAL OS v4.0...",
+                "MOUNTING KERNEL...",
+                "LOADING GRAPHICS ENGINE [THREE.JS]...",
+                "SYNCHRONIZING GLOBAL DATABANKS...",
+                "ESTABLISHING UPLINK TO ROKHAN_A...",
+                "ACCESS GRANTED."
+            ];
+            let delay = 0;
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.className = 'mb-2 opacity-80 drop-shadow-[0_0_5px_#00f3ff]';
+                    p.innerText = '> ' + line;
+                    bootLog.appendChild(p);
+                    if(index === lines.length - 1) {
+                        setTimeout(() => {
+                            bootScreen.classList.add('hidden-boot');
+                            document.body.classList.remove('booting');
+                        }, 800);
+                    }
+                }, delay);
+                delay += 300 + Math.random() * 400;
+            });
+        }
+
+        // ==========================================
+        // CUSTOM CYBERPUNK CURSOR
+        // ==========================================
+        function initCyberCursor() {
+            if (!window.matchMedia("(pointer: fine)").matches) return; 
+
+            const dot = document.createElement('div');
+            dot.className = 'cyber-cursor-dot';
+            const outline = document.createElement('div');
+            outline.className = 'cyber-cursor-outline';
+            document.body.appendChild(dot);
+            document.body.appendChild(outline);
+
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let outlineX = mouseX;
+            let outlineY = mouseY;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+            });
+
+            function animateCursor() {
+                outlineX += (mouseX - outlineX) * 0.15;
+                outlineY += (mouseY - outlineY) * 0.15;
+                outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover states
+            document.addEventListener('mouseover', (e) => {
+                if(e.target.closest('a, button, input, textarea, select, .cursor-pointer, .media-frame')) {
+                    outline.classList.add('hover-state');
+                    dot.classList.add('hover-state');
+                }
+            });
+            document.addEventListener('mouseout', (e) => {
+                 if(e.target.closest('a, button, input, textarea, select, .cursor-pointer, .media-frame')) {
+                    outline.classList.remove('hover-state');
+                    dot.classList.remove('hover-state');
+                }
+            });
+        }
 
         // ==========================================
         // SCROLL REVEAL ANIMATION SYSTEM
@@ -1357,13 +1519,73 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        // Optional: Stop observing once revealed so it doesn't animate out and in constantly
                         observer.unobserve(entry.target); 
                     }
                 });
             }, { threshold: 0.1 });
 
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ==========================================
+        // LIVE METRIC COUNTERS
+        // ==========================================
+        function initCounters() {
+            const counters = document.querySelectorAll('.metric-count');
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting && !entry.target.dataset.counted) {
+                        entry.target.dataset.counted = "true";
+                        const target = parseFloat(entry.target.dataset.target);
+                        const isFloat = entry.target.dataset.isFloat === "true";
+                        let start = 0;
+                        const duration = 2000;
+                        const startTime = performance.now();
+                        
+                        function update(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const ease = 1 - Math.pow(1 - progress, 4); // easeOutQuart
+                            const current = start + (target - start) * ease;
+                            
+                            entry.target.innerText = isFloat ? current.toFixed(current < 10 ? 2 : 1) : Math.floor(current);
+                            
+                            if(progress < 1) requestAnimationFrame(update);
+                            else entry.target.innerText = isFloat ? target : target;
+                        }
+                        requestAnimationFrame(update);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            counters.forEach(c => obs.observe(c));
+        }
+
+        // ==========================================
+        // RADAR ANIMATION SYSTEM
+        // ==========================================
+        function initRadarChart() {
+            const poly = document.getElementById('skill-poly');
+            if(!poly) return;
+            const targetPts = [
+                [50, 9.5], [88.25, 30.87], [86, 68], [50, 88.25], [7.25, 71.37], [5, 27.5]
+            ];
+            const strPts = targetPts.map(p => p.join(',')).join(' ');
+            
+            const obs = new IntersectionObserver(entries => {
+                if(entries[0].isIntersecting) {
+                    poly.setAttribute('points', strPts);
+                    targetPts.forEach((p, i) => {
+                        const node = document.getElementById('node-'+i);
+                        if(node) {
+                            node.setAttribute('cx', p[0]);
+                            node.setAttribute('cy', p[1]);
+                        }
+                    });
+                    obs.disconnect();
+                }
+            }, { threshold: 0.5 });
+            obs.observe(document.getElementById('resume'));
         }
 
         // ==========================================
@@ -1381,14 +1603,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
                     
-                    // Calculate rotation angles (max 15 degrees)
                     const rotateX = ((y - centerY) / centerY) * -15; 
                     const rotateY = ((x - centerX) / centerX) * 15;
                     
                     card.style.transition = 'transform 0.1s ease-out';
                     card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
                     
-                    // Update glare position
                     card.style.setProperty('--x', `${x}px`);
                     card.style.setProperty('--y', `${y}px`);
                 });
@@ -1408,7 +1628,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
         function initGlobal3D() {
             const canvas = document.getElementById('global-3d-bg');
             const scene = new THREE.Scene();
-            // Fog for depth fading
             scene.fog = new THREE.FogExp2(0x020305, 0.0015);
             
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -1419,7 +1638,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
 
-            // Lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
             scene.add(ambientLight);
             
@@ -1427,25 +1645,20 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             cyanLight.position.set(20, 50, 20);
             scene.add(cyanLight);
 
-            // Deep spatial Grid matrix
             const grid = new THREE.GridHelper(400, 100, 0x0066ff, 0x001133);
             grid.position.y = -30;
             grid.material.transparent = true;
             grid.material.opacity = 0.3;
             scene.add(grid);
 
-            // --- NEW: Ultra-Realistic Procedural Moon ---
-            // Generate a realistic cratered texture using canvas
             const moonCanvas = document.createElement('canvas');
             moonCanvas.width = 1024;
             moonCanvas.height = 1024;
             const mCtx = moonCanvas.getContext('2d');
             
-            // Base lunar dust color
             mCtx.fillStyle = '#888888';
             mCtx.fillRect(0, 0, 1024, 1024);
             
-            // Generate Maria (Dark patches for realism)
             for(let i=0; i<15; i++) {
                 const x = Math.random() * 1024;
                 const y = Math.random() * 1024;
@@ -1459,22 +1672,20 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 mCtx.fill();
             }
 
-            // Generate noise
             for(let i=0; i<80000; i++) {
                 mCtx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.15)';
                 mCtx.fillRect(Math.random()*1024, Math.random()*1024, 2, 2);
             }
             
-            // Generate craters
             for(let i=0; i<400; i++) {
                 const x = Math.random() * 1024;
                 const y = Math.random() * 1024;
                 const r = Math.random() * 30 + 3;
                 
                 const grad = mCtx.createLinearGradient(x-r, y-r, x+r, y+r);
-                grad.addColorStop(0, 'rgba(0,0,0,0.8)'); // Inner shadow
-                grad.addColorStop(0.4, 'rgba(80,80,80,0.3)'); // Floor
-                grad.addColorStop(0.8, 'rgba(200,200,200,0.5)'); // Highlight rim
+                grad.addColorStop(0, 'rgba(0,0,0,0.8)'); 
+                grad.addColorStop(0.4, 'rgba(80,80,80,0.3)'); 
+                grad.addColorStop(0.8, 'rgba(200,200,200,0.5)'); 
                 
                 mCtx.beginPath();
                 mCtx.arc(x, y, r, 0, Math.PI * 2);
@@ -1484,7 +1695,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             const moonTexture = new THREE.CanvasTexture(moonCanvas);
             
-            // Large realistic moon geometry
             const moonGeo = new THREE.SphereGeometry(70, 64, 64);
             const moonMat = new THREE.MeshStandardMaterial({ 
                 map: moonTexture,
@@ -1494,28 +1704,24 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 metalness: 0.1
             });
             const moon = new THREE.Mesh(moonGeo, moonMat);
-            moon.position.set(300, 150, -500); // Far away in the top right
+            moon.position.set(300, 150, -500); 
             scene.add(moon);
 
-            // Realistic harsh sunlight strictly for the moon to cast deep shadows
             const sunLight = new THREE.DirectionalLight(0xffffff, 3.5);
-            sunLight.position.set(-200, 100, 0); // Shines from front-left to create crescent
+            sunLight.position.set(-200, 100, 0); 
             sunLight.target = moon;
             scene.add(sunLight);
             scene.add(sunLight.target);
 
-            // --- NEW: Artemis II Rocket (Fixed Physics & Scaled Up) ---
             const rocketMaster = new THREE.Group();
-            rocketMaster.scale.set(4, 4, 4); // Make it MASSIVE so the text is clear
+            rocketMaster.scale.set(4, 4, 4); 
 
-            // Main Body (Aligned perfectly along the X axis)
             const rBodyGeo = new THREE.CylinderGeometry(2, 2, 18, 32);
-            rBodyGeo.rotateZ(-Math.PI / 2); // Rotate cylinder to lie along X
+            rBodyGeo.rotateZ(-Math.PI / 2); 
             const rBodyMat = new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.3 });
             const rBody = new THREE.Mesh(rBodyGeo, rBodyMat);
             rocketMaster.add(rBody);
 
-            // Nose Cone (Points to +X)
             const rNoseGeo = new THREE.ConeGeometry(2, 5, 32);
             rNoseGeo.rotateZ(-Math.PI / 2);
             rNoseGeo.translate(11.5, 0, 0);
@@ -1523,7 +1729,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const rNose = new THREE.Mesh(rNoseGeo, rNoseMat);
             rocketMaster.add(rNose);
 
-            // Thruster Base (Points to -X)
             const rThrustGeo = new THREE.CylinderGeometry(1.6, 2.2, 3, 32);
             rThrustGeo.rotateZ(-Math.PI / 2);
             rThrustGeo.translate(-10.5, 0, 0);
@@ -1531,15 +1736,13 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const rThrust = new THREE.Mesh(rThrustGeo, rThrustMat);
             rocketMaster.add(rThrust);
 
-            // Rocket Exhaust Flame (Points backward along -X)
             const rFlameGeo = new THREE.ConeGeometry(1.8, 8, 16);
-            rFlameGeo.rotateZ(Math.PI / 2); // Cone tip faces -X
+            rFlameGeo.rotateZ(Math.PI / 2); 
             rFlameGeo.translate(-16, 0, 0);
             const rFlameMat = new THREE.MeshBasicMaterial({ color: 0xffb300, transparent: true, opacity: 0.9 });
             const rFlame = new THREE.Mesh(rFlameGeo, rFlameMat);
             rocketMaster.add(rFlame);
 
-            // "ARTEMIS II" Labels 
             function createLabelTexture() {
                 const canvas = document.createElement('canvas');
                 canvas.width = 1024; canvas.height = 256;
@@ -1550,7 +1753,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 ctx.font = '900 140px monospace'; 
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('ARTEMIS II', 512, 128); // Reads left to right (from -X to +X)
+                ctx.fillText('ARTEMIS II', 512, 128);
                 const tex = new THREE.CanvasTexture(canvas);
                 tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
                 return tex;
@@ -1559,38 +1762,32 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const labelTex = createLabelTexture();
             const labelGeo = new THREE.PlaneGeometry(16, 4);
             
-            // Front Side Label (Faces +Z towards camera as it flies left to right)
             const rLabel1 = new THREE.Mesh(labelGeo, new THREE.MeshBasicMaterial({ map: labelTex, transparent: true, alphaTest: 0.5 }));
             rLabel1.position.z = 2.05; 
             rocketMaster.add(rLabel1);
 
-            // Back Side Label (Faces -Z)
             const rLabel2 = new THREE.Mesh(labelGeo, new THREE.MeshBasicMaterial({ map: labelTex, transparent: true, alphaTest: 0.5 }));
             rLabel2.rotation.y = Math.PI; 
             rLabel2.position.z = -2.05;
             rocketMaster.add(rLabel2);
 
-            // Hide initially
             rocketMaster.visible = false;
             scene.add(rocketMaster);
 
-            // --- Floating Asteroids and Futuristic Drones ---
             const asteroids = [];
             const probes = [];
             const shootingStars = [];
             const explosions = [];
 
-            // Neural / Particle Network
             const geometry = new THREE.BufferGeometry();
             const vertices = [];
             for ( let i = 0; i < 3000; i ++ ) {
-                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); // x
-                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); // y
-                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); // z
+                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); 
+                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); 
+                vertices.push( THREE.MathUtils.randFloatSpread( 300 ) ); 
             }
             geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
             
-            // Create texture for glowy particles
             const pMaterial = new THREE.PointsMaterial({ 
                 color: 0x00f3ff, 
                 size: 0.3, 
@@ -1601,7 +1798,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const bgParticles = new THREE.Points( geometry, pMaterial );
             scene.add( bgParticles );
 
-            // 1. Procedural Cyber-Asteroids (Low-Poly Flat Shaded)
             const asteroidMat = new THREE.MeshStandardMaterial({
                 color: 0x112233,
                 roughness: 0.9,
@@ -1611,9 +1807,8 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             
             for(let i = 0; i < 25; i++) {
                 const radius = Math.random() * 2 + 0.5;
-                const astGeo = new THREE.DodecahedronGeometry(radius, 0); // 0 detail makes it chunky
+                const astGeo = new THREE.DodecahedronGeometry(radius, 0); 
                 
-                // Randomly distort vertices for an organic rocky shape
                 const posAttribute = astGeo.attributes.position;
                 for (let j = 0; j < posAttribute.count; j++) {
                     posAttribute.setXYZ(j, 
@@ -1630,12 +1825,11 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     (Math.random() - 0.5) * 100,
                     (Math.random() - 0.5) * 200 - 50
                 );
-                // Custom physics data for continuous drifting
                 asteroid.userData = {
                     radius: radius,
                     velX: (Math.random() - 0.5) * 0.05,
                     velY: (Math.random() - 0.5) * 0.05,
-                    velZ: Math.random() * 0.15 + 0.05, // Drifting forward
+                    velZ: Math.random() * 0.15 + 0.05, 
                     rotX: Math.random() * 0.02,
                     rotY: Math.random() * 0.02
                 };
@@ -1643,7 +1837,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 asteroids.push(asteroid);
             }
 
-            // 2. Futuristic Data Probes/Ships (Glowing Wireframes)
             const colors = [0x00f3ff, 0xff003c, 0xffb300];
             for(let i = 0; i < 15; i++) {
                 const probeMat = new THREE.MeshBasicMaterial({ 
@@ -1652,7 +1845,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     transparent: true,
                     opacity: 0.7
                 });
-                // Mixed geometric shapes
                 const probeGeo = Math.random() > 0.5 
                     ? new THREE.OctahedronGeometry(Math.random() * 1.5 + 0.5)
                     : new THREE.TetrahedronGeometry(Math.random() * 1.5 + 0.5);
@@ -1664,7 +1856,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     (Math.random() - 0.5) * 200 - 50
                 );
                 probe.userData = {
-                    velX: (Math.random() - 0.5) * 0.3, // Faster flight speed
+                    velX: (Math.random() - 0.5) * 0.3, 
                     velY: (Math.random() - 0.5) * 0.2,
                     velZ: (Math.random() - 0.5) * 0.4,
                     rotX: Math.random() * 0.05,
@@ -1674,7 +1866,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 probes.push(probe);
             }
 
-            // 3. Dreamy Shooting Stars setup
             for(let i = 0; i < 3; i++) {
                 const ssGeo = new THREE.CylinderGeometry(0.03, 0.08, 40, 4);
                 const ssMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, transparent: true, opacity: 0.8 });
@@ -1684,7 +1875,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 shootingStars.push(ss);
             }
 
-            // Explosion Factory Function
             function createExplosion(x, y, z) {
                 const particleCount = 30;
                 const expGeo = new THREE.BufferGeometry();
@@ -1702,7 +1892,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 }
                 expGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
                 const expMat = new THREE.PointsMaterial({
-                    color: 0xffb300, // Cyber Amber
+                    color: 0xffb300, 
                     size: 0.5,
                     transparent: true,
                     opacity: 1
@@ -1712,7 +1902,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 explosions.push({ mesh: explosionParticles, velocities: velocities, age: 0 });
             }
 
-            // Mouse parallax effect
             let mouseX = 0;
             let mouseY = 0;
             let targetX = 0;
@@ -1736,63 +1925,44 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 bgParticles.rotation.y += 0.0005;
                 bgParticles.rotation.x += 0.0002;
 
-                // --- Animate Moon ---
-                moon.rotation.y += 0.0005; // Slow, majestic rotation
+                moon.rotation.y += 0.0005;
 
-                // --- Animate Artemis II Rocket ---
-                if (!rocketMaster.visible && Math.random() < 0.002) { // Spawns rarely
-                    // Spawn bottom-left foreground
+                if (!rocketMaster.visible && Math.random() < 0.002) { 
                     rocketMaster.position.set(-450, -100, 150); 
-                    
                     const start = rocketMaster.position.clone();
                     const target = moon.position.clone();
-                    // Direction vector perfectly mapped to flight path
                     const dir = new THREE.Vector3().subVectors(target, start).normalize();
-                    
-                    // Align the rocket's +X axis (nose) perfectly with the direction vector
                     rocketMaster.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), dir);
-
-                    // Slower speed so recruiters can read the text
                     rocketMaster.userData = { vel: dir.multiplyScalar(0.35) }; 
-                    
                     rocketMaster.visible = true;
                 }
 
                 if (rocketMaster.visible) {
                     rocketMaster.position.add(rocketMaster.userData.vel);
-                    
-                    // Flicker exhaust
                     rFlame.scale.set(
                         0.8 + Math.random() * 0.5, 
                         0.8 + Math.random() * 0.4, 
                         0.8 + Math.random() * 0.4
                     );
-                    
-                    // Disappears smoothly when it reaches the moon
                     if (rocketMaster.position.distanceTo(moon.position) < 80) {
                         rocketMaster.visible = false; 
                     }
                 }
 
-                // --- Animate Shooting Stars ---
-                if (Math.random() < 0.01) { // 1% chance per frame to spawn
+                if (Math.random() < 0.01) { 
                     const inactiveStar = shootingStars.find(s => !s.visible);
                     if (inactiveStar) {
                         inactiveStar.position.set(
                             (Math.random() - 0.5) * 300,
                             (Math.random() - 0.5) * 150,
-                            -200 // Start deep in space
+                            -200 
                         );
                         inactiveStar.visible = true;
-                        
-                        // Diagonal trajectory
                         inactiveStar.userData = {
                             velX: (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 2 + 1),
                             velY: (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 1 + 0.5),
                             velZ: Math.random() * 3 + 2
                         };
-                        
-                        // Align cylinder with travel direction
                         const dir = new THREE.Vector3(inactiveStar.userData.velX, inactiveStar.userData.velY, inactiveStar.userData.velZ).normalize();
                         inactiveStar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
                     }
@@ -1807,7 +1977,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     }
                 });
 
-                // --- Asteroid Physics & Collisions ---
                 for (let i = 0; i < asteroids.length; i++) {
                     for (let j = i + 1; j < asteroids.length; j++) {
                         const a1 = asteroids[i];
@@ -1816,14 +1985,12 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         const minDist = a1.userData.radius + a2.userData.radius;
                         
                         if (dist < minDist) {
-                            // Collision detected!
                             createExplosion(
                                 (a1.position.x + a2.position.x) / 2,
                                 (a1.position.y + a2.position.y) / 2,
                                 (a1.position.z + a2.position.z) / 2
                             );
                             
-                            // Reverse velocities (elastic bounce effect)
                             const tempX = a1.userData.velX;
                             const tempY = a1.userData.velY;
                             const tempZ = a1.userData.velZ;
@@ -1834,7 +2001,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                             a2.userData.velY = tempY;
                             a2.userData.velZ = tempZ;
 
-                            // Push them apart slightly to prevent getting stuck
                             const overlap = minDist - dist;
                             const sepX = ((a1.position.x - a2.position.x) / dist) * (overlap / 2 + 0.1);
                             const sepY = ((a1.position.y - a2.position.y) / dist) * (overlap / 2 + 0.1);
@@ -1846,7 +2012,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     }
                 }
 
-                // --- Update Explosions ---
                 for (let i = explosions.length - 1; i >= 0; i--) {
                     const exp = explosions[i];
                     exp.age += 1;
@@ -1857,7 +2022,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                         positions[p*3+2] += exp.velocities[p].z;
                     }
                     exp.mesh.geometry.attributes.position.needsUpdate = true;
-                    exp.mesh.material.opacity -= 0.02; // Fade out
+                    exp.mesh.material.opacity -= 0.02; 
                     
                     if (exp.age > 50 || exp.mesh.material.opacity <= 0) {
                         scene.remove(exp.mesh);
@@ -1867,7 +2032,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     }
                 }
 
-                // --- Animate Asteroids & Probes Drifting ---
                 const allSpaceObjects = [...asteroids, ...probes];
                 allSpaceObjects.forEach(obj => {
                     obj.position.x += obj.userData.velX;
@@ -1876,7 +2040,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     obj.rotation.x += obj.userData.rotX;
                     obj.rotation.y += obj.userData.rotY;
 
-                    // Infinite Space Looping (respawn on the other side if they drift too far)
                     if(obj.position.z > 60) obj.position.z = -150;
                     if(obj.position.z < -150) obj.position.z = 60;
                     if(obj.position.x > 100) obj.position.x = -100;
@@ -1906,14 +2069,13 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
         function initPhysicsEngine() {
             const container = document.getElementById('physics-canvas-container');
             if(!container) return;
-            container.innerHTML = ''; // Clear previous
+            container.innerHTML = ''; 
             
             const width = container.clientWidth;
             const height = container.clientHeight;
 
             physScene = new THREE.Scene();
             
-            // Adjust camera to look like a mathematical plot (Isometric-ish)
             physCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
             physCamera.position.set(200, 150, 400);
             physCamera.lookAt(0, 0, 0);
@@ -1922,7 +2084,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             physRenderer.setSize(width, height);
             container.appendChild(physRenderer.domElement);
 
-            // 3D Grid & Axes for Plotting
             const gridHelper = new THREE.GridHelper(1000, 20, 0x0066ff, 0x001133);
             gridHelper.position.y = 0;
             physScene.add(gridHelper);
@@ -1930,17 +2091,14 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const axesHelper = new THREE.AxesHelper(150);
             physScene.add(axesHelper);
 
-            // Projectile Sphere
             const sphereGeo = new THREE.SphereGeometry(3, 16, 16);
             const sphereMat = new THREE.MeshBasicMaterial({ color: 0xff003c });
             projectileMesh = new THREE.Mesh(sphereGeo, sphereMat);
             projectileMesh.visible = false;
             physScene.add(projectileMesh);
 
-            // Lighting
             physScene.add(new THREE.AmbientLight(0xffffff, 1));
 
-            // Basic Orbital Controls (Custom Implementation)
             let isDragging = false;
             let previousMousePosition = { x: 0, y: 0 };
             
@@ -1957,7 +2115,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 previousMousePosition = { x: e.clientX, y: e.clientY };
             });
 
-            // Zoom
             container.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 physCamera.position.z += e.deltaY * 0.5;
@@ -1969,7 +2126,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             }
             renderPhys();
             
-            // Handle resize
             window.addEventListener('resize', () => {
                 if(container && container.clientWidth) {
                     physCamera.aspect = container.clientWidth / container.clientHeight;
@@ -1980,10 +2136,8 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
         }
 
         function runPhysicsSim() {
-            // Ensure Engine is initialized
             if (!physScene) initPhysicsEngine();
             
-            // Get inputs
             const v0 = parseFloat(document.getElementById('phys-v').value) || 80;
             const angleDeg = parseFloat(document.getElementById('phys-theta').value) || 45;
             const h0 = parseFloat(document.getElementById('phys-h').value) || 0;
@@ -1994,8 +2148,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             const v0x = v0 * Math.cos(angleRad);
             const v0y = v0 * Math.sin(angleRad);
 
-            // Calculate flight time (quadratic equation: 0 = h0 + v0y*t - 0.5*g*t^2)
-            // 0.5gt^2 - v0y*t - h0 = 0
             const a = 0.5 * g;
             const b = -v0y;
             const c = -h0;
@@ -2005,23 +2157,20 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             if (discriminant >= 0) {
                 const t1 = (-b + Math.sqrt(discriminant)) / (2 * a);
                 const t2 = (-b - Math.sqrt(discriminant)) / (2 * a);
-                tFlight = Math.max(t1, t2); // Time must be positive
+                tFlight = Math.max(t1, t2); 
             } else {
-                tFlight = 0; // Won't happen with real physics unless g is negative
+                tFlight = 0; 
             }
 
-            // Calculate Max Height
             const tMaxH = v0y / g;
             const maxH = h0 + v0y * tMaxH - 0.5 * g * Math.pow(tMaxH, 2);
 
-            // Update UI Stats
             document.getElementById('stat-height').innerText = maxH.toFixed(2) + " m";
             document.getElementById('stat-time').innerText = tFlight.toFixed(2) + " s";
 
-            // Generate Trajectory Points & Table Data
             const points = [];
             const tableBody = document.getElementById('data-table-body');
-            tableBody.innerHTML = ''; // clear table
+            tableBody.innerHTML = ''; 
             
             const steps = 100;
             let maxRange = 0;
@@ -2035,7 +2184,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 
                 maxRange = Math.max(maxRange, x);
 
-                // Populate Data Table (Only ~10 rows for readability)
                 if (i % 10 === 0) {
                     const vx = v0x;
                     const vy = v0y - g * t;
@@ -2055,8 +2203,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                 }
             }
 
-            // --- Update 3D Canvas ---
-            // Remove old line if exists
             if (trajectoryLine) physScene.remove(trajectoryLine);
 
             const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
@@ -2064,24 +2210,20 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             trajectoryLine = new THREE.Line(lineGeo, lineMat);
             physScene.add(trajectoryLine);
 
-            // Auto-adjust camera to fit the trajectory
             physCamera.position.set(maxRange / 2, maxH * 1.5, maxRange);
             physCamera.lookAt(maxRange / 2, maxH / 2, 0);
             
-            // Animate Projectile
             projectileMesh.visible = true;
             let animFrame = 0;
             
-            // Cancel previous projectile animation interval if exists
             if(window.projInterval) clearInterval(window.projInterval);
             
             window.projInterval = setInterval(() => {
-                if(animFrame >= points.length) animFrame = 0; // loop
+                if(animFrame >= points.length) animFrame = 0; 
                 projectileMesh.position.copy(points[animFrame]);
                 animFrame++;
             }, 30);
             
-            // Ensure we jump to 3D tab
             switchPhysTab('3d');
         }
 
@@ -2096,7 +2238,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
                     view.classList.remove('hidden');
                     view.classList.add(tab === 'solver' ? 'flex' : 'block');
                     
-                    // Specific highlight colors per tab
                     const highlightColor = tab === 'solver' ? 'cyber-purple' : 'cyber-cyan';
                     
                     btn.className = `px-4 py-2 text-xs font-bold tracking-widest border-b-2 transition-colors whitespace-nowrap text-${highlightColor} border-${highlightColor} bg-${highlightColor}/10`;
@@ -2109,7 +2250,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             });
         }
 
-        // --- NEW: AI Physics Solver Logic (Simulated for GitHub Pages) ---
         function loadSolverPreset(text) {
             document.getElementById('solver-input').value = text;
         }
@@ -2123,7 +2263,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
 
             outputArea.innerHTML = `<span class="text-cyber-purple animate-pulse">> CALCULATING_TRAJECTORY_AND_FORCES...</span>`;
             
-            // Simulate network latency (2 seconds)
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             let formattedResponse = "";
@@ -2144,12 +2283,18 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             `;
         }
 
-        // Initialize all 3D components on load
+        // ==========================================
+        // INITIALIZE ALL
+        // ==========================================
         window.addEventListener('load', () => {
+            initBootSequence();
             initGlobal3D();
             initTiltCards();
             initPhysicsEngine();
             initScrollReveal();
+            initCounters();
+            initRadarChart();
+            initCyberCursor();
         });
 
         // ==========================================
@@ -2163,7 +2308,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             outDiv.classList.remove('hidden');
             outDiv.innerHTML = `<span class="text-cyber-purple animate-pulse">> ANALYZING_DATA_STREAM...</span>`;
             
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500)); 
             
             let formattedResponse = "";
             switch(projectId) {
@@ -2228,7 +2373,7 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             chatHistory.appendChild(aiDiv);
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1200)); 
             
             let response = "";
             const lowerMsg = message.toLowerCase();
@@ -2248,497 +2393,6 @@ body.cursor-hover #cur-o{width:54px;height:54px;border-color:#bc13fe;background:
             aiDiv.innerHTML = `<span class="text-cyber-cyan font-bold">> SYS.AI:</span> ${response}`;
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
-
-        document.querySelector('.crt-overlay').insertAdjacentHTML('afterend', `
-            <div id="top-anchor" class="absolute top-0"></div>
-        `);
-    
-</script>
-
-<script>
-// ══════════════════════════════════════════════════════════════════
-//  SPATIAL OS v4.0 — ENHANCEMENT LAYER
-// ══════════════════════════════════════════════════════════════════
-
-// ── 1. BOOT SEQUENCE ─────────────────────────────────────────────
-(function(){
-  const lines = document.querySelectorAll('.b-line');
-  const pb = document.getElementById('b-pb');
-  const pct = document.getElementById('b-pct');
-  const boot = document.getElementById('boot');
-  let i = 0;
-  const delays = [120,180,140,160,200,150,130,110,180,220];
-  function showLine(){
-    if(i < lines.length){
-      lines[i].classList.add('show');
-      const p = Math.round(((i+1)/lines.length)*100);
-      pb.style.width = p+'%';
-      pct.textContent = p+'%';
-      i++;
-      setTimeout(showLine, delays[i-1]||150);
-    } else {
-      setTimeout(()=>{
-        boot.classList.add('off');
-        setTimeout(()=>{ boot.style.display='none'; startThreeJS(); }, 750);
-      }, 500);
-    }
-  }
-  setTimeout(showLine, 400);
-})();
-
-// ── 2. CUSTOM CURSOR ─────────────────────────────────────────────
-(function(){
-  const co = document.getElementById('cur-o');
-  const ci = document.getElementById('cur-i');
-  const ch = document.getElementById('cur-h');
-  const cv = document.getElementById('cur-v');
-  let mx=window.innerWidth/2, my=window.innerHeight/2;
-  let ox=mx, oy=my;
-  document.addEventListener('mousemove', e=>{
-    mx=e.clientX; my=e.clientY;
-    ci.style.left=mx+'px'; ci.style.top=my+'px';
-    ch.style.left=mx+'px'; ch.style.top=my+'px';
-    cv.style.left=mx+'px'; cv.style.top=my+'px';
-  });
-  function loopO(){
-    ox+=(mx-ox)*.12; oy+=(my-oy)*.12;
-    co.style.left=ox+'px'; co.style.top=oy+'px';
-    requestAnimationFrame(loopO);
-  }
-  loopO();
-  document.querySelectorAll('a,button,[role="button"],input,textarea,select,.tilt-card,.nav-node').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
-  });
-})();
-
-function startThreeJS(){
-  const canvas = document.getElementById('bg3d');
-  if(!canvas || typeof THREE==='undefined') return;
-
-  const W = window.innerWidth, H = window.innerHeight;
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-  renderer.setSize(W,H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
-  renderer.setClearColor(0x000000,0);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55,W/H,0.1,3000);
-  camera.position.set(0,0,500);
-
-  // ── AMBIENT + DIR LIGHT ─────────────────────────────────────
-  scene.add(new THREE.AmbientLight(0x111133,1.5));
-  const sunLight = new THREE.DirectionalLight(0x7799ff,2.5);
-  sunLight.position.set(-400,200,300);
-  scene.add(sunLight);
-
-  // ── STARFIELD (2000 stars) ───────────────────────────────────
-  const starCount = 2000;
-  const starPositions = new Float32Array(starCount*3);
-  const starSizes    = new Float32Array(starCount);
-  const starPhases   = new Float32Array(starCount);
-  for(let i=0;i<starCount;i++){
-    starPositions[i*3]   = (Math.random()-.5)*3000;
-    starPositions[i*3+1] = (Math.random()-.5)*2000;
-    starPositions[i*3+2] = (Math.random()-.5)*1500 - 200;
-    starSizes[i]   = Math.random()*2.2+0.4;
-    starPhases[i]  = Math.random()*Math.PI*2;
-  }
-  const starGeo = new THREE.BufferGeometry();
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions,3));
-  starGeo.setAttribute('size',     new THREE.BufferAttribute(starSizes,1));
-  const starMat = new THREE.PointsMaterial({
-    color:0xffffff, size:1.6, sizeAttenuation:true,
-    transparent:true, opacity:0.85,
-    blending:THREE.AdditiveBlending, depthWrite:false
-  });
-  const stars = new THREE.Points(starGeo, starMat);
-  scene.add(stars);
-
-  // ── MOON ────────────────────────────────────────────────────
-  // Procedural moon texture (canvas)
-  function makeMoonTexture(sz){
-    const c = document.createElement('canvas');
-    c.width=c.height=sz;
-    const ctx=c.getContext('2d');
-    // base grey
-    const bg=ctx.createRadialGradient(sz*.45,sz*.42,sz*.05,sz*.5,sz*.5,sz*.52);
-    bg.addColorStop(0,'#d8d8e0');bg.addColorStop(.5,'#9fa3b0');bg.addColorStop(1,'#5a5e6e');
-    ctx.fillStyle=bg;ctx.fillRect(0,0,sz,sz);
-    // craters
-    const craters=[
-      [.38,.42,.09,.6],[.62,.35,.07,.55],[.55,.65,.05,.5],[.25,.58,.04,.45],
-      [.7,.6,.06,.5],[.45,.25,.05,.5],[.3,.35,.03,.4],[.68,.45,.04,.42],
-      [.5,.78,.04,.4],[.2,.45,.03,.38],[.75,.3,.05,.5],[.6,.7,.03,.35]
-    ];
-    craters.forEach(([cx,cy,r,d])=>{
-      const g=ctx.createRadialGradient(cx*sz,cy*sz,0,cx*sz,cy*sz,r*sz);
-      g.addColorStop(0,`rgba(0,0,20,${d*0.55})`);
-      g.addColorStop(.6,`rgba(30,30,50,${d*0.25})`);
-      g.addColorStop(1,'rgba(200,200,220,0)');
-      ctx.fillStyle=g;
-      ctx.beginPath();ctx.arc(cx*sz,cy*sz,r*sz,0,Math.PI*2);ctx.fill();
-    });
-    // maria (dark patches)
-    [[.55,.5,.18],[.4,.55,.12],[.65,.45,.1]].forEach(([cx,cy,r])=>{
-      const g=ctx.createRadialGradient(cx*sz,cy*sz,0,cx*sz,cy*sz,r*sz);
-      g.addColorStop(0,'rgba(40,45,70,0.45)');g.addColorStop(1,'rgba(40,45,70,0)');
-      ctx.fillStyle=g;ctx.fillRect(0,0,sz,sz);
-    });
-    return new THREE.CanvasTexture(c);
-  }
-
-  const moonTex = makeMoonTexture(512);
-  const moonGeo = new THREE.SphereGeometry(88,48,48);
-  const moonMat = new THREE.MeshStandardMaterial({
-    map:moonTex, roughness:0.92, metalness:0.05,
-    emissive:new THREE.Color(0x111122), emissiveIntensity:0.08
-  });
-  const moon = new THREE.Mesh(moonGeo, moonMat);
-  moon.position.set(280,-60,-150);
-  scene.add(moon);
-
-  // Moon glow (atmosphere halo)
-  const moonGlowGeo = new THREE.SphereGeometry(96,32,32);
-  const moonGlowMat = new THREE.MeshBasicMaterial({
-    color:0x334488, transparent:true, opacity:0.18,
-    side:THREE.BackSide, blending:THREE.AdditiveBlending, depthWrite:false
-  });
-  const moonGlow = new THREE.Mesh(moonGlowGeo, moonGlowMat);
-  moonGlow.position.copy(moon.position);
-  scene.add(moonGlow);
-
-  // Moon rim light
-  const moonRimGeo = new THREE.SphereGeometry(94,32,32);
-  const moonRimMat = new THREE.MeshBasicMaterial({
-    color:0x6688cc, transparent:true, opacity:0.12,
-    side:THREE.BackSide, blending:THREE.AdditiveBlending, depthWrite:false
-  });
-  const moonRim = new THREE.Mesh(moonRimGeo, moonRimMat);
-  moonRim.position.copy(moon.position);
-  scene.add(moonRim);
-
-  // ── SHOOTING STARS ───────────────────────────────────────────
-  const SHOOT_COUNT = 7;
-  const shooters = [];
-  function spawnShooter(){
-    const sx = -600 + Math.random()*400;
-    const sy =  100 + Math.random()*200;
-    const len = 60 + Math.random()*80;
-    const speed= 5 + Math.random()*7;
-    const angle= -0.3 - Math.random()*0.5; // downward right
-    const pts = [
-      new THREE.Vector3(sx, sy, -50),
-      new THREE.Vector3(sx + Math.cos(angle)*len, sy + Math.sin(angle)*len, -50)
-    ];
-    const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    const mat = new THREE.LineBasicMaterial({
-      color:0xaaddff, transparent:true, opacity:0.9,
-      blending:THREE.AdditiveBlending, depthWrite:false
-    });
-    const line = new THREE.Line(geo, mat);
-    scene.add(line);
-    return {line, mat, geo, sx, sy, angle, speed, len, life:0, maxLife:60+Math.random()*40, pts};
-  }
-  for(let i=0;i<SHOOT_COUNT;i++){
-    const s = spawnShooter();
-    s.life = Math.random()*s.maxLife; // stagger starts
-    shooters.push(s);
-  }
-
-  function updateShooter(s, dt){
-    s.life += dt;
-    const t = s.life/s.maxLife;
-    // fade in/out
-    const fade = t<0.2 ? t/0.2 : t>0.8 ? (1-t)/0.2 : 1;
-    s.mat.opacity = fade*0.9;
-    // move
-    s.pts[0].x += s.speed; s.pts[0].y -= s.speed*0.4;
-    s.pts[1].x += s.speed; s.pts[1].y -= s.speed*0.4;
-    s.geo.setFromPoints(s.pts);
-    if(s.life >= s.maxLife){
-      scene.remove(s.line);
-      s.line.geometry.dispose(); s.line.material.dispose();
-      return spawnShooter();
-    }
-    return s;
-  }
-
-  // ── ARTEMIS II ROCKET ────────────────────────────────────────
-  // Built from primitives: main body (cylinder), nose cone, 2 boosters, engine bell, windows
-  const rocketGroup = new THREE.Group();
-
-  const rMat  = new THREE.MeshStandardMaterial({color:0xdde0e8,roughness:0.7,metalness:0.3});
-  const rDark = new THREE.MeshStandardMaterial({color:0x222233,roughness:0.8,metalness:0.2});
-  const rAcc  = new THREE.MeshStandardMaterial({color:0xff6622,roughness:0.5,metalness:0.4, emissive:new THREE.Color(0xff3300), emissiveIntensity:0.3});
-  const rWin  = new THREE.MeshStandardMaterial({color:0x88ccff,roughness:0.1,metalness:0.8, emissive:new THREE.Color(0x4488cc), emissiveIntensity:0.5});
-
-  // Core stack
-  const coreGeo = new THREE.CylinderGeometry(3.2,3.2,32,16);
-  rocketGroup.add(new THREE.Mesh(coreGeo,rMat));
-
-  // Upper fairing (payload)
-  const fairGeo = new THREE.CylinderGeometry(3.2,3.0,8,16);
-  const fair = new THREE.Mesh(fairGeo,rMat); fair.position.y=20; rocketGroup.add(fair);
-
-  // Nose cone (Orion capsule)
-  const noseGeo = new THREE.ConeGeometry(3.0,9,16);
-  const nose = new THREE.Mesh(noseGeo,rDark); nose.position.y=28.5; rocketGroup.add(nose);
-
-  // Launch abort tower
-  const latGeo = new THREE.CylinderGeometry(.3,.3,8,6);
-  const lat = new THREE.Mesh(latGeo,rDark); lat.position.set(0,36,0); rocketGroup.add(lat);
-  const latCapGeo = new THREE.ConeGeometry(1.2,2,6);
-  const latCap = new THREE.Mesh(latCapGeo,rAcc); latCap.position.set(0,41,0); rocketGroup.add(latCap);
-
-  // Engine section (bottom)
-  const engBellGeo = new THREE.CylinderGeometry(3.5,4.5,4,16);
-  const engBell = new THREE.Mesh(engBellGeo,rDark); engBell.position.y=-18; rocketGroup.add(engBell);
-
-  // 4 RS-25 engine bells
-  [-1,1].forEach(sx=>[-1,1].forEach(sz=>{
-    const bellGeo = new THREE.CylinderGeometry(.7,1.1,2.5,10);
-    const b = new THREE.Mesh(bellGeo,rDark);
-    b.position.set(sx*1.6,-20,sz*1.6); rocketGroup.add(b);
-  }));
-
-  // 2 SRBs
-  [-1,1].forEach(sx=>{
-    const srbGeo = new THREE.CylinderGeometry(1.6,1.6,28,12);
-    const srb = new THREE.Mesh(srbGeo,rMat); srb.position.set(sx*6,-2,0); rocketGroup.add(srb);
-
-    const srbNoseGeo = new THREE.ConeGeometry(1.6,6,12);
-    const srbNose = new THREE.Mesh(srbNoseGeo,rAcc); srbNose.position.set(sx*6,17,0); rocketGroup.add(srbNose);
-
-    const srbBellGeo = new THREE.CylinderGeometry(1.6,2.2,3,10);
-    const srbBell = new THREE.Mesh(srbBellGeo,rDark); srbBell.position.set(sx*6,-17,0); rocketGroup.add(srbBell);
-  });
-
-  // Orange foam insulation stripe
-  const insGeo = new THREE.CylinderGeometry(3.25,3.25,18,16);
-  const insMat = new THREE.MeshStandardMaterial({color:0xcc5500,roughness:0.9,metalness:0.05});
-  const ins = new THREE.Mesh(insGeo,insMat); ins.position.y=0; rocketGroup.add(ins);
-
-  // NASA worm logo strip (emissive red band)
-  const logoGeo = new THREE.CylinderGeometry(3.26,3.26,1.5,16);
-  const logoMat = new THREE.MeshStandardMaterial({color:0xff2200,emissive:new THREE.Color(0xff2200),emissiveIntensity:.4,roughness:.7});
-  const logo = new THREE.Mesh(logoGeo,logoMat); logo.position.y=12; rocketGroup.add(logo);
-
-  // Porthole windows
-  [8,12].forEach(y=>{
-    const wGeo = new THREE.CircleGeometry(.6,12);
-    const w = new THREE.Mesh(wGeo,rWin);
-    w.position.set(3.22,y,0); w.rotation.y=Math.PI/2; rocketGroup.add(w);
-  });
-
-  // Engine plume (cone glow)
-  const plumeGeo = new THREE.ConeGeometry(3,22,16);
-  const plumeMat = new THREE.MeshBasicMaterial({
-    color:0xff7733,transparent:true,opacity:0.35,
-    blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide
-  });
-  const plume = new THREE.Mesh(plumeGeo,plumeMat);
-  plume.position.y=-28; plume.rotation.x=Math.PI; rocketGroup.add(plume);
-
-  // Plume core
-  const plumeCoreGeo = new THREE.ConeGeometry(1.4,14,10);
-  const plumeCoreM = new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.55,blending:THREE.AdditiveBlending,depthWrite:false});
-  const plumeCore = new THREE.Mesh(plumeCoreGeo,plumeCoreM);
-  plumeCore.position.y=-26; plumeCore.rotation.x=Math.PI; rocketGroup.add(plumeCore);
-
-  // Tilt rocket 45° (ascending trajectory)
-  rocketGroup.rotation.z = Math.PI*0.22;
-  rocketGroup.scale.setScalar(1.2);
-  rocketGroup.position.set(-800, -250, -80);
-  scene.add(rocketGroup);
-
-  // ── ANIMATION LOOP ────────────────────────────────────────────
-  let mpx=0, mpy=0, frame=0;
-  document.addEventListener('mousemove',e=>{mpx=(e.clientX/window.innerWidth-.5)*18;mpy=(e.clientY/window.innerHeight-.5)*12;});
-
-  function animate(){
-    requestAnimationFrame(animate);
-    frame++;
-
-    // Star twinkle
-    const t = frame*0.012;
-    starMat.opacity = 0.65 + Math.sin(t)*0.2;
-    stars.rotation.y = frame*0.00008;
-
-    // Moon slow drift + rotation
-    moon.rotation.y  = frame*0.0004;
-    moon.position.y  = -60 + Math.sin(frame*0.0007)*8;
-    moonGlow.position.copy(moon.position);
-    moonRim.position.copy(moon.position);
-
-    // Rocket flyby — crosses screen left to right, looping
-    rocketGroup.position.x += 0.55;
-    rocketGroup.position.y += 0.12;
-    if(rocketGroup.position.x > 900){
-      rocketGroup.position.set(-800, -200 - Math.random()*150, -80 + Math.random()*60);
-    }
-
-    // Plume flicker
-    plume.material.opacity = 0.28 + Math.sin(frame*0.18)*0.12;
-    plumeCore.material.opacity = 0.45 + Math.sin(frame*0.25)*0.15;
-
-    // Shooting stars
-    for(let i=0;i<shooters.length;i++){
-      shooters[i] = updateShooter(shooters[i],1);
-    }
-
-    // Camera parallax
-    camera.position.x += (mpx - camera.position.x)*0.018;
-    camera.position.y += (-mpy - camera.position.y)*0.018;
-    camera.lookAt(0,0,0);
-
-    renderer.render(scene,camera);
-  }
-  animate();
-
-  window.addEventListener('resize',()=>{
-    const nW=window.innerWidth,nH=window.innerHeight;
-    camera.aspect=nW/nH; camera.updateProjectionMatrix();
-    renderer.setSize(nW,nH);
-  });
-}
-
-// ── 4. SCROLL REVEAL ─────────────────────────────────────────────
-(function(){
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('active');
-        // trigger skill bars inside
-        e.target.querySelectorAll('.skill-bar[data-w]').forEach(b=>{
-          setTimeout(()=>{ b.style.width=b.dataset.w+'%'; },200);
-        });
-        // trigger radar inside
-        if(e.target.id==='skills-radar-wrap') animateRadar();
-        obs.unobserve(e.target);
-      }
-    });
-  },{threshold:0.12});
-  document.querySelectorAll('.reveal,.scan-reveal').forEach(el=>obs.observe(el));
-  // also observe radar wrap specifically
-  const radarEl = document.getElementById('skills-radar-wrap');
-  if(radarEl) obs.observe(radarEl);
-})();
-
-// ── 5. ANIMATED METRIC COUNTERS ───────────────────────────────────
-(function(){
-  function easeOut(t){return 1-Math.pow(1-t,3);}
-  function animCount(el){
-    const raw = el.dataset.target || el.textContent;
-    const suffix = raw.replace(/[\d.]/g,'');
-    const num = parseFloat(raw);
-    if(isNaN(num)) return;
-    const dur = 1400, start = performance.now();
-    function tick(now){
-      const p = Math.min((now-start)/dur,1);
-      const val = num*easeOut(p);
-      el.textContent = (Number.isInteger(num)?Math.round(val):val.toFixed(1)) + suffix;
-      if(p<1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.querySelectorAll('.count-up').forEach(animCount);
-        obs.unobserve(e.target);
-      }
-    });
-  },{threshold:.2});
-  document.querySelectorAll('section').forEach(s=>obs.observe(s));
-})();
-
-// ── 6. TILT CARDS ────────────────────────────────────────────────
-(function(){
-  document.querySelectorAll('.tilt-card').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      const cx=(e.clientX-r.left)/r.width, cy=(e.clientY-r.top)/r.height;
-      const rx=(cy-.5)*16, ry=(cx-.5)*-16;
-      card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
-      card.style.setProperty('--mx',(cx*100)+'%');
-      card.style.setProperty('--my',(cy*100)+'%');
-    });
-    card.addEventListener('mouseleave',()=>{
-      card.style.transform='perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1)';
-    });
-  });
-})();
-
-// ── 7. TYPEWRITER SECTION HEADERS ────────────────────────────────
-(function(){
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && !e.target.dataset.typed){
-        e.target.dataset.typed='1';
-        const full = e.target.dataset.text || e.target.textContent;
-        e.target.textContent='';
-        e.target.classList.add('type-cursor');
-        let i=0;
-        const iv=setInterval(()=>{
-          e.target.textContent+=full[i++];
-          if(i>=full.length){clearInterval(iv);e.target.classList.remove('type-cursor');}
-        },28);
-        obs.unobserve(e.target);
-      }
-    });
-  },{threshold:.5});
-  document.querySelectorAll('.typewriter').forEach(el=>{
-    el.dataset.text = el.textContent;
-    obs.observe(el);
-  });
-})();
-
-// ── 8. RADAR ANIMATION ────────────────────────────────────────────
-function animateRadar(){
-  const a1 = document.getElementById('radar-a1');
-  const a2 = document.getElementById('radar-a2');
-  const dots = [0,1,2,3,4,5].map(i=>document.getElementById('rd'+i));
-  if(!a1||!a2) return;
-  const pts1 = a1.dataset.final.split(' ').map(p=>p.split(',').map(Number));
-  const pts2 = a2.dataset.final.split(' ').map(p=>p.split(',').map(Number));
-  setTimeout(()=>{
-    a1.setAttribute('points', a1.dataset.final);
-    a2.setAttribute('points', a2.dataset.final);
-    dots.forEach((d,i)=>{
-      if(d && pts1[i]){d.setAttribute('cx',pts1[i][0]);d.setAttribute('cy',pts1[i][1]);}
-    });
-  },100);
-}
-
-// ── 9. ACTIVE NAV HIGHLIGHT ───────────────────────────────────────
-(function(){
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('#side-nav a[href^="#"]');
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      const id=e.target.getAttribute('id');
-      const link=document.querySelector(`#side-nav a[href="#${id}"]`);
-      if(link){
-        if(e.isIntersecting){ link.classList.add('nav-active'); }
-        else { link.classList.remove('nav-active'); }
-      }
-    });
-  },{rootMargin:'-40% 0px -40% 0px'});
-  sections.forEach(s=>obs.observe(s));
-})();
-
-// ── 10. SECTION HEADER SCAN REVEALS ──────────────────────────────
-(function(){
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('active'); obs.unobserve(e.target); }
-    });
-  },{threshold:0.1});
-  document.querySelectorAll('.sec-header').forEach(el=>obs.observe(el));
-})();
-
-</script>
-
+    </script>
 </body>
 </html>
